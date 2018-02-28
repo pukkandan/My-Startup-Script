@@ -28,7 +28,7 @@ ReloadScriptOnEdit(files,clean:=0){	;clean=2 reloads also
 			_ScriptEdited(f,,True)
 		if (clean=2)
 			Reload
-		return func("ReloadScriptOnEdit").bind(files)
+		return 1
 	}
 
 	for _,f in files

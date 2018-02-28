@@ -5,10 +5,10 @@ Suspend, On
 #include <ini>
 #include <Toast>
 #include <DelayedTimer>
+#include <ReloadScriptOnEdit>
 
 tooltip("ReloadScriptOnEdit",{life:500})
-;ReloadScriptOnEdit on first run returns func obj of itself, allowing the next line
-delayedTimer.set(ReloadScriptOnEdit([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000)
+delayedTimer.set(func("ReloadScriptOnEdit").bind([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000, True)
 delayedTimer.start() ;Dont delay
 
 tooltip("Tray",{life:500})

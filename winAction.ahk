@@ -3,10 +3,6 @@ class winAction{
     __new(txt:="winAction.ini"){
         this.itemList:=[]
 
-        ; global PIP_exclude:={}, PIP_include:={}
-        ; act:=ObjBindMethod(this,"PIP")
-        ; Menu, winAction, Add, PIP, % act
-
         act:=ObjBindMethod(this,"onTopToggle")
         Menu, winAction, Add, Always on &Top , % act
         act:=ObjBindMethod(this,"trayit")
@@ -21,7 +17,6 @@ class winAction{
 
         act:=ObjBindMethod(this,"Opacity")
         Menu, winAction, Add, &Opacity , % act
-
         act:=ObjBindMethod(this,"TaskView_PinWindowToggle")
         Menu, winAction TaskView, Add, Pin Window , % act
         act:=ObjBindMethod(this,"TaskView_PinAppToggle")

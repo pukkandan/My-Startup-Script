@@ -5,12 +5,12 @@ class delayedTimer {
         return this.obj.push({f:f0,t:t0,r:runatStart})
     }
     start(){
-        for _,timer in this.obj {
-            f:=timer.f
-            setTimer, % f, % timer.t
+        for _,item in this.obj {
+            f:=item.f
+            setTimer, % f, % item.t
         }
-        for _,timer in this.obj
-            if timer.r
+        for _,item in this.obj
+            if item.r
                 %f%()
         return this.reset()
     }

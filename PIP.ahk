@@ -122,7 +122,7 @@ class PIP {
         WinSet, AlwaysOnTop, Off, % "ahk_id " old.id
         taskView.UnpinWindow(old.id)
         if ( !isFullScreen(old.id,1) AND old.type!="T" )
-            WinSet, Style, +0xc00000, % "ahk_id " old.id
+            WinSet, Style, +0x400000, % "ahk_id " old.id
     }
     unPIPOld(){
         for set,old in this.topListOld {
