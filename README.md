@@ -45,7 +45,7 @@ Creates Asynchronous download request and saves the reply text in a variable. Un
 * **[PasteText](Lib\pasteText.ahk)**  
 _Work in Progress_
 
-## [Files](..\master)
+## Files
 
 * **[Master](Master.ahk)**  
 Calls all the other files. None of the other files are supposed to be run by themselves, and many times are interdependent with each other.
