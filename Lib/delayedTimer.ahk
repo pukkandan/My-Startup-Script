@@ -1,16 +1,21 @@
 class delayedTimer {
-    set(f0,t0){
-        if !isObject(this.f)
-            this.f:=[], this.t:=[]
-        return this.t.push(t0), this.f.push(f0)
+    set(f0,t0,runatStart:=False){
+        if !isObject(this.obj)
+            this.obj:=[]
+        return this.obj.push({f:f0,t:t0,r:runatStart})
     }
     start(){
-        for i,f0 in this.f
-            setTimer, % f0, % this.t[i]
+        for _,timer in this.obj {
+            f:=timer.f
+            setTimer, % f, % timer.t
+        }
+        for _,timer in this.obj
+            if timer.r
+                %f%()
         return this.reset()
     }
     reset(){
-        this.f:=[], this.t:=[]
+        this.obj:=[]
         return 0
     }
 }

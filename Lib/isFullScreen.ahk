@@ -1,5 +1,5 @@
-isFullScreen(title:="", pseudo:=0) {
-    if !(win:=winExist(title?title:"A"))
+isFullScreen(title:="A", pseudo:=0) {
+    if !(win:=winExist(title))
         return false
     win:="ahk_id " win
     WinGet, WinMinMax, MinMax, % win

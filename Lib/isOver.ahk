@@ -6,6 +6,7 @@ isOver_mouse(WinTitle:="A"){ ;If ahk_id is passed, dont use ahk_id prefix or any
 }
 
 isOver_coord(win,pos){
+    CoordMode, Mouse, Screen        ;Mouse co-ords are specified in global co-ords
     WinGetPos, x, y, w, h, % win
     ; msgbox, %x%, %y%, %w%, %h%
     ; msgbox, % mpos[1] "|" mpos[2]

@@ -74,12 +74,12 @@ global runTextObj:=new runText("Runtext.ini")
 
 tooltip("Internet",{life:500})
 #include internet.ahk
-delayedTimer.set("netNotify", 5000)
+delayedTimer.set("netNotify", 5000, True)
 
 
 tooltip("autoUpdate",{life:500})
 #include autoUpdate.ahk
-delayedTimer.set("autoUpdate", 3600000)
+delayedTimer.set("autoUpdate", 3600000, True)
 
 ;Required for mouseRemap
 GroupAdd, right_drag, ahk_exe mspaint.exe
@@ -91,9 +91,6 @@ tooltip
 delayedTimer.start()
 suspend, Off
 Toast.show("Script Loaded")
-
-netNotify() ;Performs the first run early
-autoUpdate()
 
 ;============================== End of auto-execute
 #include keyRemap.ahk

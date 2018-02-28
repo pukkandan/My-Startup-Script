@@ -21,7 +21,7 @@ MButton::winSizer.start()                           ; winSizer
 MButton Up::
 if winSizer.end()
     return
-if isPressed("RButton")
+else if isPressed("RButton")
     send, #{Tab}
 else if isOver_mouse("ahk_class Shell_TrayWnd")    ; Task manager
     Send, +^{Esc}
