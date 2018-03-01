@@ -80,8 +80,8 @@ class Toast{
             Hotkey, % k , % closeObj, On B0 T1
         return
     }
-    close(wparam:=""){
-        if (wparam!="" and !isOver_mouse(this.hwnd))
+    close(wparam:="",lParam:="",msg:="",hwnd:=""){
+        if (hwnd and hwnd!=this.hwnd)
             return
 
         this.exist:=False, GUI_handle:="Toast_GUI" this.id

@@ -9,7 +9,7 @@ Suspend, On
 
 tooltip("ReloadScriptOnEdit",{life:500})
 delayedTimer.set(func("ReloadScriptOnEdit").bind([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000, True)
-delayedTimer.start() ;Dont delay
+delayedTimer.start(True) ;Dont delay
 
 tooltip("Tray",{life:500})
 #include Tray.ahk
@@ -91,7 +91,7 @@ tooltip
 delayedTimer.start()
 suspend, Off
 Toast.show("Script Loaded")
-
+delayedTimer.firstRun()
 ;============================== End of auto-execute
 #include keyRemap.ahk
 #include *i hotStrings.ahk ;Has personal data in this file

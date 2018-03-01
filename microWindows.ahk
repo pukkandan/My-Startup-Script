@@ -1,14 +1,23 @@
 ; new microWindow(WinExist("My Script 2 ahk_exe explorer.exe"))
 
 class microWindow{
-    __new(wid, pos:="", w:=200, pos1:="", pos2:=""){
+    __new(wid, pos:="", w:=700, pos1:="", pos2:=""){
         static
         static n:=0
-        this.id:=n, this.wid:=wid, this.pos1:=pos1, this.pos2:=pos2, this.mx:=16, this.my:=39, this.M_over:=false
+        local ww, wh
+        wingetpos,,, ww, wh, % "ahk_id " wid
+        this.id:=n, this.wid:=wid, this.pos1:=pos1, this.pos2:=pos2, this.mx:=16, this.my:=39
+        , this.M_over:=false, this.width:=w, this.win_width:=ww, this.win_height:=wh
+
         local h:=w*this.win_height/this.win_width
         h:=(h>0?h:64)
+        this.height:=h
         if (pos="")
             pos:=[ A_ScreenWidth-w-64 , A_ScreenHeight-h-64 ]
+        if (!this.pos1)
+            this.pos1:=[0,0]
+        if (!this.pos2)
+            this.pos2:=[ww,wh]
 
         local GUIhwnd, act
         GUI, microWindow%n%:New, +HwndGUIhwnd +AlwaysOnTop +ToolWindow -Caption
@@ -17,100 +26,103 @@ class microWindow{
         this.dll:=this.dllLoad()
         this.prepare()
 
-        GUI, microWindow%n%:Show, % "Noactivate x" pos[1] " y" pos[2] " w" W+this.mx " h" H+this.my, microWindow %n% [%wid%]
+        GUI, microWindow%n%:Show, % "Noactivate x" pos[1] " y" pos[2] " w" w+this.mx " h" h+this.my, microWindow %n% [%wid%]
         this.update()
         n++
 
         act:=ObjBindMethod(this,"update")
         setTimer, % act, 100
 
-        OnMessage(0x201, ObjBindMethod(this,"onClick")) ;Mouse click
-    }
-
-    win_height[]{
-        get{
-            if this.pos1
-                return this.pos2[2]-this.pos1[2]
-            else {
-                wingetpos,,,, H, % "ahk_id " this.wid
-                return H
-            }
-        }
-    }
-    win_width[]{
-        get{
-            if this.pos1
-                return this.pos2[1]-this.pos1[1]
-            else {
-                wingetpos,,, W,, % "ahk_id " this.wid
-                return W
-            }
-        }
+        OnMessage(0x201, ObjBindMethod(this,"onClick")) ;Left click (down)
+        OnMessage(0x204, ObjBindMethod(this,"onClick")) ;Right click (down)
     }
 
     dllLoad(){
         static dll:={}
         if (this.id!=0)
             return dll
-        hModule     := DllCall("LoadLibrary", "Str", "gdi32.dll" , Ptr)
-        u32         := DllCall("LoadLibrary", "Str", "User32.dll", Ptr)
+        dwmapi      := DllCall("LoadLibrary", "Str", "dwmapi.dll", Ptr)
 
-        dll.CCDC    := DllCall("GetProcAddress", Ptr, hModule, AStr, "CreateCompatibleDC"    , Ptr)
-        dll.CCB     := DllCall("GetProcAddress", Ptr, hModule, AStr, "CreateCompatibleBitmap", Ptr)
-        dll.SO      := DllCall("GetProcAddress", Ptr, hModule, AStr, "SelectObject"          , Ptr)
-        dll.SSBM    := DllCall("GetProcAddress", Ptr, hModule, AStr, "SetStretchBltMode"     , Ptr)
-        dll.SB      := DllCall("GetProcAddress", Ptr, hModule, AStr, "StretchBlt"            , Ptr)
-        dll.DO      := DllCall("GetProcAddress", Ptr, hModule, AStr, "DeleteObject"          , Ptr)
-        dll.DDC     := DllCall("GetProcAddress", Ptr, hModule, AStr, "DeleteDC"              , Ptr)
-        dll.GDC     := DllCall("GetProcAddress", Ptr, u32    , AStr, "GetDC"                 , Ptr)
-        dll.PW      := DllCall("GetProcAddress", Ptr, u32    , AStr, "PrintWindow"           , Ptr)
+        dll.DRT    := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmRegisterThumbnail"        , Ptr)
+        dll.DQTSS  := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmQueryThumbnailSourceSize" , Ptr)
+        dll.DUTP   := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUpdateThumbnailProperties", Ptr)
+        dll.DUT    := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUnregisterThumbnail"      , Ptr)
         return dll
     }
     prepare(){
-        this.hdc_frame := DllCall(this.dll.GDC , UInt, this.hwnd)
-        this.hdc_buffer:= DllCall(this.dll.CCDC, UInt, this.hdc_frame)
-        this.hbm_buffer:= DllCall(this.dll.CCB , UInt, this.hdc_frame, Int, A_ScreenWidth, Int, A_ScreenHeight)
-                          DllCall(this.dll.SO  , UInt, this.hdc_buffer, UInt, this.hbm_buffer)
-                          DllCall(this.dll.SSBM, UInt, this.hdc_frame ,  Int, 4 )
-        return
+        VarSetCapacity(thumbnail, 4, 0)
+        DllCall(this.dll.DRT , UInt, this.hwnd, UInt, this.wid, UInt, &thumbnail)
+        this.hThumb:=NumGet(thumbnail)
+        return this.putThumb()
     }
+    putThumb(){
+        VarSetCapacity(dskThumbProps, 45, 0)
+        NumPut(3, dskThumbProps, 0, "UInt")
+        NumPut(0, dskThumbProps, 4, "Int")
+        NumPut(0, dskThumbProps, 8, "Int")
+        NumPut(this.width  , dskThumbProps, 12, "Int")
+        NumPut(this.height , dskThumbProps, 16, "Int")
+        NumPut(this.pos1[1], dskThumbProps, 20, "Int")
+        NumPut(this.pos1[2], dskThumbProps, 24, "Int")
+        NumPut(this.pos2[1], dskThumbProps, 28, "Int")
+        NumPut(this.pos2[2], dskThumbProps, 32, "Int")
+        DllCall(this.dll.DUTP, UInt, this.hThumb, UInt, &dskThumbProps)
+
+        VarSetCapacity(dskThumbProps, 45, 0)
+        NumPut(8, dskThumbProps,  0, "UInt")
+        NumPut(1, dskThumbProps, 37,  "Int")
+        return DllCall(this.dll.DUTP, UInt, this.hThumb, UInt, &dskThumbProps)
+    }
+
     delete(){
         GUI_handle:="microWindow" this.id
         GUI, %GUI_handle%: Destroy
-
-        DllCall(this.dll.DO , UInt,this.h_region )
-        DllCall(this.dll.DO , UInt,this.hbm_buffer)
-        DllCall(this.dll.DDC, UInt,this.hdc_frame )
-        DllCall(this.dll.DDC, UInt,this.hdc_buffer)
-
+        DllCall(this.dll.DUT, UInt, this.hThumb)
         this.SetCapacity(0)
-        this.base:=""
+        return this.base:=""
+    }
+
+    getWinSize(){
+        VarSetCapacity(Size, 8, 0)
+        DllCall(this.dll.DQTSS, Uint, this.hThumb, Uint, &Size)
+        ww:= NumGet(&Size, 0, "int"), wh:= NumGet(&Size, 4, "int")
+        , rw:=ww/this.win_width, rh:=wh/this.win_height
+        , this.pos1[1]*=rw, this.pos2[1]*=rw, this.pos1[2]*=rh, this.pos2[2]*=rh
+        , this.win_width := ww, this.win_height:= wh
         return
     }
 
     update(){
-        wingetpos,x,y,W,, % "ahk_id " this.hwnd
-        if (W="")   ;Closed
+        M_wasOver:=this.M_over, this.M_over:=this.mouseOver(), n:=this.id
+        wingetpos,x,y,w,, % "ahk_id " this.hwnd
+        if !w   ;Closed
             return this.delete()
-        this.pos:=[x,y], this.width:=W-(this.M_over?this.mx:0), h:=(this.win_height*this.width)/this.win_width
-        this.height:=h>0?h:16
+        this.getWinSize()
+        this.pos:=[x,y], this.width:=w-(M_wasOver?this.mx:0)
+        , h:=(this.win_height*this.width)/this.win_width, this.height:=h>0?h:16
+        this.putThumb()
 
-        DllCall(this.dll.PW, UInt, this.wid, UInt, this.hdc_buffer, UInt, 0)
-        DllCall(this.dll.SB, UInt, this.hdc_frame, Int, 0, Int, 0
-                    , Int, this.width, Int, this.height, UInt, this.hdc_buffer
-                    , Int, this.pos1[1], Int, this.pos1[2], Int, this.win_width, Int, this.win_height
-                    , UInt, 0xCC0020)
-        n:=this.id
         GuiControl, Move, Pic%n%, % "X0 Y0 W" this.width " H" this.height
-
-        this.mouseOver()
-
-        WinMove, % "ahk_id " this.hwnd,,,,% this.width+(this.M_over?this.mx:0), % this.height+(this.M_over?this.my:0)
+        mDir:=(!this.M_over AND M_wasOver)? 1 :(this.M_over AND !M_wasOver? -1 :0)
+        WinMove, % "ahk_id " this.hwnd,, % x+mDir*this.mx/2, % y+mDir*(this.my-this.mx/2)
+            , % this.width+(this.M_over?this.mx:0), % this.height+(this.M_over?this.my:0)
         return
     }
-    onClick(){
-        if !isOver_mouse(this.hwnd)
+    onClick(wParam, lParam, msg, hwnd){
+        if (hwnd!=this.hwnd)
             return
+
+        ; CoordMode, Mouse, Client
+        ; ; MouseGetPos, mx, my
+        ; mx := lParam & 0xFFFF
+        ; my := lParam >> 16
+        ; key:=(msg==0x204)? "R" :(msg==0x201)? "L" :""
+        ;  x:= (mx*(this.pos2[1]-this.pos1[1]))//this.width  + this.pos1[1]
+        ; ,y:= (my*(this.pos2[2]-this.pos1[2]))//this.height + this.pos1[2]
+        ; if key
+        ;     ControlClick, x%x% y%y%, % "ahk_id" this.wid,,% key,, NA Pos
+        ; ; msgbox, % key "|" mx "|" my "`n" x "=" mx "*(" this.pos2[1] "-" this.pos1[1] ")/" this.width "+" this.pos1[1] "`n" y "=" my "*(" this.pos2[2] "-" this.pos1[2] ")/" this.height "+" this.pos1[2]
+
         winactivate, % "ahk_id " this.wid
         return
     }
@@ -119,17 +131,18 @@ class microWindow{
         if !isOver_mouse(this.hwnd){
             GUI %GUI_handle%: -Caption -Resize
             this.mouse_allowed:=False
-            return
+            return False
         }
-        if (GetKeyState("Control","P") || GetKeyState("LButton","P") || GetKeyState("RButton","P") || GetKeyState("MButton","P") || WinActive("ahk_id" this.hwnd))
+        WinGetPos, X,,W,, % "ahk_id " this.hwnd
+
+        if (w>A_ScreenWidth//2 || GetKeyState("Control","P") || GetKeyState("LButton","P") || GetKeyState("RButton","P") || GetKeyState("MButton","P") || WinActive("ahk_id" this.hwnd))
             this.mouse_allowed:=True
 
         if this.mouse_allowed {
             GUI %GUI_handle%: +Caption +Resize -MaximizeBox
-        } else {
-            WinGetPos, X,,W,, % "ahk_id " this.hwnd
+            return True
+        } else
             WinMove, % "ahk_id " this.hwnd,, % 2*X>A_ScreenWidth-W ? +64 : A_ScreenWidth-W-16
-        }
-        return
+        return False
     }
 }

@@ -4,18 +4,20 @@ class delayedTimer {
             this.obj:=[]
         return this.obj.push({f:f0,t:t0,r:runatStart})
     }
-    start(){
+    start(r:=False){
         for _,item in this.obj {
             f:=item.f
             setTimer, % f, % item.t
         }
+        return r? this.firstRun() :0
+    }
+    firstRun(){
         for _,item in this.obj
             if item.r
                 %f%()
         return this.reset()
     }
     reset(){
-        this.obj:=[]
-        return 0
+        return this.obj:=[]
     }
 }

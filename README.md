@@ -1,5 +1,6 @@
 # My Startup Script
 
+<!-- ------------------------------------------------------------------------------------------------------ -->
 ## [Libraries](Lib)
 
 * **[ini](Lib/ini.ahk)**  
@@ -45,6 +46,7 @@ Creates Asynchronous download request and saves the reply text in a variable. Un
 * **[PasteText](Lib/pasteText.ahk)**  
 _Work in Progress_
 
+<!-- ------------------------------------------------------------------------------------------------------ -->
 ## [Files](../../)
 
 * **[Master](Master.ahk)**  
@@ -74,21 +76,26 @@ Resize/Move Windows. [Inspired by: [NiftyWindows](http://www.enovatic.org/produc
     * Blocks Chrome's "Disable developer mode extensions" popup
 
 * **[Transparent](Transparent.ahk)**  
-    * **Transparent_Taskbar**: Makes Taskbar semi-transparent when mouse is not over it.
+    * **Transparent_Taskbar**: Makes Taskbar semi-transparent when mouse is not over it. [Inspired by: [FadingTaskbar](http://www.dcmembers.com/skrommel/download/fadingtaskbar/)]
     * **Transparent_Windows**: Makes all windows defined in `TransGroup` (and not in `noTransGroup`) semi-transparent.
     * **Transparent_ImageGlass**: Makes ImageGlass' Background Transparent.
 
 * **[PIP](PIP.ahk)**  
 
 * **[ToggleKeys](Togglekeys.ahk)**  
+[Inspired by: [CapShift](http://www.dcmembers.com/skrommel/download/capshift/)]
+    * **CapsLockOffTimer**: Automatically turns CapsLock off after a period of keyboard inactivity.
+    * **CaseMenu**: Change the case of selected text.
 
 * **[MicroWindows](microWindows.ahk)**  
+Creates a live re-sizable PIP copy of a window [Inspired by: [LiveWindows2](https://autohotkey.com/board/topic/71692-an-updated-livewindows-which-can-also-show-video)]
 
 * **[WinAction](winAction.ahk)**  
 
 * **[RunText](runText.ahk)**  
 
 * **[Internet](internet.ahk)**  
+Checks Internet Connectivity, IP Addresses (Public and Local IPs) and VPN access (You need to provide an IP group that identifies the VPN), and notifies when there is a change.
 
 * **[AutoUpdate](autoUpdate.ahk)**  
 Auto-updates AutoHotKey
