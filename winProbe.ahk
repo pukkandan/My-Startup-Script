@@ -8,7 +8,7 @@ class winProbe {
         if !this.otherObj
             this.otherObj:=ObjBindMethod(this,"toggleOther")
         act:=this.Obj
-        setTimer, % act, 100
+        setTimer, % act, 200
         setTimer, % act, On
         act:=this.copyObj
         Hotkey, ^#w , % act, On
@@ -41,13 +41,19 @@ class winProbe {
     show(){
         DetectHiddenWindows, On
         MouseGetPos,x,y, w, c
+        CoordMode, Mouse, Window
+        MouseGetPos,xw,yw
+        CoordMode, Mouse, Client
+        MouseGetPos,xc,yc
+
+        WinGetPos, win_x, win_y, win_w, win_h, ahk_id %w%
         Winget, pn, ProcessName, ahk_id %w%
         WingetClass, cl, ahk_id %w%
         WinGetTitle, t, ahk_id %w%
         Winget, s, style, ahk_id %w%
         Winget, es, eXstyle, ahk_id %w%
         ControlGetFocus, ac,  ahk_id %w%
-        this.tip:="Title: """ substr(strReplace(t,"`n"," "),1,100) """`nID: " w "`nProcess: " pn "`nClass: " cl "`nStyle: " s "`nExStyle: " es "`nControl: " c "`nActive Control: " ac "`n"
+        this.tip:="Mouse: S:(" x "," y ") W:(" xw "," yw ") C:(" xc "," yc ")`nTitle: """ substr(strReplace(t,"`n"," "),1,100) """`nID: " w "`nProcess: " pn "`nClass: " cl "`nPosition: (" win_x "," win_y ") Size: (" win_w "," win_h ") C: (" win_w+xc-xw "," win_h+yc-yw ")`nStyle: " s "`nExStyle: " es "`nControl: " c "`nActive Control: " ac "`n"
 
         if (this.showOther) {
             winget, l, List, ahk_exe %pn% ahk_class %cl%

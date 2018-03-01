@@ -27,7 +27,7 @@ class winAction{
         Menu, winAction TaskView, Add, Go to , % act
         Menu, winAction, Add, TaskView, :winAction TaskView
 
-        this.PIP_setnames:={1:"Main"}
+        this.PIP_setnames:=["Main","Terminal","Calculator"]
         act:=ObjBindMethod(this,"PIP_add_remove",1)
         Menu, winAction PIP list, Add, % "[1] " this.PIP_setnames[1] , % act
         Menu, winAction PIP, Add, Add to , :winAction PIP list
@@ -83,14 +83,16 @@ class winAction{
         return 0
     }
     PIP_TypeMenu(set:=0){
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"V"}])
-        Menu, winAction PIP type, Add, Potplayer-like [&V], % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"C"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"VJT"}])
+        Menu, winAction PIP type, Add, &Potplayer-like, % act
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"CJT"}])
         Menu, winAction PIP type, Add, &Chrome-like, % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"T"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"J"}])
         Menu, winAction PIP type, Add, Keep &Titlebar, % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"N"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"JT"}])
         Menu, winAction PIP type, Add, &Normal, % act
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"N"}])
+        Menu, winAction PIP type, Add, &Just on Top, % act
         Menu, winAction PIP type, Default, Keep &Titlebar
         Menu, winAction PIP type, show
         return

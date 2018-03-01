@@ -62,8 +62,10 @@ Creates and updates the Tray Icon, Menu and Tip.
 Suspends hotkeys in FullScreen.
 
 * **[WinProbe](winProbe.ahk)**  
+Similar functionality to Window Spy
 
-* **[TaskView](Taskview.ahk)**  
+* **[TaskView](Taskview.ahk)** 
+Provides various functionality related to Windows 10 Virtual Desktops [Inspired by: Windows 10 Virtual Desktop Enhancer](https://github.com/sdias/win-10-virtual-desktop-enhancer)
 
 * **[HotCorners](hotcorners.ahk)**  
 Provides Hot Corner functionality.

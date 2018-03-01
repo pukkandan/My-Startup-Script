@@ -1,18 +1,18 @@
 ; #persistent
-; PP1:={title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64" ,type:"V"}
-; PP2:={title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"       ,type:"V"}
-; C  :={title:"ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"   ,type:"C"}
+; PP1:={title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64" ,type:"VJT"}
+; PP2:={title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"       ,type:"VJT"}
+; C  :={title:"ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"   ,type:"CJT"}
 ; PIP.__new([PP1,PP2,C])
 ; obj:=ObjbindMethod(PIP,"run")
 ; setTimer, % obj, 100
 ; PIP.add("ahk_exe sublime_text.exe ahk_class PX_WINDOW_CLASS")
-; PIP.add([{title:"ahk_exe explorer.exe ahk_class CabinetWClass",type:"T",set:2}])
+; PIP.add([{title:"ahk_exe explorer.exe ahk_class CabinetWClass",type:"J",set:2}])
 ; onExit(ObjbindMethod(PIP,"run",1))
 
 class PIP {
     __new(p:=""){
         this.list:={}, this.sets:=0, this.topListOld:=[], this.topList:=[], mouseAllowed:=[]
-        , this.def:={set:1, type:"T", maxwidth:A_ScreenWidth//2, maxheight:A_ScreenHeight//2}
+        , this.def:={set:1, type:"J", maxwidth:A_ScreenWidth//2, maxheight:A_ScreenHeight//2}
         onExit(ObjbindMethod(this,"run",1))
         if p
             this.add(p)
@@ -26,8 +26,15 @@ class PIP {
             if t is number
                 t:="ahk_id " t
 
-            ;type=V => Potplayer-like, type=C => Chrome-like, type=T => Dont mess with style, N => normal
-            if (p.type!="N" AND p.type!="V" AND p.type!="C" AND p.type!="T")
+            /*      Type
+                    T = Show/Hide Titlebar
+                    J = Jump on MouseOver
+                    V = Dont Show Titlebar on Mouseover (for Video players that have internal titlebar)
+                    C = Eliminate undesired Chrome windows (Page Unresponsive popup)
+                    N = None of the above
+
+             */
+            if (!p.type)
                 p.type:=this.def.type
             if (p.set!="") {
                 set:=p.set
@@ -76,14 +83,15 @@ class PIP {
             if MinMax=-1  ;Minimized
                 continue
             WinGetPos,,, w, h, ahk_id %n%
+            ; msgbox, %w% %h%
             if (h>item.maxHeight || w>item.maxWidth || h<32)    ;Too small
                 continue
-            if (item.type="C"){   ;Chrome-like
+            if inStr(item.type,"C"){   ;Chrome-like
                 WinGetTitle, title, ahk_id %n%
                 if (title="Page Unresponsive" OR title="Pages Unresponsive")
                     continue
                 WinGet, s, Style, ahk_id %n%
-                if (s&0x80000000){  ;Notification
+                if (s&0x80000000){  ;Chrome Notification
                     ;~ WinSet, AlwaysOnTop, On, ahk_id %n%   ;Make Chrome notification come on top
                     continue
                 }
@@ -121,7 +129,7 @@ class PIP {
         this.mouseAllowed[set]:=True
         WinSet, AlwaysOnTop, Off, % "ahk_id " old.id
         taskView.UnpinWindow(old.id)
-        if ( !isFullScreen(old.id,1) AND old.type!="T" )
+        if !isFullScreen(old.id,1) AND inStr(old.type,"T")
             WinSet, Style, +0x400000, % "ahk_id " old.id
     }
     unPIPOld(){
@@ -146,16 +154,20 @@ class PIP {
                 this.mouseAllowed[set]:=True
 
             if (!this.mouseAllowed[set]){
-                WinGetPos, onTopX,,onTopW,, ahk_id %n%
-                WinMove, ahk_id %n%,, % 2*onTopX>A_ScreenWidth-onTopW ? +64 : A_ScreenWidth-onTopW-16
-            } else if (this.topList[set].type="C" OR this.topList[set].type="N")
+                if inStr(this.topList[set].type,"J") {
+                    WinGetPos, onTopX,,onTopW,, ahk_id %n%
+                    WinMove, ahk_id %n%,, % 2*onTopX>A_ScreenWidth-onTopW ? +64 : A_ScreenWidth-onTopW-16
+                }
+            } else if inStr(this.topList[set].type,"T")
                 WinSet, Style, +0xC00000, ahk_id %n%
         } else this.mouseAllowed[set]:=False
 
-        if (this.topList[set].type="V")
-            WinSet, Style, -0x400000, ahk_id %n%
-        else if (!this.mouseAllowed[set] AND this.topList[set].type!="T")
-            WinSet, Style, -0xC00000, ahk_id %n%
+        if inStr(this.topList[set].type,"T") {
+            if inStr(this.topList[set].type,"V")
+                WinSet, Style, -0x400000, ahk_id %n%
+            else if (!this.mouseAllowed[set])
+                WinSet, Style, -0xC00000, ahk_id %n%
+        }
         return
     }
     setPIP(){

@@ -32,7 +32,7 @@ tooltip("Taskview",{life:500})
 taskView.__new()
 
 tooltip("Hotcorners",{life:500})
-#include hotcorners.ahk
+#include hotcorners.ahk ; Refactor as a class
 delayedTimer.set("hotcorners", 100)
 
 tooltip("winSizer",{life:500})
@@ -51,9 +51,12 @@ delayedTimer.set("UnwantedPopupBlocker", 100)
 
 tooltip("PIP",{life:500})
 #include PIP.ahk
-PIP.__new([  {title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64" ,type:"V"}
-            ,{title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"       ,type:"V"}
-            ,{title:"ahk_exe chrome.exe"                                ,type:"C"}     ])
+PIP.__new([  {title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64" ,type:"VJT"}
+            ,{title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"       ,type:"VJT"}
+            ,{title:"ahk_exe chrome.exe"                                ,type:"CJT"}
+            ,{title:"ahk_exe cmd.exe"     , set:2                       ,type:  "T"}
+            ,{title:"ahk_exe calc.exe"    , set:3   , maxheight:500     ,type:  "N"}
+            ,{title:"ahk_exe calc1.exe"   , set:3   , maxheight:500     ,type:  "N"}     ])
 delayedTimer.set(ObjbindMethod(PIP,"run"), 100)
 
 tooltip("Togglekeys",{life:500})
@@ -69,7 +72,7 @@ tooltip("WinAction",{life:500})
 winAction.__new("winAction.ini")    ; Multiple winaction can be created by using obj1:=new winaction("iniName.ini"), ...
 
 tooltip("RunText",{life:500})
-#include runText.ahk  ;Refactor!!
+#include runText.ahk  ;Needs serious Refactoring!!
 global runTextObj:=new runText("Runtext.ini")
 
 tooltip("Internet",{life:500})

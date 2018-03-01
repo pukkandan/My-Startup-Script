@@ -167,7 +167,7 @@ SetCapsLockState, % GetKeyState("Capslock","T")?"Off":"On"
 ~NumLock::
 ~ScrollLock::
 ~Insert::
-  Toast.show( strReplace(A_ThisHotkey,"~$*") (GetKeyState(strReplace(A_ThisHotkey,"~$*"),"T")? " On":" Off") )
+  Toast.show( strReplace(A_ThisHotkey,"~") (GetKeyState(strReplace(A_ThisHotkey,"~"),"T")? " On":" Off") )
 return
 
 ;===================    NetNotify
