@@ -41,7 +41,7 @@ Provides customizable Tooltips.
 `URI_Encode` and `URI_Decode` functions. [Code by: [GeekDude](http://goo.gl/0a0iJq)]
 
 * **[UrlDownload](Lib/urlDownload.ahk)**  
-Creates Asynchronous download request and saves the reply text in a variable. Unlike `UrlDownladToFile`, the script doesnot become unresponsive while the URL is downloading.[Code from: [AHK Documentation](https://autohotkey.com/docs/commands/URLDownloadToFile.htm#Examples)]
+Creates **asynchronous** download request and saves the reply text in a variable. Unlike `UrlDownladToFile`, the script doesnot become unresponsive while the URL is downloading.[Code from: [AHK Documentation](https://autohotkey.com/docs/commands/URLDownloadToFile.htm#Examples)]
 
 * **[PasteText](Lib/pasteText.ahk)**  
 _Work in Progress_
@@ -64,8 +64,8 @@ Suspends hotkeys in FullScreen.
 * **[WinProbe](winProbe.ahk)**  
 Similar functionality to Window Spy
 
-* **[TaskView](Taskview.ahk)** 
-Provides various functionality related to Windows 10 Virtual Desktops [Inspired by: Windows 10 Virtual Desktop Enhancer](https://github.com/sdias/win-10-virtual-desktop-enhancer)
+* **[TaskView](Taskview.ahk)**  
+Provides various functionality related to Windows 10 Virtual Desktops [Inspired by: [Windows 10 Virtual Desktop Enhancer](https://github.com/sdias/win-10-virtual-desktop-enhancer)]
 
 * **[HotCorners](hotcorners.ahk)**  
 Provides Hot Corner functionality.
@@ -74,8 +74,8 @@ Provides Hot Corner functionality.
 Resize/Move Windows. [Inspired by: [NiftyWindows](http://www.enovatic.org/products/niftywindows/features/)]
 
 * **[UnwantedPopupBlocker](UnwantedPopupBlocker.ahk)**  
-    * Blocks SublimeText's "This is an unregistered copy" popup
-    * Blocks Chrome's "Disable developer mode extensions" popup
+    * Blocks SublimeText's `This is an unregistered copy` popup
+    * Blocks Chrome's `Disable developer mode extensions` popup
 
 * **[Transparent](Transparent.ahk)**  
     * **Transparent_Taskbar**: Makes Taskbar semi-transparent when mouse is not over it. [Inspired by: [FadingTaskbar](http://www.dcmembers.com/skrommel/download/fadingtaskbar/)]

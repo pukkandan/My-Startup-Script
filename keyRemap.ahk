@@ -142,7 +142,7 @@ if !winExist("ahk_exe MusicBee.exe") {
     Toast.show("Starting MusicBee")
     Run, D:\Program Files\MusicBee\MusicBee.exe
     WinWait, ahk_exe MusicBee.exe
-    ; Sleep, 1000
+    Sleep, 100
 }
 Toast.show("Play/Pause")
 Send, {Media_Play_Pause}
@@ -183,7 +183,7 @@ RETURN
 /*
 RETURN
 +^Space::
-YouTubePlayPause(){ ;Not perfect
+YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
     Thread, NoTimers
     wid:=WinExist(" - YouTube ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1")
     if !wid
@@ -207,3 +207,9 @@ YouTubePlayPause(){ ;Not perfect
     return
 }
 */
+
+RETURN
+;===================    Calculator
+#NumLock:: Run, calc1.exe
+;===================    Notepad
+#CapsLock:: Run, notepad.exe

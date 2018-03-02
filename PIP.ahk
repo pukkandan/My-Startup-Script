@@ -158,11 +158,11 @@ class PIP {
                     WinGetPos, onTopX,,onTopW,, ahk_id %n%
                     WinMove, ahk_id %n%,, % 2*onTopX>A_ScreenWidth-onTopW ? +64 : A_ScreenWidth-onTopW-16
                 }
-            } else if inStr(this.topList[set].type,"T")
+            } else if inStr(this.topList[set].type,"T") AND !inStr(this.topList[set].type,"V")
                 WinSet, Style, +0xC00000, ahk_id %n%
         } else this.mouseAllowed[set]:=False
 
-        if inStr(this.topList[set].type,"T") {
+        if (!this.mouseAllowed[set]) AND inStr(this.topList[set].type,"T") {
             if inStr(this.topList[set].type,"V")
                 WinSet, Style, -0x400000, ahk_id %n%
             else if (!this.mouseAllowed[set])
@@ -172,7 +172,7 @@ class PIP {
     }
     setPIP(){
         if (this.mouseAllowed[set]="")
-            this.mouseAllowed[set]:=True
+            this.mouseAllowed[set]:=False
         for set in this.topList
             this.PIP(set)
         return
