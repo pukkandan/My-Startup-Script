@@ -1,5 +1,5 @@
 autoUpdate(path:="", download:=True, install:=True, openCLog:=True){
-    regexMatch(urlDownload("https://autohotkey.com/download/1.1/version.txt"),"^\d+\.\d+\.\d+(\.\d+)?$",v)
+    regexMatch(Download("https://autohotkey.com/download/1.1/version.txt"),"^\d+\.\d+\.\d+(\.\d+)?$",v)
     if !v
         return -1
     else if (v<=A_AhkVersion){
@@ -19,7 +19,7 @@ autoUpdate(path:="", download:=True, install:=True, openCLog:=True){
 
     Toast.show({title:{text:"AHK v" v " Available"}, life:download?500:0})
     if (download) {
-        urlDownload_toFile("https://autohotkey.com/download/ahk-install.exe","ahk.exe")
+        Download_toFile("https://autohotkey.com/download/ahk-install.exe","ahk.exe")
         Toast.show({title:{text:"AHK v" v " Downloaded"}, life:install?500:0})
         if (install)
             run *RunAs ahk.exe /s /r /IsHostApp

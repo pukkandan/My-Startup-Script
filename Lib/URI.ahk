@@ -29,3 +29,6 @@ URI_URLEncode(URL) { ; keep ":/;?@,&=+$#."
 URI_URLDecode(URL) {
     return URI_Decode(URL)
 }
+
+;Msgbox % URI_Encode("hi hello")
+;Msgbox % URI_Decode("hi%20hello")

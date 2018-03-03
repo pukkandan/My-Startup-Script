@@ -1,7 +1,7 @@
 getIPInfo(getLoc:=True){
 
     if getLoc {
-        webpage:=urlDownload("https://www.whatismybrowser.com/detect/ip-address-location")
+        webpage:=Download("https://www.whatismybrowser.com/detect/ip-address-location")
         ; http://www.netikus.net/show_ip.html gives faster result, but no location
 
         start:=Instr(webpage, "<div class=""value"">")  ;Location
@@ -10,7 +10,7 @@ getIPInfo(getLoc:=True){
         start:=Instr(webpage, "<p>Your IP Address appears to be: <strong>",start) ;IP
         public_ip:=substr(webpage,start+42,Instr(webpage, "</",false,start+42)-start-42)
     } else
-        regexMatch(urlDownload("http://www.netikus.net/show_ip.html"),"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",public_ip)
+        regexMatch(Download("http://www.netikus.net/show_ip.html"),"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",public_ip)
 
     adapter_count:=0, ipl:=""
     loop, 4 {
