@@ -75,10 +75,12 @@ class PIP {
 
             ;Elimination of undesired windows
             WinGet, currentPID, PID, ahk_id %n%
-            ifWinExist, ahk_class #32768 ahk_pid %currentPID%    ;If a menu exists, the window is not forced on top
-                continue
-            ifWinExist, ahk_class #32770 ahk_pid %currentPID%    ;Special windows like Settings (Potplayer)
-                continue
+            if inStr(item.type,"C") { ;Potplayer-like
+                ifWinExist, ahk_class #32768 ahk_pid %currentPID%    ;If a menu exists, the window is not forced on top
+                    continue
+                ifWinExist, ahk_class #32770 ahk_pid %currentPID%    ;Special windows like Settings
+                    continue
+            }
             WinGet, MinMax, MinMax, ahk_id %n%
             if MinMax=-1  ;Minimized
                 continue
@@ -130,7 +132,7 @@ class PIP {
         WinSet, AlwaysOnTop, Off, % "ahk_id " old.id
         taskView.UnpinWindow(old.id)
         if !isFullScreen(old.id,1) AND inStr(old.type,"T")
-            WinSet, Style, +0x400000, % "ahk_id " old.id
+            WinSet, Style, +0xC00000, % "ahk_id " old.id
     }
     unPIPOld(){
         for set,old in this.topListOld {
