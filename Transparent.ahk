@@ -68,24 +68,32 @@ Transparent_MaxBG(title:="A",color:="F0F0F0"){
 }
 
 ;------------------------------------------------------------------------------------------------
-Transparent_TaskbarGlass(accent_state:=4, gradient_color:=0x40000000) { ;ABGR color
-/*
+Transparent_TaskbarGlass(state:=4, color:=0x40000000) { ;ABGR color
+; Note: Resets when Start menu is active. So set as timer. Even then, it won't work while startmenu is active
+
+/*  state
+    ------------
     0   No color, Fully Transparent
     1   Colored , Fully opaque
     2   Colored , Translucent
-    3   No Color, Blurred (since ithas no color, transparency cant be controlled)
+    3   No Color, Blurred (since it has no color, transparency can't be controlled)
     4   Colored , Blurred
 */
-    static pad := (A_PtrSize=8?4:0), WCA_ACCENT_POLICY := 19, ACCENT_SIZE := VarSetCapacity(ACCENT_POLICY, 16, 0)
 
-    NumPut(accent_state, ACCENT_POLICY, 0, "int")
-    NumPut(gradient_color, ACCENT_POLICY, 8, "int")
+    static ACCENT_POLICY, WINCOMPATTRDATA, state_old, color_old
+    , pad := (A_PtrSize=8?4:0), WCA_ACCENT_POLICY := 19, ACCENT_SIZE := VarSetCapacity(ACCENT_POLICY, 16, 0)
+    , SWCA:= DllCall("GetProcAddress", "Ptr", DllCall("LoadLibrary", "Str", "user32.dll", "Ptr"), "AStr", "SetWindowCompositionAttribute", "Ptr")
 
-    VarSetCapacity(WINCOMPATTRDATA, 8 + 2*pad + A_PtrSize, 0)
-    NumPut(WCA_ACCENT_POLICY, WINCOMPATTRDATA, 0, "int")
-    NumPut(&ACCENT_POLICY, WINCOMPATTRDATA, 4 + pad, "ptr")
-    NumPut(ACCENT_SIZE, WINCOMPATTRDATA, 4 + pad + A_PtrSize, "uint")
-    if DllCall("user32\SetWindowCompositionAttribute", ptr, WinExist("ahk_class Shell_TrayWnd"), ptr, &WINCOMPATTRDATA)
-        return true
-    else return false
+    if (state!=state_old OR color!=color_old) {
+        state_old:=state, color_old:=color
+
+        NumPut(state, ACCENT_POLICY, 0, "int")
+        NumPut(color, ACCENT_POLICY, 8, "int")
+        VarSetCapacity(WINCOMPATTRDATA, 8 + 2*pad + A_PtrSize, 0)
+        NumPut(WCA_ACCENT_POLICY, WINCOMPATTRDATA, 0, "int")
+        NumPut(&ACCENT_POLICY, WINCOMPATTRDATA, 4 + pad, "ptr")
+        NumPut(ACCENT_SIZE, WINCOMPATTRDATA, 4 + pad + A_PtrSize, "uint")
+    }
+
+    return DllCall(SWCA, "ptr", WinExist("ahk_class Shell_TrayWnd"), "ptr", &WINCOMPATTRDATA)
 }

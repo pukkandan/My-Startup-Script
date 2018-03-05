@@ -38,15 +38,11 @@ class microWindow{
     }
 
     dllLoad(){
-        static dll:={}
-        if (this.id!=0)
-            return dll
-        dwmapi      := DllCall("LoadLibrary", "Str", "dwmapi.dll", Ptr)
-
-        dll.DRT    := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmRegisterThumbnail"        , Ptr)
-        dll.DQTSS  := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmQueryThumbnailSourceSize" , Ptr)
-        dll.DUTP   := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUpdateThumbnailProperties", Ptr)
-        dll.DUT    := DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUnregisterThumbnail"      , Ptr)
+        static dwmapi:= DllCall("LoadLibrary", "Str", "dwmapi.dll", Ptr)
+        , dll:={ DRT  :DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmRegisterThumbnail"        , Ptr)
+               , DQTSS:DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmQueryThumbnailSourceSize" , Ptr)
+               , DUTP :DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUpdateThumbnailProperties", Ptr)
+               , DUT  :DllCall("GetProcAddress", Ptr, dwmapi, AStr, "DwmUnregisterThumbnail"      , Ptr)   }
         return dll
     }
     prepare(){

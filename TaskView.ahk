@@ -1,6 +1,5 @@
-class TaskView
-{
-    __new(){
+class TaskView { ; There should only be one object for this
+    __new(){ ; new SHOULD be called, either by "new Taskview" or "TaskView.__new()"
         hVirtualDesktopAccessor := DllCall("LoadLibrary", "Str", A_ScriptDir . "\Lib\virtual-desktop-accessor.dll", "Ptr")
         fList:=[ "GetCurrentDesktopNumber","GetDesktopCount","GoToDesktopNumber"
                 ,"IsWindowOnDesktopNumber","MoveWindowToDesktopNumber"
