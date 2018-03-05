@@ -43,11 +43,12 @@ tooltip("UnwantedPopupBlocker",{life:500})
 #include UnwantedPopupBlocker.ahk
 delayedTimer.set("UnwantedPopupBlocker", 100)
 
-; tooltip("Transparent",{life:500})
-; #include Transparent.ahk
-; delayedTimer.set(Func("Transparent_Taskbar").bind(240), 500)
+ tooltip("Transparent",{life:500})
+ #include Transparent.ahk
+ delayedTimer.set("Transparent_TaskbarGlass", 500)
 ; delayedTimer.set(Func("Transparent_Windows").bind(250), 500)
-; delayedTimer.set("Transparent_ImageGlass", 500)
+ ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe ImageGlass.exe","3C3C3C"), 500)
+ ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe nomacs.exe"    ,"F0F0F0"), 500)
 
 tooltip("PIP",{life:500})
 #include PIP.ahk
