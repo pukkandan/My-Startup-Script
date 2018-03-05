@@ -18,15 +18,14 @@ Allows to create timers without activating them and then activate them all at on
     <details> <summary>Usage</summary>
         
     ```AutoHotKey
-    delayedTimer.set("function1",10000)
+    delayedTimer.set("function1", 10000)
     ; code block 1
-    delayedTimer.set("function2",10000,True)
+    delayedTimer.set("function2", 10000, True)
     ; code block 2
     delayedTimer.start()
     ; code block 3
     delayedTimer.firstRun()
     ```
-        
     The first two lines define the timers `function1()` and `function2()` with 10s each, but don't start the timer yet. `delayedTimer.start()` tells it to start all the defined timers, and `delayedTimer.firstRun()` tells it to run all the functions whose third parameter is `True` (`function2()`) once, and then reset the list of timers. So, it is essentially the same as:
 
     ```AutoHotKey
@@ -37,16 +36,14 @@ Allows to create timers without activating them and then activate them all at on
     ;code block 3
     function2()
     ```
-
     By default, `setTimer` allows you to use function objects, like this:
 
     ```AutoHotKey
-    object_name:=ObjBindMethod(class_name,function_name,arg_1, arg_2)
+    object_name:=ObjBindMethod(class_name, function_name, arg_1, arg_2)
     ;or object_name:=Func("funcion_name").bind(arg_1, arg_2)
     setTimer, % object_name, 100
     ```
-        
-    However, it does **not** allow to use the object directly without defining it in a previous line, like `setTimer, % ObjBindMethod(class_name,function_name,arg_1, arg_2), 100`. However, `delayedTimer()` does allow you to use such objects directly. So, you **can** write `delayedTimer(ObjBindMethod(class_name,function_name,arg_1, arg_2), 100)`.
+    However, it does **not** allow to use the object directly without defining it in a previous line, like `setTimer, % ObjBindMethod(class_name, function_name, arg_1, arg_2), 100`. However, `delayedTimer()` does allow you to use such objects directly. So, you **can** write `delayedTimer(ObjBindMethod(class_name, function_name, arg_1, arg_2), 100)`.
     </details>
 
 
@@ -131,7 +128,7 @@ Resize/Move Windows. [Inspired by: [NiftyWindows](http://www.enovatic.org/produc
     <details> <summary>Usage</summary>
     
     ```AutoHotKey
-    #if !getkeyState("Ctrl","P")
+    #if !getkeyState("Ctrl", "P")
     MButton::WinSizer.start()
     #if
     MButton Up::
@@ -150,9 +147,9 @@ Resize/Move Windows. [Inspired by: [NiftyWindows](http://www.enovatic.org/produc
 
 
 * **[Transparent](Transparent.ahk)**  
-    * **Transparent_Taskbar**: Makes Taskbar semi-transparent when mouse is not over it. [Inspired by: [FadingTaskbar](http://www.dcmembers.com/skrommel/download/fadingtaskbar/)]
-    * **Transparent_Windows**: Makes all windows defined in `TransGroup` (and not in `noTransGroup`) semi-transparent.
-    * **Transparent_ImageGlass**: Makes ImageGlass' Background Transparent.
+    * **Transparent_TaskbarGlass**: Gives Glass effect to Taskbar [Code by: [TaskBar SetAttr](https://github.com/jNizM/AHK_TaskBar_SetAttr)]
+    * **Transparent_Windows**: Makes all windows defined in `TransGroup` (and not in `noTransGroup`) translucent.
+    * **Transparent_MaxBG**: Makes Background Transparent when window is maximized.
 
 
 * **[PIP](PIP.ahk)**  

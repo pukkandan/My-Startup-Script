@@ -2,6 +2,7 @@
 RETURN
 #IfWinNotActive, ahk_group right_drag
 *RButton up::
+Critical
 ; tooltip, % """" rbutton_pressed_as_modifier """" A_PriorHotkey
 if !isPressed("RButton",False)
     send, {Blind}{RButton}
@@ -19,6 +20,7 @@ MButton::winSizer.start()                           ; winSizer
 #if
 
 MButton Up::
+Critical
 if winSizer.end()
     return
 else if isPressed("RButton")
@@ -142,7 +144,7 @@ if !winExist("ahk_exe MusicBee.exe") {
     Toast.show("Starting MusicBee")
     Run, D:\Program Files\MusicBee\MusicBee.exe
     WinWait, ahk_exe MusicBee.exe
-    Sleep, 100
+    Sleep, 1000
 }
 Toast.show("Play/Pause")
 Send, {Media_Play_Pause}
@@ -209,7 +211,6 @@ YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
 */
 
 RETURN
-;===================    Calculator
-#NumLock:: Run, calc1.exe
 ;===================    Notepad
-#CapsLock:: Run, notepad.exe
+#CapsLock:: Run notepad.exe
+#^CapsLock:: Run calc1.exe
