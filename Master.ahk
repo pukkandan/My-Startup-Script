@@ -45,7 +45,7 @@ delayedTimer.set("UnwantedPopupBlocker", 100)
 
  tooltip("Transparent",{life:500})
  #include Transparent.ahk
- delayedTimer.set("Transparent_TaskbarGlass", 500)
+ delayedTimer.set(Func("Transparent_TaskbarGlass").bind(4), 500)
 ; delayedTimer.set(Func("Transparent_Windows").bind(250), 500)
  ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe ImageGlass.exe","3C3C3C"), 500)
  ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe nomacs.exe"    ,"F0F0F0"), 500)
