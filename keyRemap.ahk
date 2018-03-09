@@ -11,7 +11,7 @@ else if A_PriorHotkey not in MButton,MButton Up,WheelUp,WheelDown
 return
 #IfWinNotActive
 
-#if isOver_mouse("ahk_class Shell_TrayWnd") AND winActive("ahk_class MultitaskingViewFrame")        ; When Task Switching
+#if winActive("ahk_class MultitaskingViewFrame") AND isOver_mouse("ahk_class Shell_TrayWnd")        ; When Task Switching
 LButton::send, {Enter}
 #if
 
