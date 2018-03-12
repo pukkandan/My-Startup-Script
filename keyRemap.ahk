@@ -1,5 +1,45 @@
-;===================    Right and Middle Buttons
+;===================    WinSizer
 RETURN
+#if !getkeyState("Ctrl","P")
+MButton::winSizer.start(A_ThisHotkey)
+#if
+
+*MButton Up::
+if !winSizer.running
+    send {Blind}{MButton}
+return
+
+;===================    TaskView
+RETURN
+#if getKeyState("RButton","P")
+MButton Up::
+isPressed("RButton")
+send, #{Tab}
+return
+
+#if getKeyState("MButton","P")                      ; Move window b/w desktops
+WheelUp::
+WheelDown::
+(A_ThisHotkey="WheelUp")? taskView.MoveToDesktopPrev(WinExist("A"),True): taskView.MoveToDesktopNext(WinExist("A"),False)
+sleep 200
+return
+
+#if getKeyState("RButton","P")                            ; Switch Windows
+WheelUp::
+WheelDown::
+isPressed("RButton")
+if (A_ThisHotkey="WheelUp") {
+    ; if (taskView.GetCurrentDesktopNumber()=1)  ;Wrap
+    ;     taskView.GoToDesktopNumber(0)
+    send % "#^{Left}"
+} else {
+    ; if (taskView.GetCurrentDesktopNumber()=taskView.GetDesktopCount())
+    ;     taskView.GoToDesktopNumber(1)
+    send % "#^{Right}"
+}
+sleep 200
+return
+
 #IfWinNotActive, ahk_group right_drag
 *RButton up::
 Critical
@@ -11,46 +51,6 @@ else if A_PriorHotkey not in MButton,MButton Up,WheelUp,WheelDown
 return
 #IfWinNotActive
 
-#if winActive("ahk_class MultitaskingViewFrame") AND isOver_mouse("ahk_class Shell_TrayWnd")        ; When Task Switching
-LButton::send, {Enter}
-#if
-
-#if !getkeyState("Ctrl","P")
-MButton::winSizer.start()                           ; winSizer
-#if
-
-MButton Up::
-Critical
-if winSizer.end()
-    return
-else if isPressed("RButton")
-    send, #{Tab}
-else if isOver_mouse("ahk_class Shell_TrayWnd")    ; Task manager
-    Send, +^{Esc}
-else
-    send, {MButton}
-return
-
-WheelUp::
-WheelDown::
-if getKeyState("MButton","P")                       ; Move window b/w desktops
-    (A_ThisHotkey=="WheelUp") ? taskView.MoveToDesktopPrev(WinExist("A"),True) : taskView.MoveToDesktopNext(WinExist("A"),False)
-else if isPressed("RButton"){
-    ; if (A_ThisHotkey="WheelUp" AND taskView.GetCurrentDesktopNumber()=1)  ;Wrap
-    ;     taskView.GoToDesktopNumber(0)
-    ; else if (A_ThisHotkey="WheelDown" AND taskView.GetCurrentDesktopNumber()=taskView.GetDesktopCount())
-    ;     taskView.GoToDesktopNumber(1)
-    ; else
-        send, % "#^{" (A_ThisHotkey="WheelUp" ? "Left":"Right") "}"
-} else if isOver_mouse("ahk_class Shell_TrayWnd")   ; Alt tab over taskbar
-    send, % A_ThisHotkey="WheelUp" ? "^+!{Tab}" : "^!{Tab}"
-else {
-    send, % "{" A_ThisHotkey "}"
-    return
-}
-sleep, 200
-return
-
 isPressed(key,check:=True){
     /*
     Checks if the key is pressed and stores that info
@@ -60,7 +60,23 @@ isPressed(key,check:=True){
         pressed[key]:=getkeystate(key,"P")
     return pressed.haskey(key)?pressed[key]:False
 }
+wasPressed(key){
+    return isPressed(key,False)
+}
+
+;===================    Over Taskbar
+RETURN
+#if isOver_mouse("ahk_class Shell_TrayWnd")   ; Alt tab over taskbar
+WheelUp::
+WheelDown::
+send % A_ThisHotkey="WheelUp" ? "^+!{Tab}" : "^!{Tab}"
 return
+MButton Up:: Send +^{Esc}    ; Task manager
+
+#if winActive("ahk_class MultitaskingViewFrame") AND isOver_mouse("ahk_class Shell_TrayWnd")        ; When Task Switching
+LButton::send, {Enter}
+#if
+
 ;===================    Ditto & Listary
 RETURN
 XButton2::

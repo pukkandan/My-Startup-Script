@@ -14,7 +14,6 @@ class runText{
         this.getGlobalSettings()
         this.createGUI_Frame()
         this.addMainItems()
-        this.putItemsInGUI()
     }
     getGlobalSettings(){
         this.iconSize:=this.settings.get("Main","IconSize",32)
@@ -79,7 +78,7 @@ class runText{
         else py:="p+0", px="+2"
         id:=obj.id
         , iconNo:=ResourceIDofIcon(obj.icon,obj.iconNo)
-        GUI, Add, Picture, x%px% y%py% W%iconSize% H%iconSize% +BackgroundTrans vRunText_%id% gRunTextIconClicked icon%iconNo%
+        GUI, RunTextGUI:Add, Picture, x%px% y%py% W%iconSize% H%iconSize% +BackgroundTrans vRunText_%id% gRunTextIconClicked icon%iconNo%
         , % obj.icon
     }
 
@@ -90,6 +89,8 @@ class runText{
         text:=text?text:Clipboard
         text:=RegExReplace(RegExReplace(text, "[`t`n]| +"," "), "^ | $|`r")
 
+        if (!this.GUIwidth)
+            this.putItemsInGUI()
         GUI, RunTextGUI:Hide
         CoordMode, Mouse, Screen
         MouseGetPos, m_x, m_y

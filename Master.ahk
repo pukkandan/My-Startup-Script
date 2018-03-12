@@ -92,8 +92,8 @@ GroupAdd, right_drag, ahk_exe cmd.exe
 GroupAdd, right_drag, ahk_exe vivaldi.exe
 
 tooltip
+suspend Off
 delayedTimer.start()
-suspend, Off
 Toast.show("Script Loaded")
 delayedTimer.firstRun()
 ;============================== End of auto-execute
