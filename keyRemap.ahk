@@ -1,22 +1,19 @@
 ;===================    WinSizer
 RETURN
-#if !getkeyState("Ctrl","P")
-MButton::winSizer.start(A_ThisHotkey)
-#if
-
-*MButton Up::
-if !winSizer.running
-    send {Blind}{MButton}
+#if getKeyState("RButton","P")
+MButton::
+isPressed("RButton")
+winSizer.start("RButton")
 return
+MButton Up::
+isPressed("RButton")
+if !winSizer.end()
+    send, #{Tab}
+return
+#if
 
 ;===================    TaskView
 RETURN
-#if getKeyState("RButton","P")
-MButton Up::
-isPressed("RButton")
-send, #{Tab}
-return
-
 #if getKeyState("MButton","P")                      ; Move window b/w desktops
 WheelUp::
 WheelDown::
