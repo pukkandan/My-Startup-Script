@@ -78,7 +78,7 @@ netNotify(refresh:=True,show:=True,life:=0) {
         else if net.status=1 and old.status=2
             title:= "VPN disconnected"             , highlight:={2:True}
         else if net.status=2 and old.status<=0
-            title=Internet Connected (with VPN)    , highlight:={1:True, 2:True}
+            title:= "Internet Connected (with VPN)", highlight:={1:True, 2:True}
         else if net.status=2 and old.status=1
             title:= "VPN Connected"                , highlight:={2:True}
 
@@ -89,12 +89,12 @@ netNotify(refresh:=True,show:=True,life:=0) {
     if (current.status="")
         msg:=["No Info"], color:=[False]
     else{
-        msg:= ["Network = " (current.status=-1?"False":"True")
-              , "Internet = " (current.status>0?"True":"False")
-              , "VPN = " (current.status=2?"True":"False")
-              , "Public IP = " current.ipInfo.ip
-              , "IP Location = " (current.ipInfo.loc?current.ipInfo.loc :"?")
-              , "Local IP = " current.ipInfo.ipl       ]
+        msg:= [ "Network = "     (current.status=-1 ?"No"               :"Yes" )
+              , "Internet = "    (current.status>0  ?"Yes"              :"No"  )
+              , "VPN = "         (current.status=2  ?"Yes"              :"No"  )
+              , "Public IP = "   (current.ipInfo.ip ?current.ipInfo.ip  :"None")
+              , "IP Location = " (current.ipInfo.loc?current.ipInfo.loc :"?"   )
+              , "Local IP = "    (current.ipInfo.ipl?current.ipInfo.ipl :"None")       ]
 
         color:= [ current.status!=-1, current.status>0, current.status==2, current.ipInfo.ip, current.ipInfo.loc, current.ipInfo.ipl]
     }

@@ -2,11 +2,9 @@
 RETURN
 #if getKeyState("RButton","P")
 MButton::
-isPressed("RButton")
 winSizer.start("RButton")
 return
 MButton Up::
-isPressed("RButton")
 if !winSizer.end()
     send, #{Tab}
 return
@@ -24,7 +22,6 @@ return
 #if getKeyState("RButton","P")                            ; Switch Windows
 WheelUp::
 WheelDown::
-isPressed("RButton")
 if (A_ThisHotkey="WheelUp") {
     ; if (taskView.GetCurrentDesktopNumber()=1)  ;Wrap
     ;     taskView.GoToDesktopNumber(0)
@@ -37,29 +34,14 @@ if (A_ThisHotkey="WheelUp") {
 sleep 200
 return
 
-#IfWinNotActive, ahk_group right_drag
+#if !winActive("ahk_group right_drag")
 *RButton up::
 Critical
-; tooltip, % """" rbutton_pressed_as_modifier """" A_PriorHotkey
-if !isPressed("RButton",False)
-    send, {Blind}{RButton}
-else if A_PriorHotkey not in MButton,MButton Up,WheelUp,WheelDown
-    send, {Blind}{RButton}
+if !{"MButton":0,"MButton Up":0,"WheelUp":0,"WheelDown":0}.haskey(A_PriorKey)
+    send % "{RButton Up}"
 return
-#IfWinNotActive
+#If
 
-isPressed(key,check:=True){
-    /*
-    Checks if the key is pressed and stores that info
-     */
-    static pressed:={}
-    if check
-        pressed[key]:=getkeystate(key,"P")
-    return pressed.haskey(key)?pressed[key]:False
-}
-wasPressed(key){
-    return isPressed(key,False)
-}
 
 ;===================    Over Taskbar
 RETURN
@@ -123,9 +105,7 @@ return
 ;===================    winAction & RunText
 RETURN
 XButton1::
-; Tooltip("winAction")
 Keywait, %A_ThisHotkey%, T0.25
-Tooltip
 if !ErrorLevel {
     #w:: winAction.show()
 } else {
