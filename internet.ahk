@@ -26,9 +26,7 @@ getIPInfo(getLoc:=True){
 }
 
 netStatus(){
-    static VPN_prefix:="10.3.", n, time_start, old_status:=""
-    if !n
-        n:=strlen(VPN_prefix)
+    static VPN_prefix:="10.3.", n:=strlen(VPN_prefix), time_start, old_status:=""
 
     ipInfo:=getIPInfo()
     if ipInfo.count=0

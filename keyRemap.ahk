@@ -1,3 +1,23 @@
+;===================    Switch to next window
+RETURN
+#if getKeyState("RButton","P")
+LButton::
+;Alt Tab is not used since it shows the TaskSwitcher Window
+sendWindowBack(){
+    winget ids, list
+    winget activeID, id, A
+    loop % ids {
+        if (activeID!=ids%A_Index%)
+            continue
+        i:=A_Index+1
+        ;Use next two lines to send active window one step back without activating the window behind
+        ;winset AlwaysOntop, On, % "ahk_id " ids%i%
+        ;winset AlwaysOntop, Off, % "ahk_id " ids%i%
+        winActivate % "ahk_id " ids%i%
+        break
+    }
+}
+
 ;===================    WinSizer
 RETURN
 #if getKeyState("RButton","P")
@@ -37,8 +57,8 @@ return
 #if !winActive("ahk_group right_drag")
 *RButton up::
 Critical
-if !{"MButton":0,"MButton Up":0,"WheelUp":0,"WheelDown":0}.haskey(A_PriorKey)
-    send % "{RButton Up}"
+if !{"MButton":0,"MButton Up":0,"WheelUp":0,"WheelDown":0,"LButton":0}.haskey(A_PriorKey)
+    send % "{Blind}{RButton}"
 return
 #If
 
