@@ -1,9 +1,8 @@
-;===================    Switch to next window
+;===================    R/M Button
 RETURN
 #if getKeyState("RButton","P")
-LButton::
-;Alt Tab is not used since it shows the TaskSwitcher Window
-sendWindowBack(){
+LButton::                   ; Switch to next window
+sendWindowBack(){ ;Alt Tab is not used since it shows the TaskSwitcher Window
     winget ids, list
     winget activeID, id, A
     loop % ids {
@@ -17,30 +16,17 @@ sendWindowBack(){
         break
     }
 }
+return
 
-;===================    WinSizer
-RETURN
-#if getKeyState("RButton","P")
-MButton::
+MButton::                   ; WinSizer
 winSizer.start("RButton")
 return
 MButton Up::
 if !winSizer.end()
     send, #{Tab}
 return
-#if
 
-;===================    TaskView
-RETURN
-#if getKeyState("MButton","P")                      ; Move window b/w desktops
-WheelUp::
-WheelDown::
-(A_ThisHotkey="WheelUp")? taskView.MoveToDesktopPrev(WinExist("A"),True): taskView.MoveToDesktopNext(WinExist("A"),False)
-sleep 200
-return
-
-#if getKeyState("RButton","P")                            ; Switch Windows
-WheelUp::
+WheelUp::                   ; Switch Windows
 WheelDown::
 if (A_ThisHotkey="WheelUp") {
     ; if (taskView.GetCurrentDesktopNumber()=1)  ;Wrap
@@ -51,6 +37,13 @@ if (A_ThisHotkey="WheelUp") {
     ;     taskView.GoToDesktopNumber(1)
     send % "#^{Right}"
 }
+sleep 200
+return
+
+#if getKeyState("MButton","P")                      ; Move window b/w desktops
+WheelUp::
+WheelDown::
+(A_ThisHotkey="WheelUp")? taskView.MoveToDesktopPrev(WinExist("A"),True): taskView.MoveToDesktopNext(WinExist("A"),False)
 sleep 200
 return
 
@@ -142,7 +135,7 @@ Menu, Tray, Show
 return
 ;===================    Invert F1
 RETURN
-#F1::Send, {F1}
+#F1::Send {F1}
 return
 ;===================    Open Potplayer
 RETURN
@@ -182,7 +175,7 @@ SetCapsLockState, % GetKeyState("Capslock","T")?"Off":"On"
 ~NumLock::
 ~ScrollLock::
 ~Insert::
-  Toast.show( strReplace(A_ThisHotkey,"~") (GetKeyState(strReplace(A_ThisHotkey,"~"),"T")? " On":" Off") )
+  Toast.show( {title:{text:strReplace(A_ThisHotkey,"~") (GetKeyState(strReplace(A_ThisHotkey,"~"),"T")? " On":" Off")}, sound:True})
 return
 
 ;===================    NetNotify
@@ -223,7 +216,22 @@ YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
 }
 */
 
+;===================    Calc/cmd/Notepad
 RETURN
-;===================    Notepad
-#CapsLock:: Run notepad.exe
+#+CapsLock:: Run notepad.exe
 #^CapsLock:: Run calc1.exe
+#CapsLock::  Run cmd.exe
+
+;===================    Groupy
+RETURN
+!CapsLock::Send #{F12}
+!+CapsLock::Send #^{F12}
+
+;===================    Fences Pages
+RETURN
+#if winActive("ahk_class WorkerW ahk_exe explorer.exe") AND getKeyState("LButton","P")
+WheelUp::
+WheelDown::
+send % "{LButton Up}!{" (A_ThisHotkey="WheelUp"?"WheelDown":"WheelUp") "}"
+return
+#if

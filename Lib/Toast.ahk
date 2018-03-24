@@ -14,7 +14,7 @@ class Toast{
         toastCount++
         this.id:=toastCount, this.closeObj:=ObjBindMethod(this,"close")
         ,this.def:={ life:500, pos:{x:"center",y:"center"}, bgColor:"0x222222", trans:250, margin:{x:5,y:5}
-                    , closekeys:[["Space","Return","~LButton","Esc"]], sound:false, activate:False
+                    , closekeys:[["~Space","Return","~LButton","Esc"]], sound:false, activate:False
                     , title:{ text:"", color: "0xFFFFFF", size:14, opt:"bold", font:"Segoe UI" }
                     , message:{ text:[], color: [], size:[], opt:[], name:[], offset:[20]
                               , def_color: "0xFFFFFF", def_size:12, def_opt:"", def_name:"Segoe UI", def_offset:5 } }

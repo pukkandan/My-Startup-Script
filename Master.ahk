@@ -1,6 +1,7 @@
 Suspend, On
 #include %A_ScriptDir%  ;Sets dir for includes
 #include Directives.ahk
+
 ; #include <byteWord>
 #include <ini>
 #include <Toast>
