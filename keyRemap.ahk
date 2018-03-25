@@ -140,7 +140,6 @@ return
 ;===================    Open Potplayer
 RETURN
 #v::Run, D:\Program Files\Potplayer\PotplayerMini64.exe %Clipboard%
-return
 
 ;===================    Open MusicBee
 RETURN
@@ -153,8 +152,16 @@ if !winExist("ahk_exe MusicBee.exe") {
     Sleep, 1000
 }
 Toast.show("Play/Pause")
-Send, {Media_Play_Pause}
+Send {Media_Play_Pause}
 return
+
+#if ProcessExist("MusicBee.exe")
+processExist(p){ ;This function is available in v2
+    Process exist, % p
+    return ErrorLevel
+}
+;MusicBee doesnt respond to Media_Play_Pause sometimes. So I set it's global hotkey to #^{F10}
+Media_Play_Pause::send #^{F10}
 
 ;===================    Listary launcher
 ; RETURN
