@@ -92,11 +92,17 @@ GroupAdd, right_drag, ahk_exe mspaint1.exe
 GroupAdd, right_drag, ahk_exe cmd.exe
 GroupAdd, right_drag, ahk_exe vivaldi.exe
 
-tooltip
-suspend Off
+;Required for HotStrings
+GroupAdd, AutoBracket, ahk_exe notepad.exe
+GroupAdd, AutoBracket, ahk_exe mathematica.exe
+GroupAdd, AutoBracket, ahk_exe chrome.exe
+
+tooltip("Starting Timers",{life:500})
 delayedTimer.start()
-Toast.show("Script Loaded")
 delayedTimer.firstRun()
+tooltip
+Toast.show("Script Loaded")
+suspend Off
 ;============================== End of auto-execute
 #include keyRemap.ahk
 #include *i hotStrings.ahk ;Has personal data in this file

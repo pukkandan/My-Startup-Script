@@ -152,7 +152,7 @@ if !winExist("ahk_exe MusicBee.exe") {
     Sleep, 1000
 }
 Toast.show("Play/Pause")
-Send {Media_Play_Pause}
+Send #{F10} ; The same key is set as global play/pause in MusicBee
 return
 
 #if ProcessExist("MusicBee.exe")
@@ -160,8 +160,11 @@ processExist(p){ ;This function is available in v2
     Process exist, % p
     return ErrorLevel
 }
-;MusicBee doesnt respond to Media_Play_Pause sometimes. So I set it's global hotkey to #^{F10}
-Media_Play_Pause::send #^{F10}
+; MusicBee sometimes doesnt respond to Media buttons. So I set it's global hotkey to #{F9/10/11}
+Media_Prev::      send #{F9}
+Media_Play_Pause::send #{F10}
+Media_Next::      send #{F11}
+#if
 
 ;===================    Listary launcher
 ; RETURN
@@ -178,12 +181,23 @@ if (ErrorLevel){
     caseMenu.show()
     return
 }
-SetCapsLockState, % GetKeyState("Capslock","T")?"Off":"On"
+SendLevel 1
+sendEvent » ;Used to trigger my hotstrings
+return
+
+RETURN
++~CapsLock::
 ~NumLock::
 ~ScrollLock::
 ~Insert::
-  Toast.show( {title:{text:strReplace(A_ThisHotkey,"~") (GetKeyState(strReplace(A_ThisHotkey,"~"),"T")? " On":" Off")}, sound:True})
+  Toast.show( {title:{text:strRemove(A_ThisHotkey,["~","+"]) (GetKeyState(strRemove(A_ThisHotkey,["~","+"]),"T")? " On":" Off")}, sound:True})
 return
+
+strRemove(parent,strlist) {
+    for _,str in strlist
+        parent:=strReplace(parent,str)
+    return parent
+}
 
 ;===================    NetNotify
 RETURN
