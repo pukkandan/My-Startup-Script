@@ -47,18 +47,18 @@ delayedTimer.set("UnwantedPopupBlocker", 100)
 tooltip("Transparent",{life:500})
 #include Transparent.ahk
 delayedTimer.set(Func("Transparent_TaskbarGlass").bind(4), 500)
-;delayedTimer.set(Func("Transparent_Windows").bind(250), 500)
+;delayedTimer.set(Func("Transparent_Windows").bind(240), 500)
 ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe ImageGlass.exe","3C3C3C"), 500)
 ;delayedTimer.set(Func("Transparent_MaxBG").bind("ahk_exe nomacs.exe"    ,"F0F0F0"), 500)
 
 tooltip("PIP",{life:500})
 #include PIP.ahk
-PIP.__new([  {title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64" ,type:"VJT"}
-            ,{title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"       ,type:"VJT"}
-            ,{title:"ahk_exe chrome.exe"                                ,type:"CJT"}
-            ,{title:"ahk_exe cmd.exe"     , set:2                       ,type:  "T"}
-            ,{title:"ahk_exe calc.exe"    , set:3   , maxheight:500     ,type:  "N"}
-            ,{title:"ahk_exe calc1.exe"   , set:3   , maxheight:500     ,type:  "N"}     ])
+PIP.__new([  {title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64"     , type:"VJT"}
+            ,{title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"           , type:"VJT"}
+            ,{title:"ahk_exe chrome.exe"                                    , type:"CJT"}
+            ,{title:"ahk_class ConsoleWindowClass", set:2                   , type:  "T"}
+            ,{title:"ahk_exe calc.exe"            , set:3, maxheight:500    , type:  "N"}
+            ,{title:"ahk_exe calc1.exe"           , set:3, maxheight:500    , type:  "N"}     ])
 delayedTimer.set(ObjbindMethod(PIP,"run"), 100)
 
 tooltip("Togglekeys",{life:500})
@@ -105,7 +105,7 @@ Toast.show("Script Loaded")
 suspend Off
 ;============================== End of auto-execute
 #include keyRemap.ahk
-#include *i hotStrings.ahk ;Has personal data in this file
+#include hotStrings.ahk ;Has personal data in this file
 
 RETURN
 Exit:

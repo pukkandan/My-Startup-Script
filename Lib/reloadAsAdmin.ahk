@@ -1,16 +1,12 @@
-reloadAsAdmin(force=True){
+reloadAsAdmin(force:=True){
     if A_IsAdmin
         return 0
-    try{
-        Run % "*RunAs" ( A_IsCompiled ? "" : """"  A_AhkPath """" )  " """ A_ScriptFullpath """", %A_ScriptDir%, UseErrorLevel
-        ExitApp
-    } catch e
-        _reloadAsAdmin_Error(e,force)
-    return 1
+    Run % "*RunAs " ( A_IsCompiled ? "" : """"  A_AhkPath """" )  " """ A_ScriptFullpath """", %A_ScriptDir%, UseErrorLevel
+    return _reloadAsAdmin_Error(e,force)
 }
 
 ;http://ahkscript.org/boards/viewtopic.php?t=4334
-reloadAsAdmin_Task(force=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:22/Aug/2014
+reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:22/Aug/2014
 ; Asks for UAC only first time
 
   TASK_CREATE := 0x2,  TASK_LOGON_INTERACTIVE_TOKEN := 3
@@ -71,5 +67,5 @@ _reloadAsAdmin_Error(e,force){
         MsgBox, 4112, FATAL ERROR!!, Couldn't restart script!!`nError Code: %e%
         ExitApp
     }
-    return
+    return 1
 }

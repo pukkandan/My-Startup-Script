@@ -3,6 +3,7 @@ suspendOnFS(){
     {
         Suspend, On
         setTimer, hotcorners, Off
+        setTimer, netNotify, Off
         setTimer,, Off
         setTimer, resumeOnWin, 100
     }
@@ -13,6 +14,7 @@ resumeOnWin(){
     {
         Suspend, Off
         setTimer, hotcorners, On
+        setTimer, netNotify, On
         setTimer,, Off
         setTimer, suspendOnFS, On
     }

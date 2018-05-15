@@ -182,7 +182,7 @@ if (ErrorLevel){
     return
 }
 SendLevel 1
-sendEvent » ;Used to trigger my hotstrings
+sendEvent » ;Used to trigger many hotstrings
 return
 
 RETURN
@@ -255,4 +255,11 @@ WheelUp::
 WheelDown::
 send % "{LButton Up}!{" (A_ThisHotkey="WheelUp"?"WheelDown":"WheelUp") "}"
 return
+#if
+
+;===================    Send `n/`t in cases where enter/tab is used for other purposes
+#if !winActive("ahk_exe Mathematica.exe")
++Enter::Send `n
+#if !winActive("ahk_exe sublime_text.exe")
++Tab::Send % "    " ;I prefer 4 spaces instead of tab in some situations where I need to use +tab
 #if

@@ -13,5 +13,8 @@ unwantedPopupBlocker(){
         send, {esc}
         ; ControlSend, Intermediate D3D Window1, {esc},
     }
+
+    IfWinExist, Error ahk_class #32770 ahk_exe SdDisplay.exe
+        winclose
     return
 }

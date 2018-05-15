@@ -33,7 +33,7 @@ class PIP {
                     C = Eliminate undesired Chrome windows (Page Unresponsive popup)
                     N = None of the above
 
-             */
+            */
             if (!p.type)
                 p.type:=this.def.type
             if (p.set!="") {
@@ -75,7 +75,7 @@ class PIP {
 
             ;Elimination of undesired windows
             WinGet, currentPID, PID, ahk_id %n%
-            if inStr(item.type,"C") { ;Potplayer-like
+            if inStr(item.type,"V") { ;Potplayer-like
                 ifWinExist, ahk_class #32768 ahk_pid %currentPID%    ;If a menu exists, the window is not forced on top
                     continue
                 ifWinExist, ahk_class #32770 ahk_pid %currentPID%    ;Special windows like Settings

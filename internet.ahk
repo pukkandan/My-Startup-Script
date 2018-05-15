@@ -10,7 +10,7 @@ getIPInfo(getLoc:=True){
         start:=Instr(webpage, "<p>Your IP Address appears to be: <strong>",start) ;IP
         public_ip:=substr(webpage,start+42,Instr(webpage, "</",false,start+42)-start-42)
     } else
-        regexMatch(Download("http://www.netikus.net/show_ip.html"),"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$",public_ip)
+        regexMatch(Download("http://www.netikus.net/show_ip.html"),"^\d{1,3}(\.\d{1,3}){3}$",public_ip)
 
     adapter_count:=0, ipl:=""
     loop, 4 {
@@ -62,22 +62,22 @@ netNotify(refresh:=True,show:=True,life:=0) {
             return
         }
 
-        if (net.time<=0 or old.status=net.status)
+        if (net.time<=0 OR old.status=net.status)
             return current:=net   ; Not enough time to show notification OR no change
 
-        if net.status=0 and old.status>0
+        if net.status=0 AND old.status>0
             title:= "Internet disconnected"        , highlight:={1:True}
-        else if net.status=-1 and old.status>=0
+        else if net.status=-1 AND old.status>=0
             title:="No Network Connection"         , highlight:={0:True}
-        else if net.status=0 and old.status=-1
+        else if net.status=0 AND old.status=-1
             title:= "Network Connected"            , highlight:={0:True}
-        else if net.status=1 and old.status<=0
+        else if net.status=1 AND old.status<=0
             title:= "Internet Connected"           , highlight:={1:True}
-        else if net.status=1 and old.status=2
+        else if net.status=1 AND old.status=2
             title:= "VPN disconnected"             , highlight:={2:True}
-        else if net.status=2 and old.status<=0
+        else if net.status=2 AND old.status<=0
             title:= "Internet Connected (with VPN)", highlight:={1:True, 2:True}
-        else if net.status=2 and old.status=1
+        else if net.status=2 AND old.status=1
             title:= "VPN Connected"                , highlight:={2:True}
 
         current:=net, old:=net
