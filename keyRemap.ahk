@@ -109,8 +109,10 @@ runListary(){
     if ErrorLevel
         return
     sleep, 10
+    clipboard:=text
+    ClipWait
     ; pasteText(text, "ahk_exe Listary.exe")
-    sendRaw,% text
+    send, +{Insert}
     send, ^a
     return
 }
