@@ -10,7 +10,7 @@ Suspend, On
 
 tooltip("ReloadScriptOnEdit",{life:500})
 delayedTimer.set(func("ReloadScriptOnEdit").bind([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000, True)
-delayedTimer.start(True) ;Dont delay
+;delayedTimer.start(True) ;Dont delay
 
 tooltip("Tray",{life:500})
 #include Tray.ahk
@@ -29,7 +29,7 @@ tooltip("dimScreen",{life:500})
 ; dimScreen(120)
 
 tooltip("Taskview",{life:500})
-#include Taskview.ahk
+#include Taskview_Temp.ahk
 taskView.__new()
 
 tooltip("Hotcorners",{life:500})
