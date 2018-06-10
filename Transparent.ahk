@@ -68,17 +68,17 @@ Transparent_MaxBG(title:="A",color:="F0F0F0"){
 }
 
 ;------------------------------------------------------------------------------------------------
-Transparent_TaskbarGlass(state:=-4, color:=0x40000000) { ;ABGR color
+Transparent_TaskbarGlass(state:=-3, color:=0x40000000) { ;ABGR color
 ; Note: Resets when Start menu is active. So set as timer. Even then, it won't work while startmenu/taskview is active
 
 /*  state
     ------------
-    0   No color, Fully Transparent
+    0   No color, Fully Opaque
     1   Colored , Fully opaque
     2   Colored , Translucent
     3   No Color, Blurred (since it has no color, transparency can't be controlled)
     4   Colored , Blurred
-   <0   0 when on desktop and |state| otherwise
+   <0   (2,0x01000000) when on desktop and (|state|,color) otherwise
 */
     static ACCENT_POLICY, WINCOMPATTRDATA, state_old, color_old
     , pad := (A_PtrSize=8?4:0), WCA_ACCENT_POLICY := 19, ACCENT_SIZE := VarSetCapacity(ACCENT_POLICY, 16, 0)
@@ -86,7 +86,9 @@ Transparent_TaskbarGlass(state:=-4, color:=0x40000000) { ;ABGR color
 
     if(state<0){
         WinGetClass c, A
-        state:=(c="Progman" OR c="WorkerW" OR c="Shell_TrayWnd")?0:-state
+        if(c="Progman" OR c="WorkerW" OR c="Shell_TrayWnd"){
+            state:=2, color:=0x01000000
+        } else state:=-state
     }
 
     if (state_old!=(state:=mod(state,5)) OR color_old!=color) {

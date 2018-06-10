@@ -42,6 +42,7 @@ class TaskView { ; There should only be one object for this
         win:="ahk_id " hwnd
         WinGet, minMax, MinMax, % win
         winHide % win
+        sleep 100
         winShow % win
         if minMax=1
         {

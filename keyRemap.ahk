@@ -58,14 +58,14 @@ return
 
 ;===================    Over Taskbar
 RETURN
-#if isOver_mouse("ahk_class Shell_TrayWnd")   ; Alt tab over taskbar
+#if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")   ; Alt tab over taskbar
 WheelUp::
 WheelDown::
 send % A_ThisHotkey="WheelUp" ? "^+!{Tab}" : "^!{Tab}"
 return
 MButton Up:: Send +^{Esc}    ; Task manager
 
-#if winActive("ahk_class MultitaskingViewFrame") AND isOver_mouse("ahk_class Shell_TrayWnd")        ; When Task Switching
+#if winActive("Task Switching ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE") AND isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")        ; When Task Switching
 LButton::send, {Enter}
 #if
 
@@ -103,7 +103,7 @@ runListary(){
         if ErrorLevel
             return
     }
-    send, ^#``
+    send, !``
     DetectHiddenWindows, Off
     Winwait, ahk_exe Listary.exe,,2
     if ErrorLevel
@@ -124,7 +124,7 @@ Keywait, %A_ThisHotkey%, T0.25
 if !ErrorLevel {
     #w:: winAction.show()
 } else {
-    !`:: runTextObj.showGUI()
+    #`:: runTextObj.showGUI()
 }
 return
 
@@ -247,8 +247,8 @@ RETURN
 
 ;===================    Groupy
 RETURN
-!CapsLock::Send #{F12}
-!+CapsLock::Send #^{F12}
+!CapsLock::Send #``
+!+CapsLock::Send #^``
 
 ;===================    Fences Pages
 RETURN
