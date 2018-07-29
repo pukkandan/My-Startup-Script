@@ -33,15 +33,15 @@ trayMenu(){
 }
 AHK_Help(){
     SplitPath, A_AhkPath,, path
-    Run, %path%\AutoHotkey.chm
+    ShellRun(path "\AutoHotkey.chm")
     return
 }
 SCR_OpenFolder(){
-    Run, % A_ScriptDir
+    ShellRun(A_ScriptDir)
     return
 }
 SCR_Edit(){
-    Run, %SCR_Name%.sublime-project
+    ShellRun(SCR_Name ".sublime-project")
     return
 }
 SCR_Reload(){
@@ -60,12 +60,12 @@ SCR_Pause(){
 
 AHK_Help2(){
     SplitPath, A_AhkPath,, path
-    Run, %path%_v2\AutoHotkey.chm
+    ShellRun( path "_v2\AutoHotkey.chm")
     return
 }
 SCR_Edit2(){
     SplitPath, % A_ScriptDir, , OutDir,
-    Run, %OutDir%\%SCR_Name%_v2\%SCR_Name%.sublime-project
+    ShellRun( OutDir "\" SCR_Name "_v2\" SCR_Name ".sublime-project")
     return
 }
 

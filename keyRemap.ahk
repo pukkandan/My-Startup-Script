@@ -83,7 +83,7 @@ if !ErrorLevel {
     }
     else {
         Toast.show("Starting Ditto . . .")
-        Run, D:\Program Files\Ditto\Ditto.exe
+        ShellRun("D:\Program Files\Ditto\Ditto.exe")
     }
 } else {
     !Space:: runListary()
@@ -97,7 +97,7 @@ runListary(){
     text:=strlen(text)<100?text:""
     Process, Exist, Listary.exe
     if !ErrorLevel {
-        Run, D:\Program Files\Listary\Listary.exe
+        ShellRun("D:\Program Files\Listary\Listary.exe")
         DetectHiddenWindows, On
         Winwait, ahk_exe Listary.exe,, 2
         if ErrorLevel
@@ -141,7 +141,7 @@ RETURN
 return
 ;===================    Open Potplayer
 RETURN
-#v::Run, D:\Program Files\Potplayer\PotplayerMini64.exe %Clipboard%
+#v::ShellRun("D:\Program Files\Potplayer\PotplayerMini64.exe" Clipboard)
 
 ;===================    Open MusicBee
 RETURN
@@ -149,7 +149,7 @@ RETURN
 DetectHiddenWindows, On
 if !winExist("ahk_exe MusicBee.exe") {
     Toast.show("Starting MusicBee")
-    Run, D:\Program Files\MusicBee\MusicBee.exe
+    ShellRun("D:\Program Files\MusicBee\MusicBee.exe")
     WinWait, ahk_exe MusicBee.exe
     Sleep, 2000
 }
@@ -242,10 +242,10 @@ YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
 
 ;===================    Calc/cmd/Notepad
 RETURN
-#+CapsLock:: Run notepad.exe
-#^CapsLock:: Run calc1.exe
-#CapsLock::  Run cmd.exe
-^!CapsLock::  Run bash.exe
+#+CapsLock:: ShellRun("notepad.exe")
+#^CapsLock:: ShellRun("calc1.exe")
+#CapsLock::  ShellRun("cmd.exe",,,"RunAs")
+^!CapsLock::  ShellRun("bash.exe",,,"RunAs")
 
 ;===================    Groupy
 RETURN

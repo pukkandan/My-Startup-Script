@@ -123,7 +123,7 @@ class runText{
         static menu:=[]
         if (f){
             if (A_GuiEvent="DoubleClick") {
-                Run, % f,, UseErrorLevel
+                ShellRun(f)
                 this.GUIhide()
                 return
             }
@@ -199,7 +199,7 @@ class runText{
         RETURN
         RunTextFileClicked:
         global RunTextObj
-        Run, % RunTextObj.SectList[substr(A_ThisMenu,13)].get("Folder") . (A_ThisMenuItem="..\"?"":A_ThisMenuItem),, UseErrorLevel
+        ShellRun(RunTextObj.SectList[substr(A_ThisMenu,13)].get("Folder") . (A_ThisMenuItem="..\"?"":A_ThisMenuItem))
         return
     }
     clickActions(sect, mod:=""){
@@ -214,7 +214,7 @@ class runText{
                 break
             if (r){
                 Tooltip("Running """ r """")
-                Run, % r,, UseErrorLevel
+                ShellRun(r)
             }
             if (w){
                 Tooltip("Waiting for """ w """")

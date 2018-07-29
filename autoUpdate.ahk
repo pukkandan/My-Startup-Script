@@ -10,7 +10,7 @@ autoUpdate(path:="", download:=True, install:=True, openCLog:=True){
             Toast.show({title:{text:"AHK Updated"}, life:openHelp?500:0})
             if openCLog {
                 SplitPath, A_AhkPath,, path
-                run, C:\Windows\hh.exe mk:@MSITStore:%path%\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm
+                ShellRun("C:\Windows\hh.exe mk:@MSITStore:%path%\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm")
             }
             return 2
         }
