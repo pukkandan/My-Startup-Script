@@ -1,4 +1,4 @@
-getIPInfo(getLoc:=True){
+getIPInfo(getLoc:=False){
 
     if getLoc {
         webpage:=Download("https://www.whatismybrowser.com/detect/ip-address-location")

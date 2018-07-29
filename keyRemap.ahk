@@ -151,22 +151,23 @@ if !winExist("ahk_exe MusicBee.exe") {
     Toast.show("Starting MusicBee")
     Run, D:\Program Files\MusicBee\MusicBee.exe
     WinWait, ahk_exe MusicBee.exe
-    Sleep, 1000
+    Sleep, 2000
 }
 Toast.show("Play/Pause")
-Send #{F10} ; The same key is set as global play/pause in MusicBee
+Send {Media_Play_Pause} ;#{F10} ; The same key is set as global play/pause in MusicBee
 return
 
-#if ProcessExist("MusicBee.exe")
-processExist(p){ ;This function is available in v2
-    Process exist, % p
-    return ErrorLevel
-}
-; MusicBee sometimes doesnt respond to Media buttons. So I set it's global hotkey to #{F9/10/11}
-Media_Prev::      send #{F9}
-Media_Play_Pause::send #{F10}
-Media_Next::      send #{F11}
-#if
+;#if ProcessExist("MusicBee.exe")
+;processExist(p){ ;This function is available in v2
+;    Process exist, % p
+;    return ErrorLevel
+;}
+;; MusicBee sometimes doesn't respond to Media buttons. So I set it's global hotkey to #{F9/10/11}
+;Media_Prev::      send #{F9}
+;Media_Play_Pause::send #{F10}
+;Media_Next::      send #{F11}
+;#if
+
 
 ;===================    Listary launcher
 ; RETURN
@@ -244,6 +245,7 @@ RETURN
 #+CapsLock:: Run notepad.exe
 #^CapsLock:: Run calc1.exe
 #CapsLock::  Run cmd.exe
+^!CapsLock::  Run bash.exe
 
 ;===================    Groupy
 RETURN
