@@ -1,3 +1,4 @@
+;Critical
 Suspend, On
 #include %A_ScriptDir%  ;Sets dir for includes
 #include Directives.ahk
@@ -30,6 +31,7 @@ tooltip("dimScreen",{life:500})
 
 tooltip("Taskview",{life:500})
 #include Taskview_Temp.ahk
+;#include Taskview.ahk
 taskView.__new()
 
 tooltip("Hotcorners",{life:500})
@@ -91,6 +93,7 @@ GroupAdd, right_drag, ahk_exe mspaint.exe
 GroupAdd, right_drag, ahk_exe mspaint1.exe
 GroupAdd, right_drag, ahk_exe cmd.exe
 GroupAdd, right_drag, ahk_exe vivaldi.exe
+;GroupAdd, right_drag, ahk_exe chrome.exe
 
 ;Required for HotStrings
 GroupAdd, AutoBracket, ahk_exe notepad.exe

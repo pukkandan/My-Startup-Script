@@ -41,7 +41,7 @@ SCR_OpenFolder(){
     return
 }
 SCR_Edit(){
-    ShellRun(SCR_Name ".sublime-project")
+    ShellRun(A_ScriptDir "\" SCR_Name ".sublime-project")
     return
 }
 SCR_Reload(){

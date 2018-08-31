@@ -2,6 +2,9 @@
 RETURN
 #if getKeyState("RButton","P")
 LButton::                   ; Switch to next window
+sendWindowBack()
+silentKeyRelease_Mouse("R",200)
+return
 sendWindowBack(){ ;Alt Tab is not used since it shows the TaskSwitcher Window
     winget ids, list
     winget activeID, id, A
@@ -16,14 +19,12 @@ sendWindowBack(){ ;Alt Tab is not used since it shows the TaskSwitcher Window
         break
     }
 }
-return
 
-MButton::                   ; WinSizer
-winSizer.start("RButton")
-return
+MButton:: winSizer.start("RButton")                  ; WinSizer
 MButton Up::
 if !winSizer.end()
     send, #{Tab}
+silentKeyRelease_Mouse("R",200)
 return
 
 WheelUp::                   ; Switch Windows
@@ -37,6 +38,7 @@ if (A_ThisHotkey="WheelUp") {
     ;     taskView.GoToDesktopNumber(1)
     send % "#^{Right}"
 }
+silentKeyRelease_Mouse("R",200)
 sleep 200
 return
 
@@ -44,6 +46,7 @@ return
 WheelUp::
 WheelDown::
 (A_ThisHotkey="WheelUp")? taskView.MoveToDesktopPrev(WinExist("A"),True): taskView.MoveToDesktopNext(WinExist("A"),False)
+silentKeyRelease_Mouse("M",200)
 sleep 200
 return
 
@@ -58,15 +61,14 @@ return
 
 ;===================    Over Taskbar
 RETURN
-#if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")   ; Alt tab over taskbar
-WheelUp::
-WheelDown::
-send % A_ThisHotkey="WheelUp" ? "^+!{Tab}" : "^!{Tab}"
-return
-MButton Up:: Send +^{Esc}    ; Task manager
+#if winActive("Task Switching ahk_class MultitaskingViewFrame ahk_exe Explorer.EXE") AND isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")        ; When Task Switching
+LButton::send {Enter}
+MButton::send !{Esc}{Alt Up}
 
-#if winActive("Task Switching ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE") AND isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")        ; When Task Switching
-LButton::send, {Enter}
+#if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")   ; Alt tab over taskbar
+~MButton::send ^!{Tab}^+!{Tab}
+WheelUp::send ^+!{Tab}
+WheelDown::send ^!{Tab}
 #if
 
 ;===================    Ditto & Listary
@@ -141,11 +143,12 @@ RETURN
 return
 ;===================    Open Potplayer
 RETURN
-#v::ShellRun("D:\Program Files\Potplayer\PotplayerMini64.exe" Clipboard)
+#v::ShellRun("D:\Program Files\Potplayer\PotplayerMini64.exe", Clipboard)
 
 ;===================    Open MusicBee
 RETURN
 #F10::
+#Media_Play_Pause::
 DetectHiddenWindows, On
 if !winExist("ahk_exe MusicBee.exe") {
     Toast.show("Starting MusicBee")
@@ -157,16 +160,21 @@ Toast.show("Play/Pause")
 Send {Media_Play_Pause} ;#{F10} ; The same key is set as global play/pause in MusicBee
 return
 
-;#if ProcessExist("MusicBee.exe")
-;processExist(p){ ;This function is available in v2
-;    Process exist, % p
-;    return ErrorLevel
-;}
+#if ProcessExist("MusicBee.exe")
+processExist(p){ ;This function is available in v2
+    Process exist, % p
+    return ErrorLevel
+}
+
+#F9::Media_Prev
+#F11::Media_Next
+
 ;; MusicBee sometimes doesn't respond to Media buttons. So I set it's global hotkey to #{F9/10/11}
 ;Media_Prev::      send #{F9}
 ;Media_Play_Pause::send #{F10}
 ;Media_Next::      send #{F11}
-;#if
+
+#if
 
 
 ;===================    Listary launcher
