@@ -4,3 +4,6 @@ hotStrings.ahk
 backup\*
 temp\*
 *.bak
+explorerWindows
+*.old
+HotStrings-Private.ahk
