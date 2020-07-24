@@ -253,7 +253,7 @@ RETURN
 ; !CapsLock:: ShellRun("cmd.exe",,,"RunAs")          ; cmd
 ;^!CapsLock:: runSSH()                               ; SSH
 ;+!CapsLock:: ShellRun("wsl.exe",,,"RunAs")          ; WSL
- ^CapsLock:: caseMenu.show()                        ; caseMenu
+CapsLock:: caseMenu.show()                        ; caseMenu
 ; CapsLock, +CapsLock are used elsewhere
 
 ;#F1:: Send {F1}                                     ; Convert #F1 => F1
