@@ -251,8 +251,8 @@ RETURN
 ; CapsLock, +CapsLock are used elsewhere
 
 #F1:: Send {F1}                                     ; Convert #F1 => F1
-#F5:: dimScreen(+10)                                ; DimScreen
-#F6:: dimScreen(-10)
+#F2:: dimScreen(+10)                                ; DimScreen
+#F3:: dimScreen(-10)
  #c:: makeMicroWindow()                             ; MicroWindow
  #f:: listOpenFolders()                             ; List all open folders
 #^e:: watchExplorerWindows.recover()				; Recover Explorer Window
