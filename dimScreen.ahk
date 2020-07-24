@@ -2,6 +2,7 @@ dimScreen(p:=0){
     static hwnd:=0, t:=0, e:=False
     if p is not Number  ;The tray name gets passed as param
         p:=0
+    p:=p*2.5
     t:= p||t? (t>-p? (t+p>250?250:t+p) :0) :75,  e:= t? (p?True:!e) :False
     ; tooltip, % t "," e "," p
     if !hwnd {
@@ -11,7 +12,7 @@ dimScreen(p:=0){
     }
     if (e) {
         WinSet, Transparent, % t, ahk_id %hwnd%
-        Toast.show("Dimscreen " t "/255")
+        Toast.show("Dimscreen -" round(t//2.5))
         Gui, DimScreenGUI:Show, NoActivate
         Menu, Tray, Check, &Dim Screen
     }

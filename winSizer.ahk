@@ -5,7 +5,8 @@ class winSizer{
         setTimer, % act, 100 ;, 10
         setTimer, % act, Off
     }
-    start(){
+    start(endOnKeyRelease:=""){
+        this.endOnKeyRelease:=endOnKeyRelease
         MouseGetPos, mx, my, Win
         WinGetClass, winclass, ahk_id %win%
         if (winclass="WorkerW" OR winclass="Shell_TrayWnd" OR !winexist("ahk_id" win))
@@ -47,6 +48,8 @@ class winSizer{
             e:= (mode.x OR mode.y)? "Resize " (!mode.x?"|":!mode.y?"--":mode.x*mode.y>0?"\":"/") : "Move"
             this.show(x,y,wx,wy,w,h,e)
         }
+        if (this.endOnKeyRelease AND !GetKeyState(this.endOnKeyRelease,"P"))
+            return this.end()
         return
     }
 

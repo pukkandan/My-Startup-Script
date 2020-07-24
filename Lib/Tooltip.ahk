@@ -1,8 +1,8 @@
 Tooltip(tip:="", p:=""){
     ; static def:={ color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:8, opt:"",name:"Segoe UI"} }
     static def:={ font:{size:8, opt:"",name:"Segoe UI"} }
-    if !tip
-        _TTremove(p.no)
+    if !tip 
+        return _TT_RemoveNow(p.no)
     if A_IsPaused
         return
 
@@ -10,10 +10,16 @@ Tooltip(tip:="", p:=""){
     ; ToolTip_Font( "norm s" (p.font.size? p.font.size :def.font.size) (p.font.opt? p.font.opt :def.font.opt)
     ;             , p.font.name ? p.font.name  :def.font.name )
 
+    if (p.mode) {
+        mode:=A_CoordModeToolTip
+        CoordMode, Tooltip, % p.mode
+    }
     tooltip, % tip, % p.x, % p.y, % p.no
+    if mode
+        CoordMode, Tooltip, % mode
 
     if p.life
-        Tooltip_Remove(p.life,p.no)
+        _TT_Remove(p.life,p.no)
     ; if (p.reset!=false){
     ;     ToolTip_Font ("Default")
     ;     Tooltip_color("Default","Default")
@@ -22,17 +28,17 @@ Tooltip(tip:="", p:=""){
 }
 
 ;------------------------------------------------------------------------------
-Tooltip_Remove(time:=1,WhichToolTip:=1){
+_TT_Remove(time:=1,WhichToolTip:=1){
     if WhichToolTip not between 1 and 20
         WhichToolTip:=1
     static act:=[]
     if !act.haskey(Whichtooltip)
-        act[WhichToolTip]:=Func("_TTremove").bind(WhichToolTip)
+        act[WhichToolTip]:=Func("_TT_RemoveNow").bind(WhichToolTip)
     obj:=act[WhichToolTip]
     setTimer, % obj, -%time%
     return
 }
-_TTremove(no:=1){
+_TT_RemoveNow(no:=1){
     Tooltip,,,,% no
     return
 }

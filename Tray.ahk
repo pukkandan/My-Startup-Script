@@ -1,5 +1,5 @@
 trayMenu(){
-    ifExist, %SCR_Name%.ico                         ;Main Icon
+    ifexist %SCR_Name%.ico                         ;Main Icon
         Menu, Tray, Icon, %SCR_Name%.ico,,0
     Menu, Tray, Tip, % " "  ;Tray tip is shown using tooltip 20
 
@@ -8,9 +8,11 @@ trayMenu(){
     Menu, Tray, Add, &Active, SCR_Pause
     Menu, Tray, Check, &Active
     Menu, Tray, Add, &Edit Script, SCR_Edit
+    Menu, Tray, Add, Edit v2 Script, SCR_Edit2
     Menu, Tray, Add, Open &Folder, SCR_OpenFolder
     Menu, Tray, Add, AHK &Help, AHK_Help
-    Menu, Tray, Default, AHK &Help
+    Menu, Tray, Add, AHK v2 Help, AHK_Help2
+    Menu, Tray, Default, AHK v2 Help
 
     Menu, Tray, Add
     act:=func("netNotify").bind(False,,0)
@@ -27,19 +29,19 @@ trayMenu(){
     Menu, Tray, Add, E&xit, Exit
 
     trayListen()
-    setTimer, trayListen, 1000  ;for better Stability
+    ;setTimer, trayListen, 1000  ;for better Stability
 }
 AHK_Help(){
     SplitPath, A_AhkPath,, path
-    Run, %path%\AutoHotkey.chm
+    ShellRun(path "\AutoHotkey.chm")
     return
 }
 SCR_OpenFolder(){
-    Run, % A_ScriptDir
+    ShellRun(A_ScriptDir)
     return
 }
 SCR_Edit(){
-    Run, %SCR_Name%.sublime-project
+    ShellRun(A_ScriptDir "\" SCR_Name ".sublime-project")
     return
 }
 SCR_Reload(){
@@ -49,11 +51,24 @@ SCR_Reload(){
 SCR_Pause(){
     Suspend
     Menu, Tray, ToggleCheck, &Active
-    Tooltip,,,,20
-    Tooltip
+    Tooltip(,{no:20})
+    Tooltip()
     Pause, Toggle, 1
     return
 }
+
+
+AHK_Help2(){
+    SplitPath, A_AhkPath,, path
+    ShellRun( path "_v2\AutoHotkey.chm")
+    return
+}
+SCR_Edit2(){
+    SplitPath, % A_ScriptDir, , OutDir,
+    ShellRun( OutDir "\" SCR_Name "_v2\" SCR_Name ".sublime-project")
+    return
+}
+
 ;==========================================
 trayListen(){
     OnMessage(0x404, "mouseOverTray")  ;Mouse over tray icon

@@ -3,10 +3,6 @@ class winAction{
     __new(txt:="winAction.ini"){
         this.itemList:=[]
 
-        ; global PIP_exclude:={}, PIP_include:={}
-        ; act:=ObjBindMethod(this,"PIP")
-        ; Menu, winAction, Add, PIP, % act
-
         act:=ObjBindMethod(this,"onTopToggle")
         Menu, winAction, Add, Always on &Top , % act
         act:=ObjBindMethod(this,"trayit")
@@ -21,7 +17,6 @@ class winAction{
 
         act:=ObjBindMethod(this,"Opacity")
         Menu, winAction, Add, &Opacity , % act
-
         act:=ObjBindMethod(this,"TaskView_PinWindowToggle")
         Menu, winAction TaskView, Add, Pin Window , % act
         act:=ObjBindMethod(this,"TaskView_PinAppToggle")
@@ -32,7 +27,7 @@ class winAction{
         Menu, winAction TaskView, Add, Go to , % act
         Menu, winAction, Add, TaskView, :winAction TaskView
 
-        this.PIP_setnames:={1:"Main"}
+        this.PIP_setnames:=["Main","Terminal","Calculator"]
         act:=ObjBindMethod(this,"PIP_add_remove",1)
         Menu, winAction PIP list, Add, % "[1] " this.PIP_setnames[1] , % act
         Menu, winAction PIP, Add, Add to , :winAction PIP list
@@ -88,14 +83,16 @@ class winAction{
         return 0
     }
     PIP_TypeMenu(set:=0){
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"V"}])
-        Menu, winAction PIP type, Add, Potplayer-like [&V], % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"C"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"VJT"}])
+        Menu, winAction PIP type, Add, &Potplayer-like, % act
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"CJT"}])
         Menu, winAction PIP type, Add, &Chrome-like, % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"T"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"J"}])
         Menu, winAction PIP type, Add, Keep &Titlebar, % act
-        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"N"}])
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"JT"}])
         Menu, winAction PIP type, Add, &Normal, % act
+        act:=ObjBindMethod(PIP,"add",[{title:this.win, set:set, type:"N"}])
+        Menu, winAction PIP type, Add, &Just on Top, % act
         Menu, winAction PIP type, Default, Keep &Titlebar
         Menu, winAction PIP type, show
         return
@@ -152,8 +149,9 @@ class winAction{
         return taskView.PinAppToggle(this.win_hwnd)
     }
     TaskView_pinCheck(){
-        Menu, winAction, % taskView.isPinnedWindow(this.win_hwnd)?"Check":"Uncheck", &Pin Window
-        Menu, winAction TaskView, % taskView.isPinnedWindow(this.win_hwnd)?"Check":"Uncheck", Pin Window
+        isPinnedWin:= taskView.isPinnedWindow(this.win_hwnd) ? "Check" : "Uncheck"
+        Menu, winAction, % isPinnedWin, &Pin Window
+        Menu, winAction TaskView, % isPinnedWin, Pin Window
         Menu, winAction TaskView, % taskView.isPinnedApp(this.win_hwnd)?"Check":"Uncheck", Pin App
         return
     }
@@ -181,11 +179,26 @@ class winAction{
     }
 
     trayit(){
+        static title_len:=90
         WinGetTitle, title , % this.win
+        WinGet, exe, ProcessName, % this.win
+        WinGet, path, ProcessPath, % this.win
+        if (exe="hh.exe") ; hh.exe is the name of chm reader
+            exe:="CHM"
+        else if (exe="Applicationframehost.exe") ; Metro App
+        {
+            path:="C:\Windows\System32\consent.exe" ; For Icon
+            exe:="X"
+        }
+        exe:=Format("{:T}", str_replace(exe, [[".exe"], ["_"," "]] )) ;"sublime_text.exe" to "Sublime Text" etc
+        title:="[" exe "]> " StrReplace(title, " - " exe) ; Remove " - Sublime Text" etc
+        title:=(strLen(title)>title_len? substr(title, 1, title_len-3) "..." :title) " " this.win_hwnd ; Limit Size. win_hwnd is added for uniqueness
+
         ; winget, s, style, % this.win
         ; winget, es, exstyle, % this.win
         act:=ObjBindMethod(this,"unTrayIt",this.win,title)
         Menu, trayIt, Add, % title, % act
+        try Menu, trayIt, Icon, % title, % path, 0
         OnExit(act)
 
         ; WinSet, style, -0, % this.win
@@ -195,6 +208,7 @@ class winAction{
     }
     unTrayIt(uid,name,s:=0,es:=0){
         winshow, % uid
+        winactivate, % uid
         ; winset, Style, % s, % uid
         ; winset, ExStyle, % es, % uid
         ; WinSet, Redraw
@@ -261,14 +275,23 @@ class winAction{
     }
 
     show(){
-        this.win_hwnd:=WinExist("A")
         Toast.show("winAction")
+        if !this.bind_Window()
+            return
+        ; sleep, % 500+t0-A_TickCount ;Give time for toast to disappear
+        Menu, winAction, show
+        Tooltip
+        return
+    }
+
+    bind_Window(win:="A"){
+        this.win_hwnd:=WinExist(win)
         ; t0:=A_TickCount
         this.win:="ahk_id " this.win_hwnd
         WinGetClass, winclass, % this.win
         if (winclass="WorkerW" OR winclass="Shell_TrayWnd" OR !winexist(this.win)){
             Toast.show("No Window")
-            return
+            return False
         }
 
         this.PIP_Check()
@@ -276,10 +299,7 @@ class winAction{
         this.onTopCheck()
         loop, % this.itemlist.length()
             this.itemList[A_index].checkMenu()
-        ; sleep, % 500+t0-A_TickCount ;Give time for toast to disappear
-        Menu, winAction, show
-        Tooltip
-        return
+        return True
     }
 
 }

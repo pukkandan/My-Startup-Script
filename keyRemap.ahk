@@ -1,209 +1,304 @@
-;===================    Right and Middle Buttons
+#include keyRemapFunc.ahk
+
+;===================    CapsLock as Prefix
+#if GetKeyState("CapsLock", "P")
+
+r:: ; I forget +F10                                  ; No AppsKey in my laptop
+m::                                                  ; Hard to M-Click in trackpad
+	prefixUsed("CapsLock")
+	SendLevel 1
+	sendEvent % {r: "{AppsKey}", m: "{MButton}"}[subStr(A_ThisHotkey,0)]
+return
+
+Space::                                              ; Play/Pause all visible video players 
+	prefixUsed("CapsLock")
+	playAllVideoPlayers() 
+return
+
+n::                                                  ; NetNotify
+	prefixUsed("CapsLock")
+	netNotify(True,,1000)
+return
+
+1::													 ; Caps+Num => #Num since #Num is replaced below
+2::
+3::
+4::
+5::
+6::
+7::
+8::
+9::
+0::
+	prefixUsed("CapsLock")
+	if !prefixUsed("CapsLock_Num", False)
+	    send % "{LWin down}"
+	prefixUsed("CapsLock_Num")
+
+	send % A_ThisHotkey
+	setTimer, winUpWhenCapsReleased, 100
+return
+
+;===================    R/M Button as Prefix
 RETURN
-#IfWinNotActive, ahk_group right_drag
-*RButton up::
-; tooltip, % """" rbutton_pressed_as_modifier """" A_PriorHotkey
-if !isPressed("RButton",False)
-    send, {Blind}{RButton}
-else if A_PriorHotkey not in MButton,MButton Up,WheelUp,WheelDown
-    send, {Blind}{RButton}
+#if getKeyState("RButton","P")
+
+LButton::                                            ; Switch to next window
+	sendWindowBack()
+	silentKeyRelease_Mouse("R")
 return
-#IfWinNotActive
 
-#if isOver_mouse("ahk_class Shell_TrayWnd") AND winActive("ahk_class MultitaskingViewFrame")        ; When Task Switching
-LButton::send, {Enter}
-#if
-
-#if !getkeyState("Ctrl","P")
-MButton::winSizer.start()                           ; winSizer
-#if
-
+MButton:: winSizer.start("RButton")                  ; WinSizer
 MButton Up::
-if winSizer.end()
-    return
-if isPressed("RButton")
-    send, #{Tab}
-else if isOver_mouse("ahk_class Shell_TrayWnd")    ; Task manager
-    Send, +^{Esc}
-else
-    send, {MButton}
+	if !winSizer.end()
+	    send, #{Tab}
+	silentKeyRelease_Mouse("R")
 return
 
+WheelUp::                                            ; Go to Prev/Next Desktops
+WheelDown::
+	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(True): taskView.GoToDesktopNext(False)
+	silentKeyRelease_Mouse("R")
+	sleep 200
+return
+
+#if getKeyState("MButton","P")
+
+WheelUp::                                            ; Move window to desktop and go there
+WheelDown::
+	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
+	silentKeyRelease_Mouse("M")
+	sleep 200
+return
+
+#ifWinNotActive ahk_group right_drag
+
+*RButton up::                                        ; Dont Block RButton
+	Critical
+	if !{"MButton":0,"MButton Up":0,"WheelUp":0,"WheelDown":0,"LButton":0}.haskey(A_PriorKey)
+	    send % "{Blind}{RButton}"
+return
+
+#If
+
+;===================    Task View with Keyboard
+RETURN
++#Left::                                             ; Move window to desktop
++#Right::
+	if (A_ThisHotkey="+#Left")
+		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True)
+	else
+		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
+return
+
+!#Left::                                             ; Move window to desktop and go there
+!#Right::
+	if (A_ThisHotkey="!#Left")
+		taskView.MoveWindowToDesktopPrev(WinExist("A"),True)
+	else
+		taskView.MoveWindowToDesktopNext(WinExist("A"),False)
+return
+
+#1::                                                 ; Go to Desktop by number
+#2::
+#3::
+#4::
+#5::
+#6::
+#7::
+#8::
+#9::
+#0::
+	taskView.GoToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), False)
+return
+
++#1::                                                ; Move window to Desktop by number
++#2::
++#3::
++#4::
++#5::
++#6::
++#7::
++#8::
++#9::
++#0::
+	taskView.MoveWindowAndGoToDesktopNumber( SubStr(A_ThisHotKey,0)=="0"? 10: SubStr(A_ThisHotKey,0), winActive("A"), False)
+return
+
+!#1::                                                ; Move window to Desktop by number and go there
+!#2::
+!#3::
+!#4::
+!#5::
+!#6::
+!#7::
+!#8::
+!#9::
+!#0::
+	taskView.MoveWindowToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), sendWindowBack(), False)
+return
+
+
+;===================    Over Taskbar
+RETURN
+#if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")
+~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
+WheelUp::send ^+!{Tab}
+WheelDown::send ^!{Tab}
+
+#if winActive("Task Switching ahk_class MultitaskingViewFrame ahk_exe Explorer.EXE") AND isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")        ; When Task Switching
+LButton::send {Enter}
+MButton::send {Alt Up}{Esc}
+#if
+
+/*
+;===================    Groupy
+RETURN
+!CapsLock::Send #``
+!+CapsLock::Send #^``
+*/
+
+;===================    Fences Pages
+RETURN
+#if winActive("ahk_class WorkerW ahk_exe explorer.exe") AND getKeyState("LButton","P")
 WheelUp::
 WheelDown::
-if getKeyState("MButton","P")                       ; Move window b/w desktops
-    (A_ThisHotkey=="WheelUp") ? taskView.MoveToDesktopPrev(WinExist("A"),True) : taskView.MoveToDesktopNext(WinExist("A"),False)
-else if isPressed("RButton"){
-    ; if (A_ThisHotkey="WheelUp" AND taskView.GetCurrentDesktopNumber()=1)  ;Wrap
-    ;     taskView.GoToDesktopNumber(0)
-    ; else if (A_ThisHotkey="WheelDown" AND taskView.GetCurrentDesktopNumber()=taskView.GetDesktopCount())
-    ;     taskView.GoToDesktopNumber(1)
-    ; else
-        send, % "#^{" (A_ThisHotkey="WheelUp" ? "Left":"Right") "}"
-} else if isOver_mouse("ahk_class Shell_TrayWnd")   ; Alt tab over taskbar
-    send, % A_ThisHotkey="WheelUp" ? "^+!{Tab}" : "^!{Tab}"
-else {
-    send, % "{" A_ThisHotkey "}"
-    return
-}
-sleep, 200
+	send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
 return
+#if
 
-isPressed(key,check:=True){
-    /*
-    Checks if the key is pressed and stores that info
-     */
-    static pressed:={}
-    if check
-        pressed[key]:=getkeystate(key,"P")
-    return pressed.haskey(key)?pressed[key]:False
-}
-return
-;===================    Ditto & Listary
-RETURN
-XButton2::
-; Tooltip("Ditto")
-Keywait, %A_ThisHotkey%, T0.5
-; ToolTip
-if !ErrorLevel {
-    Process, Exist, Ditto.exe
-    if ErrorLevel {
-        Toast.show("Ditto")
-        Send, ^``
-    }
-    else {
-        Toast.show("Starting Ditto . . .")
-        Run, D:\Program Files\Ditto\Ditto.exe
-    }
-} else {
-    !Space:: runListary()
-}
-return
-runListary(){
-    Toast.show("Listary")
-    text:=getSelectedText()
-    text:=text?text:Clipboard
-    text:=RegExReplace(RegExReplace(text, "[`t`n]| +"," "), "^ | $|`r")
-    text:=strlen(text)<100?text:""
-    Process, Exist, Listary.exe
-    if !ErrorLevel {
-        Run, D:\Program Files\Listary\Listary.exe
-        DetectHiddenWindows, On
-        Winwait, ahk_exe Listary.exe,, 2
-        if ErrorLevel
-            return
-    }
-    send, ^#``
-    DetectHiddenWindows, Off
-    Winwait, ahk_exe Listary.exe,,2
-    if ErrorLevel
-        return
-    sleep, 10
-    ; pasteText(text, "ahk_exe Listary.exe")
-    sendRaw,% text
-    send, ^a
-    return
-}
-return
-;===================    winAction & RunText
-RETURN
-XButton1::
-; Tooltip("winAction")
-Keywait, %A_ThisHotkey%, T0.25
-Tooltip
-if !ErrorLevel {
-    #w:: winAction.show()
-} else {
-    !`:: runTextObj.showGUI()
-}
-return
+;===================    Toggglekeys
 
-;===================    Tray Menu
 RETURN
-^#t::
-updateTray(0,A_ScreenHeight-200)
-sleep, 300
-Menu, Tray, Show
-return
-;===================    Invert F1
-RETURN
-#F1::Send, {F1}
-return
-;===================    Open Potplayer
-RETURN
-#v::Run, D:\Program Files\Potplayer\PotplayerMini64.exe %Clipboard%
-return
-
-;===================    Open MusicBee
-RETURN
-#F10::
-DetectHiddenWindows, On
-if !winExist("ahk_exe MusicBee.exe") {
-    Toast.show("Starting MusicBee")
-    Run, D:\Program Files\MusicBee\MusicBee.exe
-    WinWait, ahk_exe MusicBee.exe
-    ; Sleep, 1000
-}
-Toast.show("Play/Pause")
-Send, {Media_Play_Pause}
-return
-
-;===================    Listary launcher
-; RETURN
-; ~LWin & RWin::Return    ;Prevents LWin from trigerring when #... (eg: #Tab) is used
-; LWin UP:: Send, #``
-; return
-
-;===================    Toggglekeys and CaseMenu
-RETURN
-CapsLock::
-keywait, Capslock, T0.2
-if (ErrorLevel){
-    ^CapsLock::
-    caseMenu.show()
-    return
-}
-SetCapsLockState, % GetKeyState("Capslock","T")?"Off":"On"
++~CapsLock::
 ~NumLock::
 ~ScrollLock::
 ~Insert::
-  Toast.show( strReplace(A_ThisHotkey,"~$*") (GetKeyState(strReplace(A_ThisHotkey,"~$*"),"T")? " On":" Off") )
+	Toast.show( {title:{text:str_Replace(A_ThisHotkey,[["~"],["+"]]) (GetKeyState(str_Replace(A_ThisHotkey,[["~"],["+"]]),"T")? " On":" Off")}, sound:True})
 return
 
-;===================    NetNotify
+;===================    Trigger HotStrings (») [Check hotStrings.ahk for details]
 RETURN
-#n:: netNotify(False,,1000)
+CapsLock::
+	keyWait %A_ThisHotkey%
+	if prefixUsed("CapsLock", False)
+	    return
+	SendLevel 1
+	sendEvent » ;Used to trigger many hotstrings
+return
 
-;===================    DimScreen
-RETURN
-#F2:: dimScreen(+25)
-#F3:: dimScreen(-25)
+;===================    Send `n/`t in cases where enter/tab is used for other purposes
+#ifWinNotActive ahk_exe Mathematica.exe
++Enter::Send `n
+;#if !winActive("ahk_exe sublime_text.exe")
+;+Tab::Send % "    " ;I prefer 4 spaces instead of tab in some situations where I need to use +tab
+#if
 
-;===================    Play/Pause Youtube
-/*
+;===================    X1 - Ditto & Launcher
 RETURN
-+^Space::
-YouTubePlayPause(){ ;Not perfect
-    Thread, NoTimers
-    wid:=WinExist(" - YouTube ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1")
-    if !wid
-        return
-    ControlGet, cid, Hwnd,,Chrome_RenderWidgetHostHWND1, ahk_id %wid%
-    if !cid
-        return
-    IfWinNotActive, ahk_exe chrome.exe
-    {
-        ControlFocus,,ahk_id %cid%
-        ControlSend,, k , ahk_id %cid%
-    } else {
-        WinGet, wid, id, A
-        ControlGetFocus, cid_old, ahk_id %wid%
-        ControlGet, cid_old, Hwnd,, %cid_old%, ahk_id %wid%
-        ControlFocus,,ahk_id %cid%
-        send, k
-        sleep, 100
-        ControlFocus,,ahk_id %cid_old%
-    }
-    return
-}
-*/
+XButton2::
+	Keywait, %A_ThisHotkey%, T0.5
+	if !ErrorLevel {
+	    runOrSend("Ditto" ,"^``", "D:\Program Files\Ditto\Ditto.exe")
+	} else {
+	    goSub #Space ; Check "Launcher"
+	}
+return
+
+;===================    X2 - winAction & RunText
+RETURN
+XButton1::
+	Keywait, %A_ThisHotkey%, T0.25
+	if !ErrorLevel {
+#w:: 	winAction.show()
+	} else {
+#`:: 	runTextObj.showGUI()
+	}
+return
+#if
+
+;===================    Launcher
+RETURN
+LWin::                                              ; LWin => Launcher
+#Space::                                            ; Open Launcher with pastable text
+	runLauncher(A_ThisHotkey=="LWin", A_ThisHotkey!="LWin")
+return
+
+#ifWinActive Keypirinha ahk_exe keypirinha-x64.exe
+~Tab::                                              ; Paste previously selected text
+~Space:: 
+	keepSelectedText(False)
+return
+#if
+
+~LWin & RWin:: return                               ; Allows LWin to be still used as prefix
+;+^LWin:: send {Ctrl Up}{Shift Up}{LWin Up}{RWin}   ; +^LWin => Win (^Esc already does this)
+return
+
+;===================    Programs/Functions
+RETURN
+;                                                   ; Run => Launcher
+;#r:: runOrSend("Run" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{>} ")
+
+;                                                   ; WindowSwitch
+ #CapsLock:: runOrSend("WindowSwitch" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{»}{Tab}")
++#CapsLock:: ShellRun("notepad.exe")                ; Notepad
+^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
+ !CapsLock:: ShellRun("cmd.exe",,,"RunAs")          ; cmd
+^!CapsLock:: runSSH()                               ; SSH
++!CapsLock:: ShellRun("wsl.exe",,,"RunAs")          ; WSL
+ ^CapsLock:: caseMenu.show()                        ; caseMenu
+; CapsLock, +CapsLock are used elsewhere
+
+#F1:: Send {F1}                                     ; Convert #F1 => F1
+#F5:: dimScreen(+10)                                ; DimScreen
+#F6:: dimScreen(-10)
+ #c:: makeMicroWindow()                             ; MicroWindow
+ #f:: listOpenFolders()                             ; List all open folders
+#^e:: watchExplorerWindows.recover()				; Recover Explorer Window
+#v:: activateVideoPlayer()                          ; Open VideoPlayer
+
+
+#m:: winAction.bind_Window() ? winAction.trayIt()   ; TrayIt
+#t:: Menu, trayIt, show                             ; TrayIt Menu
+
+#ifwinactive ahk_exe explorer.exe                   ; Move Files to Common FOlder
+#n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
+#if
+
+
+
+#F10::                                              ; Global controls for Music player
+#Media_Play_Pause::
+	runOrSend("Music Player" ,"{Media_Play_Pause}", "D:\Program Files\MusicBee\MusicBee.exe")
+return
+
+#if ProcessExist("MusicBee.exe")
+#F9::  Media_Prev
+#F11:: Media_Next
+; MusicBee sometimes doesn't respond to Media buttons.
+; So I set it's global hotkey to #{F9/10/11}
+;Media_Prev::       send #{F9}
+;Media_Play_Pause:: send #{F10}
+;Media_Next::       send #{F11}
+#if
+
+;+^Space:: YouTubePlayPause()                       ; Play/Pause Youtube
+return
+
+;===================    Script Functions - Tray/Pause/Reload/Exit
+RETURN
+#+t::
+	updateTray(0, A_ScreenHeight-200)
+	sleep, 300
+	Menu, Tray, Show
+return
+
+#+p::
+	Suspend, Permit
+	SCR_Pause()
+return
+
+#+r:: Reload
+#+q:: ExitApp
+return

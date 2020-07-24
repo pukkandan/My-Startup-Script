@@ -1,5 +1,5 @@
-isFullScreen(title:="", pseudo:=0) {
-    if !(win:=winExist(title?title:"A"))
+isFullScreen(title:="A", pseudo:=0) {
+    if !(win:=winExist(title))
         return false
     win:="ahk_id " win
     WinGet, WinMinMax, MinMax, % win
@@ -9,7 +9,7 @@ isFullScreen(title:="", pseudo:=0) {
         WinGetClass, c, % win
         WinGet, pr, ProcessName, % win
         SplitPath, pr,,, ext
-        if (c="Progman") OR (c="WorkerW") OR (ext="scr")
+        if (c="Progman") OR (c="WorkerW") OR (ext="scr") OR (pr="LockApp.exe")
             return false
         ; Msgbox, %pseudo% %WinMinMax% %x% %y% %w% %h%`n%c% %ext% %pr%
         return true

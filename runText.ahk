@@ -14,7 +14,6 @@ class runText{
         this.getGlobalSettings()
         this.createGUI_Frame()
         this.addMainItems()
-        this.putItemsInGUI()
     }
     getGlobalSettings(){
         this.iconSize:=this.settings.get("Main","IconSize",32)
@@ -79,7 +78,7 @@ class runText{
         else py:="p+0", px="+2"
         id:=obj.id
         , iconNo:=ResourceIDofIcon(obj.icon,obj.iconNo)
-        GUI, Add, Picture, x%px% y%py% W%iconSize% H%iconSize% +BackgroundTrans vRunText_%id% gRunTextIconClicked icon%iconNo%
+        GUI, RunTextGUI:Add, Picture, x%px% y%py% W%iconSize% H%iconSize% +BackgroundTrans vRunText_%id% gRunTextIconClicked icon%iconNo%
         , % obj.icon
     }
 
@@ -90,6 +89,8 @@ class runText{
         text:=text?text:Clipboard
         text:=RegExReplace(RegExReplace(text, "[`t`n]| +"," "), "^ | $|`r")
 
+        if (!this.GUIwidth)
+            this.putItemsInGUI()
         GUI, RunTextGUI:Hide
         CoordMode, Mouse, Screen
         MouseGetPos, m_x, m_y
@@ -122,7 +123,7 @@ class runText{
         static menu:=[]
         if (f){
             if (A_GuiEvent="DoubleClick") {
-                Run, % f,, UseErrorLevel
+                ShellRun(f)
                 this.GUIhide()
                 return
             }
@@ -198,7 +199,7 @@ class runText{
         RETURN
         RunTextFileClicked:
         global RunTextObj
-        Run, % RunTextObj.SectList[substr(A_ThisMenu,13)].get("Folder") . (A_ThisMenuItem="..\"?"":A_ThisMenuItem),, UseErrorLevel
+        ShellRun(RunTextObj.SectList[substr(A_ThisMenu,13)].get("Folder") . (A_ThisMenuItem="..\"?"":A_ThisMenuItem))
         return
     }
     clickActions(sect, mod:=""){
@@ -213,7 +214,7 @@ class runText{
                 break
             if (r){
                 Tooltip("Running """ r """")
-                Run, % r,, UseErrorLevel
+                ShellRun(r)
             }
             if (w){
                 Tooltip("Waiting for """ w """")

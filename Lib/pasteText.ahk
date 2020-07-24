@@ -1,21 +1,19 @@
-;Buggy!!
-pasteText(text:="",window:="",controll:="") {
-    Msgbox, Warning - Buggy!!
+pasteText(text:="", win:="", cntrl:="", waitWin:="") {
     if text {
         clipOld:=ClipboardAll
         Clipboard:=text
-        loop {
-        sleep, 100
-        if (Clipboard=text)
-            break
-        }
+        ClipWait
     }
 
-    if window
-        ControlSend, % controll, ^v, % window
-    else
-        Send, ^v
-
+    if waitWin
+        WinWaitActive, % waitWin
+    
+    if (win) {
+        ControlSend, % cntrl, ^v, % win
+    } else {
+        Send, +{Insert} ;^v
+    }
+    
     if text
         Clipboard:=clipOld
 

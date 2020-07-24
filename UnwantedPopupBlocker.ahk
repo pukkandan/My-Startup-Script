@@ -13,5 +13,19 @@ unwantedPopupBlocker(){
         send, {esc}
         ; ControlSend, Intermediate D3D Window1, {esc},
     }
+
+    IfWinExist, Error ahk_class #32770 ahk_exe SdDisplay.exe
+        winclose
+
+    IfWinExist, ahk_class AvIPMDialog ahk_exe ipmGui.exe
+        winclose
+    IfWinExist, Internet Download Manager Registration ahk_exe IDMan.exe
+        winclose
+    IfWinExist, Internet Download Manager ahk_exe IDMan.exe, Internet Download Manager has been registered with a fake Serial Number
+        winclose
+    IfWinExist, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
+        winclose
     return
 }
+
+

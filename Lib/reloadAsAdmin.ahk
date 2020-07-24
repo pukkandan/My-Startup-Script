@@ -1,54 +1,42 @@
-reloadAsAdmin(force="True"){
+reloadAsAdmin(force:=True){
     if A_IsAdmin
         return 0
-    try{
-        Run *RunAs "%A_ScriptFullPath%"
-        ExitApp
-    } catch e {
-        if force {
-            MsgBox, 4112, FATAL ERROR!!, Couldn't restart script!!`nError Code: %e%
-            ExitApp
-        }
-    }
-    return 1
+    Run % "*RunAs " ( A_IsCompiled ? "" : """"  A_AhkPath """" )  " """ A_ScriptFullpath """", %A_ScriptDir%, UseErrorLevel
+    return _reloadAsAdmin_Error(e,force)
 }
 
 ;http://ahkscript.org/boards/viewtopic.php?t=4334
-reloadAsAdmin_Task() { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:22/Aug/2014
+reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:22/Aug/2014
 ; Asks for UAC only first time
 
-  Local CmdLine, TaskName, TaskExists, XML, TaskSchd, TaskRoot, RunAsTask
-  Local TASK_CREATE := 0x2,  TASK_LOGON_INTERACTIVE_TOKEN := 3
+  TASK_CREATE := 0x2,  TASK_LOGON_INTERACTIVE_TOKEN := 3
 
-  Try TaskSchd  := ComObjCreate( "Schedule.Service" ),    TaskSchd.Connect()
-    , TaskRoot  := TaskSchd.GetFolder( "\" )
-  Catch
-      Return "", ErrorLevel := 1
+  Try TaskSchd := ComObjCreate( "Schedule.Service" ),    TaskSchd.Connect()
+  Catch e
+      return _reloadAsAdmin_Error(e,force)
+
 
   CmdLine       := ( A_IsCompiled ? "" : """"  A_AhkPath """" )  A_Space  ( """" A_ScriptFullpath """"  )
-  TaskName      := "[RunAsTask] " A_ScriptName " @" SubStr( "000000000"  DllCall( "NTDLL\RtlComputeCrc32"
+  TaskName      := A_ScriptName " @" SubStr( "000000000"  DllCall( "NTDLL\RtlComputeCrc32"
                    , "Int",0, "WStr",CmdLine, "UInt",StrLen( CmdLine ) * 2, "UInt" ), -9 )
 
-  Try RunAsTask := TaskRoot.GetTask( TaskName )
-  TaskExists    := ! A_LastError
+  Try {
+    Try TaskRoot := TaskSchd.GetFolder("\AHK-ReloadAsAdmin")
+    catch
+        TaskRoot := TaskSchd.GetFolder("\"), TaskName:="[AHK-ReloadAsAdmin]" TaskName
+    RunAsTask := TaskRoot.GetTask( TaskName )
+  }
+  TaskExists    := !A_LastError
 
 
-  If ( not A_IsAdmin and TaskExists )      {
-
-    RunAsTask.Run( "" )
-    ExitApp
-
+  if !A_IsAdmin {
+    if TaskExists {
+        RunAsTask.Run("")
+        ExitApp
+    } else reloadAsAdmin(force)
   }
 
-  If ( not A_IsAdmin and not TaskExists )  {
-
-    Run *RunAs %CmdLine%, %A_ScriptDir%, UseErrorLevel
-    ExitApp
-
-  }
-
-  If ( A_IsAdmin and not TaskExists )      {
-
+  else if !TaskExists {
     XML := "
     ( LTrim Join
       <?xml version=""1.0"" ?><Task xmlns=""http://schemas.microsoft.com/windows/2004/02/mit/task""><Regi
@@ -71,5 +59,13 @@ reloadAsAdmin_Task() { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:2
 
   }
 
-  Return TaskName, ErrorLevel := 0
+  Return TaskName
+}
+
+_reloadAsAdmin_Error(e,force){
+    if force {
+        MsgBox, 4112, FATAL ERROR!!, Couldn't restart script!!`nError Code: %e%
+        ExitApp
+    }
+    return 1
 }

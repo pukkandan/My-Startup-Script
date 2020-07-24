@@ -14,11 +14,12 @@ class Toast{
         toastCount++
         this.id:=toastCount, this.closeObj:=ObjBindMethod(this,"close")
         ,this.def:={ life:500, pos:{x:"center",y:"center"}, bgColor:"0x222222", trans:250, margin:{x:5,y:5}
-                    , closekeys:[["Space","Return","~LButton","Esc"]], sound:false, activate:False
+                    , closekeys:[["~LButton","Esc"]], sound:false, activate:False
                     , title:{ text:"", color: "0xFFFFFF", size:14, opt:"bold", font:"Segoe UI" }
                     , message:{ text:[], color: [], size:[], opt:[], name:[], offset:[20]
                               , def_color: "0xFFFFFF", def_size:12, def_opt:"", def_name:"Segoe UI", def_offset:5 } }
-
+        if (p.life==0)
+            this.def.closekeys:=[["~Space","Return","~LButton","Esc"]]
         if p
             for i,x in p {
                 if IsObject(x)
@@ -80,8 +81,8 @@ class Toast{
             Hotkey, % k , % closeObj, On B0 T1
         return
     }
-    close(wparam:=""){
-        if (wparam!="" and !isOver_mouse(this.hwnd))
+    close(wparam:="",lParam:="",msg:="",hwnd:=""){
+        if (hwnd and hwnd!=this.hwnd)
             return
 
         this.exist:=False, GUI_handle:="Toast_GUI" this.id

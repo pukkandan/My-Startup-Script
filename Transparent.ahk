@@ -39,8 +39,9 @@ _Transparent_windows_EXIT(tr){
 }
 
 ;------------------------------------------------------------------------------------------------
+/* ; Use Transparent_TaskbarGlass
 Transparent_Taskbar(trans){
-    static DefaultGUIColor := DllCall("GetSysColor", "Int", COLOR_3DFACE, "UInt")  ;Get UI Color
+    static DefaultGUIColor := DllCall("GetSysColor", Int, 15, UInt)  ;Get UI Color
 
     if isOver_mouse("ahk_class Shell_TrayWnd")   ;Mouse over taskbar
         WinSet, Transparent, % trans, ahk_class Shell_TrayWnd   ;Make taskbar slightly transparent (Automatically removes transcolor)
@@ -55,12 +56,50 @@ _Transparent_Taskbar_EXIT(){
     WinSet, Transparent, Off, ahk_class Shell_TrayWnd   ;and remove its transparency
     return
 }
+*/
 
 ;------------------------------------------------------------------------------------------------
-Transparent_ImageGlass(){
-    WinGet, max , MinMax, ahk_exe ImageGlass.exe
+Transparent_MaxBG(title:="A",color:="F0F0F0"){
+    WinGet, max , MinMax, % title
     if max
-        WinSet, Transcolor, 3C3C3C, ahk_exe ImageGlass.exe
+        WinSet, Transcolor, % color, % title
     else
-        WinSet, Transcolor, Off, ahk_exe ImageGlass.exe
+        WinSet, Transcolor, Off, % title
+}
+
+;------------------------------------------------------------------------------------------------
+Transparent_TaskbarGlass(state:=-3, color:=0x40000000) { ;ABGR color
+; Note: Resets when Start menu is active. So set as timer. Even then, it won't work while startmenu/taskview is active
+
+/*  state
+    ------------
+    0   No color, Fully Opaque
+    1   Colored , Fully opaque
+    2   Colored , Translucent
+    3   No Color, Blurred (since it has no color, transparency can't be controlled)
+    4   Colored , Blurred
+   <0   (2,0x01000000) when on desktop and (|state|,color) otherwise
+*/
+    static ACCENT_POLICY, WINCOMPATTRDATA, state_old, color_old
+    , pad := (A_PtrSize=8?4:0), WCA_ACCENT_POLICY := 19, ACCENT_SIZE := VarSetCapacity(ACCENT_POLICY, 16, 0)
+    , SWCA:= DllCall("GetProcAddress", "Ptr", DllCall("LoadLibrary", "Str", "user32.dll", "Ptr"), "AStr", "SetWindowCompositionAttribute", "Ptr")
+
+    if(state<0){
+        WinGetClass c, A
+        if(c="Progman" OR c="WorkerW" OR c="Shell_TrayWnd"){
+            state:=2, color:=0x01000000
+        } else state:=-state
+    }
+
+    if (state_old!=(state:=mod(state,5)) OR color_old!=color) {
+        state_old:=state, color_old:=color
+        NumPut(state, ACCENT_POLICY, 0, "int")
+        NumPut(color, ACCENT_POLICY, 8, "int")
+        VarSetCapacity(WINCOMPATTRDATA, 8 + 2*pad + A_PtrSize, 0)
+        NumPut(WCA_ACCENT_POLICY, WINCOMPATTRDATA, 0, "int")
+        NumPut(&ACCENT_POLICY, WINCOMPATTRDATA, 4 + pad, "ptr")
+        NumPut(ACCENT_SIZE, WINCOMPATTRDATA, 4 + pad + A_PtrSize, "uint")
+    }
+
+    return DllCall(SWCA, "ptr", WinExist("ahk_class Shell_TrayWnd"), "ptr", &WINCOMPATTRDATA)
 }
