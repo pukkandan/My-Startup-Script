@@ -1,7 +1,9 @@
 *.sublime-project
-hotStrings.ahk
+hotStrings-Private.ahk
 *.sublime-workspace
 backup\*
 temp\*
 *.bak
-
+*.exe
+*.old
+explorerWindows
