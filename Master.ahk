@@ -9,8 +9,8 @@ Suspend, On
 #include <DelayedTimer>
 #include <ReloadScriptOnEdit>
 
-tooltip("ReloadScriptOnEdit",{life:500})
-delayedTimer.set(func("ReloadScriptOnEdit").bind([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000, True)
+;tooltip("ReloadScriptOnEdit",{life:500})
+;delayedTimer.set(func("ReloadScriptOnEdit").bind([A_ScriptDir "\*.ahk",A_ScriptDir "\*.ini"]), 2000, True)
 ;delayedTimer.start(True) ;Dont delay
 
 tooltip("Tray",{life:500})
@@ -25,22 +25,22 @@ delayedTimer.set(Func("suspendOnFS").bind([
         ,"ahk_exe chrome.exe"
         ,"ahk_exe vivaldi.exe"           ]), 100)
 
-tooltip("winProbe",{life:500})
+;tooltip("winProbe",{life:500})
 #include winProbe.ahk
 ; winProbe.activate()
 
 tooltip("dimScreen",{life:500})
 #include dimScreen.ahk
-; dimScreen(120)
+;dimScreen(120)
 
 tooltip("Taskview",{life:500})
 ;#include Taskview_Temp.ahk
 #include Taskview.ahk
 TaskView.__new()
 
-tooltip("Hotcorners",{life:500})
+;tooltip("Hotcorners",{life:500})
 #include hotcorners.ahk ; Refactor as a class
-delayedTimer.set("hotcorners", 100)
+;delayedTimer.set("hotcorners", 100)
 
 tooltip("winSizer",{life:500})
 #include winSizer.ahk
@@ -63,14 +63,14 @@ PIP.__new([  {title:"ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64"     , ty
             ,{title:"ahk_exe PotPlayer.exe ahk_class PotPlayer64"           , type:"VJTD" }
             ,{title:"Picture in picture ahk_exe chrome.exe"                 , type:"CJT " }
             ,{title:"Picture in picture ahk_exe vivaldi.exe"                , type:"CJT " }
-            ,{title:"ahk_class ConsoleWindowClass", set:2                   , type:"  TD" }
+            ;,{title:"ahk_class ConsoleWindowClass", set:2                   , type:"  TD" }
             ,{title:"ahk_exe calc.exe"            , set:3, maxheight:500    , type:"N   " }
             ,{title:"ahk_exe calc1.exe"           , set:3, maxheight:500    , type:"N   " }     ])
 delayedTimer.set(ObjbindMethod(PIP,"run"), 100)
 
 tooltip("Togglekeys",{life:500})
 #include Togglekeys.ahk
-delayedTimer.set(Func("CapsLockOffTimer").bind(60000), 1000)
+;delayedTimer.set(Func("CapsLockOffTimer").bind(60000), 1000)
 caseMenu.__new()
 
 tooltip("MicroWindows",{life:500})
@@ -90,14 +90,13 @@ tooltip("RunText",{life:500})
 #include runText.ahk  ;Needs serious Refactoring!!
 global runTextObj:=new runText("Runtext.ini")
 
-tooltip("Internet",{life:500})
+;tooltip("Internet",{life:500})
 #include internet.ahk
-delayedTimer.set(Func("netNotify").bind(,false), 5000, True)
-
+;delayedTimer.set(Func("netNotify").bind(,false), 5000, True)
 
 tooltip("autoUpdate",{life:500})
 #include autoUpdate.ahk
-delayedTimer.set("autoUpdate", 3600000, True)
+delayedTimer.set(Func("autoUpdate").bind("C:\setup\",True, False, False), 3600000, True)
 
 ;Required for mouseRemap
 GroupAdd, right_drag, ahk_exe mspaint.exe

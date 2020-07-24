@@ -20,7 +20,7 @@ resumeOnWin(){
     {
         Suspend, Off
         setTimer, hotcorners, On
-        setTimer, netNotify, On
+        ;setTimer, netNotify, On
         setTimer,, Off
         setTimer, suspendOnFS, On
     }

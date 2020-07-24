@@ -1,5 +1,5 @@
 #include keyRemapFunc.ahk
-
+/*
 ;===================    CapsLock as Prefix
 #if GetKeyState("CapsLock", "P")
 
@@ -38,7 +38,8 @@ return
 	send % A_ThisHotkey
 	setTimer, winUpWhenCapsReleased, 100
 return
-
+*/
+/*
 ;===================    R/M Button as Prefix
 RETURN
 #if getKeyState("RButton","P")
@@ -80,7 +81,8 @@ return
 return
 
 #If
-
+*/
+/*
 ;===================    Task View with Keyboard
 RETURN
 +#Left::                                             ; Move window to desktop
@@ -137,8 +139,8 @@ return
 !#0::
 	taskView.MoveWindowToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), sendWindowBack(), False)
 return
-
-
+*/
+/*
 ;===================    Over Taskbar
 RETURN
 #if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")
@@ -150,14 +152,14 @@ WheelDown::send ^!{Tab}
 LButton::send {Enter}
 MButton::send {Alt Up}{Esc}
 #if
-
+*/
 /*
 ;===================    Groupy
 RETURN
 !CapsLock::Send #``
 !+CapsLock::Send #^``
 */
-
+/*
 ;===================    Fences Pages
 RETURN
 #if winActive("ahk_class WorkerW ahk_exe explorer.exe") AND getKeyState("LButton","P")
@@ -166,17 +168,17 @@ WheelDown::
 	send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
 return
 #if
-
+*/
 ;===================    Toggglekeys
 
 RETURN
-+~CapsLock::
+~CapsLock::
 ~NumLock::
 ~ScrollLock::
 ~Insert::
 	Toast.show( {title:{text:str_Replace(A_ThisHotkey,[["~"],["+"]]) (GetKeyState(str_Replace(A_ThisHotkey,[["~"],["+"]]),"T")? " On":" Off")}, sound:True})
 return
-
+/*
 ;===================    Trigger HotStrings (») [Check hotStrings.ahk for details]
 RETURN
 CapsLock::
@@ -186,14 +188,16 @@ CapsLock::
 	SendLevel 1
 	sendEvent » ;Used to trigger many hotstrings
 return
-
+*/
+/*
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
 #ifWinNotActive ahk_exe Mathematica.exe
 +Enter::Send `n
 ;#if !winActive("ahk_exe sublime_text.exe")
 ;+Tab::Send % "    " ;I prefer 4 spaces instead of tab in some situations where I need to use +tab
 #if
-
+*/
+/*
 ;===================    X1 - Ditto & Launcher
 RETURN
 XButton2::
@@ -216,6 +220,7 @@ XButton1::
 	}
 return
 #if
+*/
 
 ;===================    Launcher
 RETURN
@@ -240,23 +245,24 @@ RETURN
 ;                                                   ; Run => Launcher
 ;#r:: runOrSend("Run" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{>} ")
 
+
 ;                                                   ; WindowSwitch
- #CapsLock:: runOrSend("WindowSwitch" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{»}{Tab}")
-+#CapsLock:: ShellRun("notepad.exe")                ; Notepad
-^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
- !CapsLock:: ShellRun("cmd.exe",,,"RunAs")          ; cmd
-^!CapsLock:: runSSH()                               ; SSH
-+!CapsLock:: ShellRun("wsl.exe",,,"RunAs")          ; WSL
+; #CapsLock:: runOrSend("WindowSwitch" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{»}{Tab}")
+;+#CapsLock:: ShellRun("notepad.exe")                ; Notepad
+;^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
+; !CapsLock:: ShellRun("cmd.exe",,,"RunAs")          ; cmd
+;^!CapsLock:: runSSH()                               ; SSH
+;+!CapsLock:: ShellRun("wsl.exe",,,"RunAs")          ; WSL
  ^CapsLock:: caseMenu.show()                        ; caseMenu
 ; CapsLock, +CapsLock are used elsewhere
 
-#F1:: Send {F1}                                     ; Convert #F1 => F1
+;#F1:: Send {F1}                                     ; Convert #F1 => F1
 #F5:: dimScreen(+10)                                ; DimScreen
 #F6:: dimScreen(-10)
  #c:: makeMicroWindow()                             ; MicroWindow
- #f:: listOpenFolders()                             ; List all open folders
-#^e:: watchExplorerWindows.recover()				; Recover Explorer Window
-#v:: activateVideoPlayer()                          ; Open VideoPlayer
+; #f:: listOpenFolders()                             ; List all open folders
+;#^e:: watchExplorerWindows.recover()				; Recover Explorer Window
+;#v:: activateVideoPlayer()                          ; Open VideoPlayer
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()   ; TrayIt
@@ -267,7 +273,7 @@ RETURN
 #if
 
 
-
+/*
 #F10::                                              ; Global controls for Music player
 #Media_Play_Pause::
 	runOrSend("Music Player" ,"{Media_Play_Pause}", "D:\Program Files\MusicBee\MusicBee.exe")
@@ -285,7 +291,8 @@ return
 
 ;+^Space:: YouTubePlayPause()                       ; Play/Pause Youtube
 return
-
+*/
+/*
 ;===================    Script Functions - Tray/Pause/Reload/Exit
 RETURN
 #+t::
@@ -300,5 +307,6 @@ return
 return
 
 #+r:: Reload
+*/
 #+q:: ExitApp
 return

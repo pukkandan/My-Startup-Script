@@ -7,22 +7,23 @@ trayMenu(){
     Menu, Tray, Add, &Reload Script, SCR_Reload
     Menu, Tray, Add, &Active, SCR_Pause
     Menu, Tray, Check, &Active
-    Menu, Tray, Add, &Edit Script, SCR_Edit
-    Menu, Tray, Add, Edit v2 Script, SCR_Edit2
+    ;Menu, Tray, Add, &Edit Script, SCR_Edit
+    ;Menu, Tray, Add, Edit v2 Script, SCR_Edit2
     Menu, Tray, Add, Open &Folder, SCR_OpenFolder
     Menu, Tray, Add, AHK &Help, AHK_Help
-    Menu, Tray, Add, AHK v2 Help, AHK_Help2
-    Menu, Tray, Default, AHK v2 Help
+    ;Menu, Tray, Add, AHK v2 Help, AHK_Help2
+    Menu, Tray, NoDefault
+    ;Menu, Tray, Default, AHK v2 Help
 
     Menu, Tray, Add
-    act:=func("netNotify").bind(False,,0)
-    Menu, Tray, Add, &Net Status, % act
+    ;act:=func("netNotify").bind(False,,0)
+    ;Menu, Tray, Add, &Net Status, % act
     Menu, Tray, Add, &Dim Screen, dimScreen
     Menu, TrayIt, Add
     Menu, Tray, Add, &TrayIt, :TrayIt
     Menu, Tray, Add
-    act:=ObjBindMethod(winProbe,"toggle")
-    Menu, Tray, Add, &Window Probe, % act
+    ;act:=ObjBindMethod(winProbe,"toggle")
+    ;Menu, Tray, Add, &Window Probe, % act
     Menu, Tray, MainWindow
     Menu, AHK, Standard
     Menu, Tray, Add, &AHK, :AHK

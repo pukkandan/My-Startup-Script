@@ -219,6 +219,7 @@ class runText{
             if (w){
                 Tooltip("Waiting for """ w """")
                 Winwait, % w,, % RunTextObj.waitTimeout
+                sleep 500
                 if (ErrorLevel){
                     Tooltip("TIMEOUT: Wait for """ w """")
                     Sleep, 500
