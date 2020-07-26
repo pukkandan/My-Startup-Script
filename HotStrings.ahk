@@ -28,7 +28,7 @@ return
 
 ;===================    Brackets
 RETURN
-#IfWinActive, ahk_group AutoBracket
+#IfWinActive ahk_group WG_AutoBracket
 
 :b0:{}::
 :b0:[]::
@@ -46,7 +46,7 @@ Send {Left 2}
 return
 
 :b0:<>::
-if !winActive("ahk_exe Mathematica.exe")
+ifWinNotActive ahk_group WG_NoAngularBrac
     Send {Left}
 return
 

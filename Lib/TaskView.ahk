@@ -4,7 +4,7 @@
 
 ; Functions starting with _ are not expected to be called from outside the class.
 
-class TaskView { ; There should only be one object for this
+class TaskView {
     __new(){
         this.base:={__call:ObjBindMethod(this,"_call")}
 
@@ -12,7 +12,7 @@ class TaskView { ; There should only be one object for this
         this.Toast:=new toast({life:1000})
 
         ; Windows 10 desktop changes listener
-        DllCall(this.fList["RegisterPostMessageHook"], Int, SCR_hwnd+(0x1000 << 32), Int, 0x1400 + 30)
+        DllCall(this.fList["RegisterPostMessageHook"], Int, A_ScriptHwnd+(0x1000 << 32), Int, 0x1400 + 30)
         OnMessage(0x1400 + 30, ObjBindMethod(this,"_VWMessage"))
 
         ; Restart the virtual desktop accessor when explorer.exe restarts
@@ -306,7 +306,7 @@ class TaskView { ; There should only be one object for this
         n:=this._desktopNumber(n, params2*)
         this.MoveWindowToDesktopNumber(n, win_hwnd, params*)
         if (active) ; Deactivate the window
-            WinActivate, ahk_class Shell_TrayWnd ahk_exe Explorer.EXE
+            WinActivate ahk_group WG_TaskBar
         this.GoToDesktopNumber(n, params*)
         if(active)
             winactivate, ahk_id %win_hwnd%

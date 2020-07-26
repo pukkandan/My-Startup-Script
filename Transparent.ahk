@@ -1,19 +1,13 @@
 Transparent_windows(tr){
-    GroupAdd, TransGroup, ahk_class CabinetWClass ahk_exe explorer.exe
-
-    GroupAdd, noTransGroup, ahk_class SysShadow
-    GroupAdd, noTransGroup, ahk_class Dropdown
-    GroupAdd, noTransGroup, ahk_class SysDragImage
-
     onExit(Func("_Transparent_windows_EXIT").bind(tr))
 
     WinGet windows, List
     Loop %windows%{
         wid := windows%A_Index%
 
-        IfWinNotExist, ahk_group TransGroup ahk_id %wid%
+        IfWinNotExist, ahk_group WG_Transparent ahk_id %wid%
             continue
-        IfWinExist, ahk_group noTransGroup ahk_id %wid%
+        IfWinExist, ahk_group WG_NoTransparent ahk_id %wid%
             continue
 
         winget, trans, Transparent, ahk_id %wid%
@@ -27,9 +21,9 @@ _Transparent_windows_EXIT(tr){
     WinGet windows, List
         Loop %windows% {
             wid := windows%A_Index%
-            IfWinNotExist, ahk_group TransGroup ahk_id %wid%
+            IfWinNotExist, ahk_group WG_Transparent ahk_id %wid%
                 continue
-            IfWinExist, ahk_group noTransGroup ahk_id %wid%
+            IfWinExist, ahk_group WG_NoTransparent ahk_id %wid%
                 continue
             winget, trans, Transparent, ahk_id %wid%
             if (trans=tr)
@@ -80,6 +74,7 @@ Transparent_TaskbarGlass(state:=-3, color:=0x40000000) { ;ABGR color
     4   Colored , Blurred
    <0   (2,0x01000000) when on desktop and (|state|,color) otherwise
 */
+
     static ACCENT_POLICY, WINCOMPATTRDATA, state_old, color_old
     , pad := (A_PtrSize=8?4:0), WCA_ACCENT_POLICY := 19, ACCENT_SIZE := VarSetCapacity(ACCENT_POLICY, 16, 0)
     , SWCA:= DllCall("GetProcAddress", "Ptr", DllCall("LoadLibrary", "Str", "user32.dll", "Ptr"), "AStr", "SetWindowCompositionAttribute", "Ptr")

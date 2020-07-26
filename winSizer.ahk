@@ -1,16 +1,19 @@
-class winSizer{
+class winSizer {
     __new(){
         this.action:=objBindmethod(this,"run"), act:=this.action, this.running:=False
         , this.toastObj:=new toast({life:0,margin:{x:1,y:1}, title:{size:10}, message:{def_size:8,offset:[4],def_offset:1}})
         setTimer, % act, 100 ;, 10
         setTimer, % act, Off
     }
-    start(endOnKeyRelease:=""){
+
+    start(endOnKeyRelease:="", force:=False){
+        if (!force && this.running)
+            return false
         this.endOnKeyRelease:=endOnKeyRelease
         MouseGetPos, mx, my, Win
         WinGetClass, winclass, ahk_id %win%
-        if (winclass="WorkerW" OR winclass="Shell_TrayWnd" OR !winexist("ahk_id" win))
-            return
+        if (winclass="WorkerW" OR winclass="Shell_TrayWnd" OR !winexist("ahk_id " win))
+            return false
         WinGetPos, wx, wy, w, h, ahk_id %win%
         ; Winget, isMax, MinMax, % win    ; Can't be minimized
         this.win:=win, this.mx:=mx, this.my:=my, this.wx:=wx, this.wy:=wy, this.ww:=w, this.wh:=h
@@ -21,14 +24,20 @@ class winSizer{
         act:=this.action
         setTimer, % act, On
         ; this.show(mx,my,wx,wy,w,h)
-        return
+        return true
     }
+    
     end(){
-        act:=this.action, r:=this.running, this.running:=False
-        setTimer, % act, Off
-        this.toastObj.close()
+        r:=this.running
+        if r {
+            this.toastObj.close()
+            act:=this.action
+            setTimer, % act, Off
+            this.running:=False
+        }
         return r
     }
+    
     run(){
         MouseGetPos, x, y
         mode:=this.mode, dx0:=x-this.mx, dy0:=y-this.my, win:= "ahk_id " this.win

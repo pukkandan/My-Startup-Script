@@ -1,16 +1,45 @@
 ;#include <Taskview>
 ;TaskView.__new()
 
+Explorer_winActive(desktop:=False) {
+	w:=winActive("ahk_group WG_Explorer")
+	if desktop && !w
+		w:=winActive("ahk_group WG_Desktop")
+	return w
+}
+
+Explorer_GetAllWindowsInfo(opt*) {
+	ret:=[]
+	for win in Explorer_GetAllWindowObjects(){
+		;msgbox % "explorer " Explorer_GetWindowObjectPath(win)
+		ret.push({ hwnd:win.hwnd, path:Explorer_GetWindowObjectPath(win, opt*)
+				 , desktop:TaskView.GetWindowDesktopNumber(win.hwnd)		})
+	}
+	return ret
+}
+
+Explorer_GetPath(hwnd, opts*) {
+	if !WinExist("ahk_group WG_Explorer ahk_id " hwnd)
+		return False
+	for win in Explorer_GetAllWindowObjects() {
+		if win.hwnd!=hwnd
+			continue
+		return Explorer_GetWindowObjectPath(win, opts*)
+	}
+	return False
+}
+
+;=========================================================
+
 Explorer_GetAllWindowObjects() {
     return ComObjCreate("Shell.Application").Windows
 }
-
 
 Explorer_GetWindowObjectPath(winObj, ignoreSpecial:=False) {
 	static replace:=[ ["ftp://.*@", "ftp://", True], ["file:///"], ["/", "\"] ]
 	if (!winObj.LocationURL) {
 		if ignoreSpecial
-			return
+			return False
 		hw:=A_DetectHiddenWindows 
 	    DetectHiddenWindows, On
 	    WinGetTitle, t, % "ahk_id " winObj.hwnd
@@ -22,15 +51,7 @@ Explorer_GetWindowObjectPath(winObj, ignoreSpecial:=False) {
 	return path
 }
 
-Explorer_GetAllWindows(opt*) {
-	ret:=[]
-	for win in Explorer_GetAllWindowObjects(){
-		;msgbox % "explorer " Explorer_GetWindowObjectPath(win)
-		ret.push({ hwnd:win.hwnd, path:Explorer_GetWindowObjectPath(win, opt*)
-				 , desktop:TaskView.GetWindowDesktopNumber(win.hwnd)		})
-	}
-	return ret
-}
+;=========================================================
 
 Explorer_getSpecialFolderPath(name){
 	static special:="" 

@@ -1,5 +1,4 @@
-getSelectedText(opts:="")
-{
+getSelectedText(opts:="") {
  /* Returns selected text without disrupting the clipboard. However, if the clipboard contains a large amount of data, some of it may be lost
  */
 
@@ -17,6 +16,7 @@ getSelectedText(opts:="")
     Clipboard:=""
     Send, ^c
     ClipWait, 0.1, 1
+    sleep 100
     clipNew:=Clipboard
     Clipboard:=clipOld
     clipOld:=""
@@ -28,16 +28,13 @@ getSelectedText(opts:="")
 _getSelectedText_process(clip, opts){
     if !clip
         return ""
-    if (!opts.path && winActive("ahk_exe explorer.exe ahk_id " winExist("A")) ) {
+    if (!opts.path && Explorer_winActive() ) {
         clipNew:=""
         Loop, Parse, clip, `n, `r
-        {
-            SplitPath, A_LoopField,,,, i
-            clipNew.=i "`n"
-        }
+            clipNew.=path(A_LoopField).name "`n"
     } else {
         clipNew:=clip
     }
 
-    return !opts.clean? clipNew: str_Replace(clipNew, [ ["[`t`n]| +", " ", True], ["^ | $|`r", "", True] ])
+    return !opts.clean? clipNew: str_Replace(clipNew, [ ["\s+", " ", True], ["^ | $", "", True] ])
 }

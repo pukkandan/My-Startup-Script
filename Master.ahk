@@ -1,6 +1,9 @@
 ;Critical
+reloadAsAdmin_Task()
 Suspend, On
+
 #include %A_ScriptDir%  ;Sets dir for includes
+#include globals.ahk
 #include Directives.ahk
 
 ; #include <byteWord>
@@ -98,19 +101,6 @@ delayedTimer.set(Func("netNotify").bind(,false), 5000, True)
 tooltip("autoUpdate",{life:500})
 #include autoUpdate.ahk
 delayedTimer.set("autoUpdate", 3600000, True)
-
-;Required for mouseRemap
-GroupAdd, right_drag, ahk_exe mspaint.exe
-GroupAdd, right_drag, ahk_exe mspaint1.exe
-GroupAdd, right_drag, ahk_exe cmd.exe
-GroupAdd, right_drag, ahk_exe vivaldi.exe
-GroupAdd, right_drag, ahk_exe chrome.exe
-
-;Required for HotStrings
-GroupAdd, AutoBracket, ahk_exe notepad.exe
-GroupAdd, AutoBracket, ahk_exe mathematica.exe
-GroupAdd, AutoBracket, ahk_exe chrome.exe
-;GroupAdd, AutoBracket, ahk_exe vivaldi.exe
 
 tooltip("Starting Timers",{life:500})
 delayedTimer.start(False)

@@ -18,7 +18,7 @@ class microWindow{
         h:=(h>0?h:64)
         this.height:=h
         if (pos="")
-            pos:=[ A_ScreenWidth-w-128 , A_ScreenHeight-h-128 ]
+            pos:=[ A_ScreenWidth*0.05 , A_ScreenHeight*0.87-h ]
 
         local GUIhwnd, act
         GUI, microWindow%n%:New, +HwndGUIhwnd +AlwaysOnTop +ToolWindow -Caption
@@ -144,15 +144,16 @@ class microWindow{
             return False
         }
         WinGetPos, X,,W,, % "ahk_id " this.hwnd
+        X/=A_ScreenWidth, W/=A_ScreenWidth
 
-        if (w>A_ScreenWidth//2 || GetKeyState("Control","P") || GetKeyState("LButton","P") || GetKeyState("RButton","P") || GetKeyState("MButton","P") || WinActive("ahk_id" this.hwnd))
+        if (W>0.5 || GetKeyState("Control","P") || GetKeyState("LButton","P") || GetKeyState("RButton","P") || GetKeyState("MButton","P") || WinActive("ahk_id" this.hwnd))
             this.mouse_allowed:=True
 
         if this.mouse_allowed {
             GUI %GUI_handle%: +Caption +Resize -MaximizeBox
             return True
         } else
-            WinMove, % "ahk_id " this.hwnd,, % 2*X>A_ScreenWidth-W ? +64 : A_ScreenWidth-W-16
+            WinMove, % "ahk_id " this.hwnd,, % A_ScreenWidth*(2*X>1-W ? 0.05 : 1-W-0.02)
         return False
     }
 
@@ -183,12 +184,20 @@ class microWindow{
         for l,k in map
         {
             obj:= register? ObjBindMethod(this, "crop", l, True) :"Off"
-            hotkey, % "+" k[1] , % obj
+            hotkey, % "^" k[1] , % obj
             obj:= register? ObjBindMethod(this, "crop", l) :"Off"
             hotkey, % k[2] , % obj
+            
+            obj:= register? ObjBindMethod(this, "crop", l, True, 4) :"Off"
+            hotkey, % "+^" k[1] , % obj
+            obj:= register? ObjBindMethod(this, "crop", l,, 4) :"Off"
+            hotkey, % "+" k[2] , % obj
+
             if (register) {
-                hotkey, % k[1] , On
+                hotkey, % "^" k[1] , On
                 hotkey, % k[2] , On
+                hotkey, % "^+" k[1] , On
+                hotkey, % "+" k[2] , On
             }
         }
         obj:= register? ObjBindMethod(this, "resetCrop") :"Off"

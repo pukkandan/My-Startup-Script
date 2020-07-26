@@ -14,9 +14,13 @@
 ; onExit(ObjbindMethod(PIP,"run",1))
 
 class PIP {
+    _module_init(args*){
+        this.__new(args*)
+        this._module_timerFn:=ObjbindMethod(this, "run")
+    }
     __new(p:=""){
         this.list:={}, this.sets:=0, this.topListOld:=[], this.topList:=[], mouseAllowed:=[]
-        , this.def:={set:1, type:"J", maxwidth:A_ScreenWidth//2.1, maxheight:A_ScreenHeight//2.1}
+        , this.def:={ set:1, type:"J", maxwidth:0.48, maxheight:0.48 }
         onExit(ObjbindMethod(this,"run",1))
         if p
             this.add(p)
@@ -41,17 +45,29 @@ class PIP {
             */
             if (!p.type)
                 p.type:=this.def.type
-            if (p.set!="") {
+
+            if (!p.set) {
+                p.set:=this.def.set
+            } if (p.set=0) {
+                p.set:=this.sets+1   ;new set
+            } else {
                 set:=p.set
                 if set is not number
                     p.set:=this.sets+1   ;new set
-                else if (set=0)
-                    p.set:=this.sets+1   ;new set
             }
+
+            for _,dim in ["width", "height"] { ; If Width/height < 1 , it is relative
+                key:="max" dim
+                val:=p[key]? p[key] :this.def[key]
+                if val<1
+                    p[key]:= A_Screen%dim% *val
+                ;msgbox % val "`n" p[key]
+            }
+
             this.unPIP(this.list[t].set)
             for prop,def in this.def
                 this.list[t,prop]:= p[prop]?p[prop]:def
-            ; msgbox, % "Add:" t "`n" this.list[t].type " " this.list[t].set
+            ;msgbox, % "Add:" t "`n" this.list[t].type " " this.list[t].set
         }
 
         return this.sets:=(this.sets>this.list[t].set?this.sets:this.list[t].set)
@@ -174,7 +190,8 @@ class PIP {
             if (!this.mouseAllowed[set]){
                 if inStr(this.topList[set].type,"J") {
                     WinGetPos, onTopX,,onTopW,, ahk_id %n%
-                    WinMove, ahk_id %n%,, % 2*onTopX>A_ScreenWidth-onTopW ? +64 : A_ScreenWidth-onTopW-16
+                    onTopX/=A_ScreenWidth, onTopW/=A_ScreenWidth
+                    WinMove, ahk_id %n%,, % A_ScreenWidth*(2*onTopX>1-onTopW ? 0.05 : 1-onTopW-0.02)
                 }
             } else if inStr(this.topList[set].type,"T") AND !inStr(this.topList[set].type,"V")
                 WinSet, Style, +0xC00000, ahk_id %n%

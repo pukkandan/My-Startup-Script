@@ -8,6 +8,7 @@ reloadAsAdmin(force:=True){
 ;http://ahkscript.org/boards/viewtopic.php?t=4334
 reloadAsAdmin_Task(force:=True) { ;  By SKAN,  http://goo.gl/yG6A1F,  CD:19/Aug/2014 | MD:22/Aug/2014
 ; Asks for UAC only first time
+  #SingleInstance Force
 
   TASK_CREATE := 0x2,  TASK_LOGON_INTERACTIVE_TOKEN := 3
 

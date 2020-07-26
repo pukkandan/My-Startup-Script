@@ -8,10 +8,8 @@ autoUpdate(path:="", download:=True, install:=False, openCLog:=True){
             FileMove, ahk.exe, %path%\AutoHotkey_%v%_setup, 0 ;Dont replace
             FileDelete, ahk.exe ;If exe still exists
             Toast.show({title:{text:"AHK Updated"}, life:openHelp?500:0})
-            if openCLog {
-                SplitPath, A_AhkPath,, path
-                ShellRun("C:\Windows\hh.exe", "mk:@MSITStore:" path "\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm")
-            }
+            if openCLog
+                ShellRun(PRG_CHM, "mk:@MSITStore:" SCR_AHKDir "\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm")
             return 2
         }
         else return 0

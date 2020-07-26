@@ -23,7 +23,7 @@ listOpenFolders(){
 }
 
 listOpenFolders_pastePath(path, win){
-    winGetClass, c, % ahk_id %win%
+    winGetClass, c, % win
     pasteText(path,,,win)
     if c=="#32770"
         send {Return}
@@ -35,20 +35,20 @@ moveFilesToCommonFolder(list){
     Toast.show({title:{text:"Move to Folder"}, life:100})
 
     n:=list.length()
-    if (!n) {
+    if !n
         return 1
-    } else if (n==1) {
-        folder:=list[1]
-        SplitPath, folder,, folder
-    } else {
-        folder:=regexReplace(str_CommonPart(list), "[^\\a-zA-Z0-9]+$")    
-    }
+    else if (n==1)
+        folder:=path(list[1]).dir
+    else
+        folder:=regexReplace(str_CommonPart(list), "[^\\a-zA-Z0-9]+$")
     
     if (subStr(folder,0)=="\") {
         path:=substr(folder,1,-1), folder:=""
     } else {
-        SplitPath, folder, folder, path
+        pathObj:=path(folder)
+        path:=pathObj.dir, folder:=pathObj.file
     }
+
     text:=str_splitIntoLines(path "\", 50)
     InputBox, folder, Move %n% files into:, % text ,, , % 100+25*str_countLines(text) ,,,,, % folder
     if ErrorLevel
@@ -57,7 +57,7 @@ moveFilesToCommonFolder(list){
     folder:=path "\" folder
     FileCreateDir % folder
     for _,file in list {
-        SplitPath, file , fileName
+        fileName:=path(file).file
         if instr(FileExist(file), "D") {
             FileMoveDir, % file, % folder "\" fileName
         } else {
@@ -70,7 +70,8 @@ moveFilesToCommonFolder(list){
 ;=============================================
 
 runOrSend(title, key, path, paste:=False, sendAfter:=""){
-    SplitPath, path, exe
+    ;msgbox %title%`n%key%`n%path%`n%paste%`n%sendAfter%
+    exe:=path(path).file
     win:="ahk_exe " exe
 
     if (paste) {
@@ -104,55 +105,54 @@ runOrSend(title, key, path, paste:=False, sendAfter:=""){
     return
 }
 
-runLauncher(toggle, getText){
-    key:="!{F2}"
-    path:="D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe"
-    win:="Keypirinha", exclude:=" - "
-    
-    SplitPath, path, exe
-    win.=" ahk_exe " exe
+runLauncher(toggle:=True, getText:=False){
+    static tooltipOff:=Func("_runLauncher_tooltipOff")
     if getText
         text:=keepSelectedText()
 
-    if WinActive(win,,exclude) {
+    if WinActive("ahk_group WG_Launcher") {
         send {Esc}
         if toggle
             return
     }
-
-    runOrSend("Launcher", key, path,, getText? "{BackSpace}" :"")
+    PRG_RS_Launcher[5]:=getText? "{BackSpace}" :""
+    runOrSend(PRG_RS_Launcher*)
 
     if !getText
         return
-    WinWaitActive, % win,, 2, % exclude
+    WinWaitActive, ahk_group WG_Launcher,, 2
     sleep 100
-    tooltip(!text? "Nothing Selected": "Press SPACE/TAB to paste :`n" text
+    tooltip(!text? "Nothing Selected": "Press SPACE/TAB to paste :`n" subStr(text, 1, 150)
         , {no:3, y:(text?-50:-25), x:0, mode:"Window"}  )
-    f:=func("_runLauncher_tooltipOff").bind(False, win, exclude)
-    setTimer, %f%, 1000
-    setTimer, %f%, On
+    setTimer, % tooltipOff, 1000
+    setTimer, % tooltipOff, On
     return
 }
-_runLauncher_tooltipOff(force:=False, win:="", exclude:=""){
-        if !force && WinActive(win,,, exclude)
+_runLauncher_tooltipOff(force:=False){
+        if !force && WinActive("ahk_group WG_Launcher")
             return
         tooltip(,{no:3})
         keepSelectedText(-1)
         return
 }
 
-keepSelectedText(new:=True){ ; -1 to delete text
-    static text:=""
+keepSelectedText(new:=True, again:=True){ ; new = -1 to delete text, "" to return text without doing anything 
+    static text:="", pasted:=False
     ;tooltip % text
-    if (new==-1)
-        return text:=""
-    if (new)
-        return text:=subStr(getSelectedText({clean:True, clip:True, path:False}), 1, 300)
-    if (text) {
-        pasteText(text)
-        ;_runLauncher_tooltipOff(True)
+    if (new=="")
         return text
+    else if (new==-1)
+        text:=""
+    else if new {
+        pasted:=False
+        text:=subStr(getSelectedText({clean:True, clip:True, path:False}), 1, 300)
+    } else if text {
+        if !again && pasted
+            return False
+        pasted:=True
+        pasteText(text)
     }
+    return text
 }
 
 ;=============================================
@@ -168,6 +168,11 @@ runSSH(){
     InputBox, param, SHH, parameters?,,, 128,,,,,-CX 14173002@10.2.60.11
     ShellRun("ssh.exe",param,,,"RunAs")
     return
+}
+
+cmdInCurrentFolder(wsl:=False) { ;as admin 
+    path:=Explorer_GetPath(winExist("A"))
+    ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, "RunAs")
 }
 
 ;=============================================
@@ -189,11 +194,15 @@ makeMicroWindow(){
 ;=============================================
 
 activateVideoPlayer() {
-    win:=WinExist("ahk_exe PotPlayerMini64.exe")
+    win:=WinExist("ahk_group WG_VideoPlayer")
+    if (!win) {
+        DetectHiddenWindows, On
+        win:=WinExist("ahk_group WG_VideoPlayer")
+    }
     if win
         WinActivate, ahk_id %win%
     else
-        ShellRun("D:\Program Files\Potplayer\PotplayerMini64.exe") ;, Clipboard)
+        ShellRun(PRG_VideoPlayer) ;, Clipboard)
 }
 
 ;=============================================
@@ -201,7 +210,7 @@ activateVideoPlayer() {
 playAllVideoPlayers(){
     DetectHiddenWindows, off
     active:=winExist("A")
-    WinGet, l, list, ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64
+    WinGet, l, list, ahk_group WG_VideoPlayer
     loop %l%
     {
         w:="ahk_id " l%A_Index%
@@ -209,7 +218,7 @@ playAllVideoPlayers(){
         ;msgbox %w%`n%m%
         if (m!=-1) {
             winActivate % w
-            Send, +{F12} ; Set +{F12} to play/pause in potplayer. Media_Play_Pause doesnt work if it is set as global
+            Send, % PRG_RS_VideoPlayer[2] ; Set it to play/pause in potplayer. Media_Play_Pause doesnt work if it is set as global
             sleep 10 ; Sleep makes the different players drift out of sync slowly, but the send becomes much more reliable
         }
     }
@@ -222,13 +231,13 @@ playAllVideoPlayers(){
 
 YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
     Thread, NoTimers
-    wid:=WinExist(" - YouTube ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1")
+    wid:=WinExist(" - YouTube ahk_group WG_Browser")
     if !wid
         return
     ControlGet, cid, Hwnd,,Chrome_RenderWidgetHostHWND1, ahk_id %wid%
     if !cid
         return
-    IfWinNotActive, ahk_exe chrome.exe
+    IfWinNotActive, ahk_group WG_Browser
     {
         ControlFocus,,ahk_id %cid%
         ControlSend,, k , ahk_id %cid%

@@ -8,11 +8,11 @@ trayMenu(){
     Menu, Tray, Add, &Active, SCR_Pause
     Menu, Tray, Check, &Active
     Menu, Tray, Add, &Edit Script, SCR_Edit
-    Menu, Tray, Add, Edit v2 Script, SCR_Edit2
+    Menu, Tray, Add, Edit v&2 Script, SCR_Edit2
     Menu, Tray, Add, Open &Folder, SCR_OpenFolder
     Menu, Tray, Add, AHK &Help, AHK_Help
-    Menu, Tray, Add, AHK v2 Help, AHK_Help2
-    Menu, Tray, Default, AHK v2 Help
+    Menu, Tray, Add, AHK &v2 Help, AHK_Help2
+    Menu, Tray, Default, AHK &Help
 
     Menu, Tray, Add
     act:=func("netNotify").bind(False,,0)
@@ -23,30 +23,30 @@ trayMenu(){
     Menu, Tray, Add
     act:=ObjBindMethod(winProbe,"toggle")
     Menu, Tray, Add, &Window Probe, % act
+    act:=ObjBindMethod(winProbe,"toggle")
+    Menu, Tray, Add, Deb&ug, DebugVars
     Menu, Tray, MainWindow
     Menu, AHK, Standard
-    Menu, Tray, Add, &AHK, :AHK
+    Menu, Tray, Add, AH&K, :AHK
     Menu, Tray, Add, E&xit, Exit
 
     trayListen()
     ;setTimer, trayListen, 1000  ;for better Stability
 }
+DebugVars(){
+    ShellRun(path(A_ScriptDir).dir "\DebugVars\DebugVars.ahk")
+}
 AHK_Help(){
-    SplitPath, A_AhkPath,, path
-    ShellRun(path "\AutoHotkey.chm")
-    return
+    ShellRun(SCR_AHKDir "\AutoHotkey.chm")
 }
 SCR_OpenFolder(){
     ShellRun(A_ScriptDir)
-    return
 }
 SCR_Edit(){
     ShellRun(A_ScriptDir "\" SCR_Name ".sublime-project")
-    return
 }
 SCR_Reload(){
     Reload
-    return
 }
 SCR_Pause(){
     Suspend
@@ -59,20 +59,15 @@ SCR_Pause(){
 
 
 AHK_Help2(){
-    SplitPath, A_AhkPath,, path
-    ShellRun( path "_v2\AutoHotkey.chm")
-    return
+    ShellRun(SCR_AHKDir "_v2\AutoHotkey.chm")
 }
 SCR_Edit2(){
-    SplitPath, % A_ScriptDir, , OutDir,
-    ShellRun( OutDir "\" SCR_Name "_v2\" SCR_Name ".sublime-project")
-    return
+    ShellRun( path(A_ScriptDir).dir "\" SCR_Name "_v2\" SCR_Name ".sublime-project")
 }
 
 ;==========================================
 trayListen(){
     OnMessage(0x404, "mouseOverTray")  ;Mouse over tray icon
-    return
 }
 mouseOverTray(wParam,lParam){
     if (lParam=0x201) {         ; Single click
@@ -106,5 +101,4 @@ updateTray(mx0:="",my0:=""){
 }
 showTrayTip(tip,mx,my){
     ToolTip(tip, { x:mx,y:my-50,no:20,life:200, color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:10} })
-    return
 }

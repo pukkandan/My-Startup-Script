@@ -18,12 +18,9 @@ class delayedTimer {
         return
     }
     firstRun(){
-        for _,item in this.obj {
-            if item.r {
-                f:=item.f
-                %f%()
-            }
-        }
+        for _,item in this.obj
+            if item.r
+                item.f.call()
         return this.reset()
     }
     reset(){

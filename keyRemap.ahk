@@ -48,7 +48,7 @@ LButton::                                            ; Switch to next window
 	silentKeyRelease_Mouse("R")
 return
 
-MButton:: winSizer.start("RButton")                  ; WinSizer
+MButton:: winSizer.start("RButton")                  ; WinSizer (keyboard alternative below)
 MButton Up::
 	if !winSizer.end()
 	    send, #{Tab}
@@ -71,7 +71,7 @@ WheelDown::
 	sleep 200
 return
 
-#ifWinNotActive ahk_group right_drag
+#ifWinNotActive ahk_group WG_RightDrag
 
 *RButton up::                                        ; Dont Block RButton
 	Critical
@@ -122,7 +122,7 @@ return
 +#8::
 +#9::
 +#0::
-	taskView.MoveWindowAndGoToDesktopNumber( SubStr(A_ThisHotKey,0)=="0"? 10: SubStr(A_ThisHotKey,0), winActive("A"), False)
+	taskView.MoveWindowAndGoToDesktopNumber( SubStr(A_ThisHotKey,0)=="0"? 10: SubStr(A_ThisHotKey,0), winExist("A"), False)
 return
 
 !#1::                                                ; Move window to Desktop by number and go there
@@ -141,13 +141,13 @@ return
 
 ;===================    Over Taskbar
 RETURN
-#if isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")
+#if isOver_mouse("ahk_group WG_TaskBar")
 ~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
 WheelUp::send ^+!{Tab}
 WheelDown::send ^!{Tab}
 
-#if winActive("Task Switching ahk_class MultitaskingViewFrame ahk_exe Explorer.EXE") AND isOver_mouse("ahk_class Shell_TrayWnd ahk_exe Explorer.exe")        ; When Task Switching
-LButton::send {Enter}
+#if winActive("ahk_group WG_TaskView") AND isOver_mouse("ahk_group WG_TaskBar")
+LButton::send {Enter}								; When Task Switching
 MButton::send {Alt Up}{Esc}
 #if
 
@@ -160,12 +160,23 @@ RETURN
 
 ;===================    Fences Pages
 RETURN
-#if winActive("ahk_class WorkerW ahk_exe explorer.exe") AND getKeyState("LButton","P")
+#if winActive("ahk_group WG_Desktop") AND getKeyState("LButton","P")
 WheelUp::
 WheelDown::
 	send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
 return
 #if
+
+;===================    WinSizer
+RETURN
++^CapsLock::
+	prefixUsed("CapsLock")
+	winSizer.start("CapsLock")
+return
+ ~Ctrl Up::
+~Shift Up::
+	winSizer.end()
+return
 
 ;===================    Toggglekeys
 
@@ -188,81 +199,70 @@ CapsLock::
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
-#ifWinNotActive ahk_exe Mathematica.exe
+#ifWinNotActive ahk_group WG_ShiftEnter
 +Enter::Send `n
-;#if !winActive("ahk_exe sublime_text.exe")
-;+Tab::Send % "    " ;I prefer 4 spaces instead of tab in some situations where I need to use +tab
+#ifWinNotActive ahk_group WG_ShiftSpace
++Space::Send % "    " ;I prefer 4 spaces instead of tab in some situations instead of tab
 #if
 
 ;===================    X1 - Ditto & Launcher
 RETURN
 XButton2::
 	Keywait, %A_ThisHotkey%, T0.5
-	if !ErrorLevel {
-	    runOrSend("Ditto" ,"^``", "D:\Program Files\Ditto\Ditto.exe")
-	} else {
-	    goSub #Space ; Check "Launcher"
-	}
+	!ErrorLevel? runOrSend(PS_Clipboard*) : runLauncher(False,True)
 return
 
 ;===================    X2 - winAction & RunText
 RETURN
 XButton1::
 	Keywait, %A_ThisHotkey%, T0.25
-	if !ErrorLevel {
-#w:: 	winAction.show()
-	} else {
-#`:: 	runTextObj.showGUI()
-	}
+	!ErrorLevel? winAction.show() : runTextObj.showGUI()
 return
 #if
 
 ;===================    Launcher
 RETURN
-LWin::                                              ; LWin => Launcher
-#Space::                                            ; Open Launcher with pastable text
-	runLauncher(A_ThisHotkey=="LWin", A_ThisHotkey!="LWin")
-return
+  LWin:: runlauncher(True)							; LWin => Launcher
+#Space:: runLauncher(False,True)					; Open Launcher with pastable text
 
-#ifWinActive Keypirinha ahk_exe keypirinha-x64.exe
-~Tab::                                              ; Paste previously selected text
+#ifWinActive ahk_group WG_Launcher
+  ~Tab:: 											; Paste previously selected text
 ~Space:: 
-	keepSelectedText(False)
+    if keepSelectedText(False, A_ThisHotkey=="~Tab")
+        tooltip("Press TAB to paste :`n" subStr(keepSelectedText(""), 1, 150), {no:3, y:-50, x:0, mode:"Window"}  )
 return
 #if
 
 ~LWin & RWin:: return                               ; Allows LWin to be still used as prefix
 ;+^LWin:: send {Ctrl Up}{Shift Up}{LWin Up}{RWin}   ; +^LWin => Win (^Esc already does this)
-return
 
 ;===================    Programs/Functions
 RETURN
-;                                                   ; Run => Launcher
-;#r:: runOrSend("Run" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{>} ")
-
-;                                                   ; WindowSwitch
- #CapsLock:: runOrSend("WindowSwitch" ,"!{f2}", "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe", False, "{»}{Tab}")
+ #CapsLock:: runOrSend(PS_WindowSwitch*)			; WindowSwitch
 +#CapsLock:: ShellRun("notepad.exe")                ; Notepad
 ^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
- !CapsLock:: ShellRun("cmd.exe",,,"RunAs")          ; cmd
+ !CapsLock:: cmdInCurrentFolder()					; CMD
++!CapsLock:: cmdInCurrentFolder(True)				; WSL
 ^!CapsLock:: runSSH()                               ; SSH
-+!CapsLock:: ShellRun("wsl.exe",,,"RunAs")          ; WSL
  ^CapsLock:: caseMenu.show()                        ; caseMenu
-; CapsLock, +CapsLock are used elsewhere
+; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
 #F1:: Send {F1}                                     ; Convert #F1 => F1
 #F5:: dimScreen(+10)                                ; DimScreen
 #F6:: dimScreen(-10)
  #c:: makeMicroWindow()                             ; MicroWindow
  #f:: listOpenFolders()                             ; List all open folders
+ #w:: winAction.show()								; winAction
+ #`:: runTextObj.showGUI()							; runText
 #^e:: watchExplorerWindows.recover()				; Recover Explorer Window
-#v:: activateVideoPlayer()                          ; Open VideoPlayer
+ #v:: activateVideoPlayer() 						; Open VideoPlayer
+;#r:: runOrSend(PS_Run*)							; Run => Launcher
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()   ; TrayIt
 #t:: Menu, trayIt, show                             ; TrayIt Menu
 
-#ifwinactive ahk_exe explorer.exe                   ; Move Files to Common FOlder
+#if Explorer_winActive()                   			; Move Files to Common FOlder
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
 #if
 
@@ -270,10 +270,10 @@ RETURN
 
 #F10::                                              ; Global controls for Music player
 #Media_Play_Pause::
-	runOrSend("Music Player" ,"{Media_Play_Pause}", "D:\Program Files\MusicBee\MusicBee.exe")
+	runOrSend(PS_MusicPlayer*)
 return
 
-#if ProcessExist("MusicBee.exe")
+#if ProcessExist(PRG_MusicPlayer)
 #F9::  Media_Prev
 #F11:: Media_Next
 ; MusicBee sometimes doesn't respond to Media buttons.
