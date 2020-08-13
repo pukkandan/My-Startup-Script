@@ -10,11 +10,12 @@ pasteText(text:="", win:="", cntrl:="", waitWin:="") {
     sleep 100
 
     if (win) {
-        ControlSend, % cntrl, ^v, % win
+        ControlSend, % cntrl, +{Insert}, % win
     } else {
         Send, +{Insert} ;^v
     }
     
+    sleep 100
     if text
         Clipboard:=clipOld
 

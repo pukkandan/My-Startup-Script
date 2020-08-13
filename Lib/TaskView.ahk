@@ -208,10 +208,10 @@ class TaskView {
     }
     */
 
-    GoToDesktopNumber(n, wrap:=False, anim:=-112, animDelay:=200) {
+    GoToDesktopNumber(n, wrap:=False, anim:=-12, animDelay:=200) {
         ; anim can be a combination of:
         ; * -1 = Single page by #^{Arrow}
-        ; +100 = Use 'Top Window Activate' Method
+        ; +100 = Use 'Top Window Activate' Method // This is slow and therefore deprecated
         ; + 10 = Use 'GUI' Method
         ; and one of the following fallbacks:
         ;   0 = Animate Each Page (-0 = 0)
@@ -225,10 +225,10 @@ class TaskView {
         ;    -112 => Try to activate top window, use GUI if there is no window, and skip animation if both fail
 
         ; Recomended methods are:
-        ; -112 = default
+        ;  -12 = default
+        ;   12 = Use GUI method only
         ;    2 = No animation
         ;   -2 = Animate only for single page
-        ;   12 = Animate without activating any window
         ;    0 = Animate Each Page
 
         if n is not number
@@ -317,6 +317,7 @@ class TaskView {
 
     createNewDesktops(n, anim:=1, animDelay:=200) {
         ; anim can be: 0=No anim, 1=1 anim, 2=Full anim
+        msgbox Creating %n% new desktops!
         loop, % n {
             if ( A_Index>1 && (anim>1 || (anim==1 && A_Index==n)) )  {
                 sleep % animDelay

@@ -22,7 +22,7 @@ DetectHiddenWindows, Off        ;Detect Windows that are hidden? Recommended to 
 #InstallKeybdHook				;Installs Keyboard hook
 #InstallMouseHook				;Installs Mouse hook
 #KeyHistory 100					;maximum number of keyboard and mouse events displayed by the KeyHistory window.
-#IfTimeout % SCR_hookTimeOut//3 ;A timeout is implemented to prevent long-running expressions from stalling keyboard input processing. If the timeout value is exceeded, the expression continues to evaluate, but the keyboard hook continues as if the expression had already returned false.
+#IfTimeout % SCR_hookTimeOut//5 ;A timeout is implemented to prevent long-running expressions from stalling keyboard input processing. If the timeout value is exceeded, the expression continues to evaluate, but the keyboard hook continues as if the expression had already returned false.
 ;;#LTrim Off					;Donot left-trim Continuation sections
 #MaxHotkeysPerInterval 200		;Rate of hotkey activations beyond which a warning dialog will be displayed
 #MaxMem 256						;Allows variables with heavy memory usage. DO NOT FORGET TO EMPTY SUCH VARIABLES AFTER USE

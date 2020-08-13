@@ -1,3 +1,5 @@
+; This file must be in Windows 1252 encoding, because of "�"
+
 ; Script Name
 global SCR_Name  := path(A_ScriptName).name        ;SCR_Name = Name of script file without extension
 global SCR_AHKDir:= path(A_Ahkpath).dir

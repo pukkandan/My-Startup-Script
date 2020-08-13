@@ -17,14 +17,12 @@ return
 ;===================    Paste Trackers
 RETURN
 ::tr»::
-FileRead trackerList, trackers.txt
-temp:=ClipboardAll, Clipboard:=""
-clipboard:=trackerList
-ClipWait
-send ^v
-sleep 100
-Clipboard:=temp, temp:="", trackerList:=""
-return
+pasteTrackers(){
+	FileRead trackerList, trackers.txt
+	pasteText(trackerList)
+	trackerList:=""
+	return
+}
 
 ;===================    Brackets
 RETURN

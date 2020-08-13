@@ -1,5 +1,6 @@
 listOpenFolders(){
     winCurrent:="ahk_id " winExist("A")
+    ;ControlGetFocus, ctrlCurrent, ahk_id %winCurrent%
     pathList:={}
 
     Menu, listOpenFolders, Add
@@ -7,17 +8,18 @@ listOpenFolders(){
 
     i:=0
     for win in Explorer_GetAllWindowObjects() {
-        i++
         path:=Explorer_GetWindowObjectPath(win, true)
         if !path || pathList.hasKey(path)
             continue
         pathList[path]:=True
         ;msgbox % pathList.hasKey(path) "`n" pathList[path] "`n" path
 
-        act:=func("listOpenFolders_pastePath").bind(path "\", winCurrent)
+        act:=func("listOpenFolders_pastePath").bind(path "\", winCurrent) ;, ctrlCurrent)
         Menu, listOpenFolders, Add, % (i>9?"":"&") (i==10?"1&0":i) " " path, % act
+        i++
     }
-    
+    if !i
+        Toast.show("No Folders Open")
     Menu, listOpenFolders, Show
     return
 }
@@ -25,7 +27,7 @@ listOpenFolders(){
 listOpenFolders_pastePath(path, win){
     winGetClass, c, % win
     pasteText(path,,,win)
-    if c=="#32770"
+    if(c="#32770")
         send {Return}
 }
 

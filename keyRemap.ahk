@@ -160,10 +160,13 @@ RETURN
 
 ;===================    Fences Pages
 RETURN
-#if winActive("ahk_group WG_Desktop") AND getKeyState("LButton","P")
+#ifwinActive ahk_group WG_Desktop
 WheelUp::
 WheelDown::
-	send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
+	if getKeyState("LButton","P")
+		send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
+	else
+		send {%A_ThisHotkey%}	
 return
 #if
 
@@ -209,7 +212,7 @@ return
 RETURN
 XButton2::
 	Keywait, %A_ThisHotkey%, T0.5
-	!ErrorLevel? runOrSend(PS_Clipboard*) : runLauncher(False,True)
+	!ErrorLevel? runOrSend(PRG_RS_Clipboard*) : runLauncher(False,True)
 return
 
 ;===================    X2 - winAction & RunText
@@ -218,7 +221,6 @@ XButton1::
 	Keywait, %A_ThisHotkey%, T0.25
 	!ErrorLevel? winAction.show() : runTextObj.showGUI()
 return
-#if
 
 ;===================    Launcher
 RETURN
@@ -238,7 +240,7 @@ return
 
 ;===================    Programs/Functions
 RETURN
- #CapsLock:: runOrSend(PS_WindowSwitch*)			; WindowSwitch
+ #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)			; WindowSwitch
 +#CapsLock:: ShellRun("notepad.exe")                ; Notepad
 ^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
  !CapsLock:: cmdInCurrentFolder()					; CMD
@@ -256,7 +258,7 @@ RETURN
  #`:: runTextObj.showGUI()							; runText
 #^e:: watchExplorerWindows.recover()				; Recover Explorer Window
  #v:: activateVideoPlayer() 						; Open VideoPlayer
-;#r:: runOrSend(PS_Run*)							; Run => Launcher
+;#r:: runOrSend(PRG_RS_Run*)							; Run => Launcher
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()   ; TrayIt
@@ -270,7 +272,7 @@ RETURN
 
 #F10::                                              ; Global controls for Music player
 #Media_Play_Pause::
-	runOrSend(PS_MusicPlayer*)
+	runOrSend(PRG_RS_MusicPlayer*)
 return
 
 #if ProcessExist(PRG_MusicPlayer)
