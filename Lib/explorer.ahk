@@ -32,11 +32,16 @@ Explorer_GetPath(hwnd, opts*) {
 ;=========================================================
 
 Explorer_GetAllWindowObjects() {
-    return ComObjCreate("Shell.Application").Windows
+	return ComObjCreate("Shell.Application").Windows
 }
 
 Explorer_GetWindowObjectPath(winObj, ignoreSpecial:=False) {
 	static replace:=[ ["ftp://.*@", "ftp://", True], ["file:///"], ["/", "\"] ]
+	
+	path:=winObj.Document.Folder.Self.Path
+	return (SubStr(path, 0, 2)=="::") ? (ignoreSpecial? False : "shell:" path) :path
+
+	/*// OLD METHOD
 	if (!winObj.LocationURL) {
 		if ignoreSpecial
 			return False
@@ -49,6 +54,7 @@ Explorer_GetWindowObjectPath(winObj, ignoreSpecial:=False) {
 	} else
 		path:= URI_Decode(str_Replace(winObj.LocationURL, replace))
 	return path
+	*/
 }
 
 ;=========================================================

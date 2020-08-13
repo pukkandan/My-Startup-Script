@@ -1,8 +1,8 @@
 class watchExplorerWindows {
-    _module_init(args*){
+    __module_init(args*){
         this.__new(args*)
-		this._module_runTimerAtStart:=True
-        this._module_timerFn:=ObjbindMethod(this, "run")
+		this.__module := {	runTimerAtStart: True
+						  , this._module_timerFn: ObjbindMethod(this, "run")	}
     }
 	__new(file:="explorerWindows", firstRun:=True){
 		this.file:=file
@@ -66,6 +66,7 @@ class watchExplorerWindows {
 
 	recover(args*) {
 		this.recoverRunning:=True
+		currentDesktop:=TaskView.GetCurrentDesktopNumber()
 		tooltip("Recovering Explorer Windows...", {no:4})
     	;Toast.show("Recover Explorer")
 
@@ -74,6 +75,7 @@ class watchExplorerWindows {
 			ret:=this._recover(True, False)
 		this.writeWinsToFile(True, True)
 		
+		TaskView.gotoDesktopNumber(currentDesktop,,"")
 		tooltip("", {no:4})
 		this.recoverRunning:=False
 	}
@@ -94,16 +96,23 @@ class watchExplorerWindows {
 				else
 					ask:=False
 			}
-			if diff>0
-				method:= (subStr(path,1,7)=="shell::" || this.currentWins[path].length())? "explorer.exe" :"explore"
-			; explore cant open duplicates and some special windows
-			; but explorer.exe opens new process everytime. So this is a compromise
+
+			;if diff>0
+			;	method:= (subStr(path,1,7)=="shell::" || this.currentWins[path].length())? "explorer.exe" :"explore"
+			; explore can't open duplicates and some special windows
+			; explorer.exe opens new process everytime. Multiple processes messes with "shell.application"
+			; Directly giving path can open special windows but not duplicates.
 			
 			try {
 				loop % diff {
-					RunWait, %method% "%path%",, Max
+					RunWait, "%path%",, Max
 					opened:=True
 					sleep 1000
+
+					if this.currentWins[path].length() { ; Window was already open. Now it is active. Duplicate it
+						Send, ^n
+						sleep 1000
+					}
 				}
 			} catch
 				wins.delete(path)
@@ -115,7 +124,7 @@ class watchExplorerWindows {
 		}
 
 		for path,deskList in wins {
-			if !this.currentWins[path]
+			if ( !this.currentWins[path] || this.currentWins[path].length() < deskList.length() )
 				return !this._recoverAsk("Failed to open window at:`n" path "`n`nRetry?")
 
 			toMove:=this.currentWins[path].clone()

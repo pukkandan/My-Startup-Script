@@ -14,13 +14,13 @@
 ; onExit(ObjbindMethod(PIP,"run",1))
 
 class PIP {
-    _module_init(args*){
+    __module_init(args*){
         this.__new(args*)
-        this._module_timerFn:=ObjbindMethod(this, "run")
+        this.__module := { timerFn: ObjbindMethod(this, "run") }
     }
     __new(p:=""){
         this.list:={}, this.sets:=0, this.topListOld:=[], this.topList:=[], mouseAllowed:=[]
-        , this.def:={ set:1, type:"J", maxwidth:0.48, maxheight:0.48 }
+        , this.def:={ set:1, type:"J", maxwidth:0.47, maxheight:0.47 }
         onExit(ObjbindMethod(this,"run",1))
         if p
             this.add(p)
