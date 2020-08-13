@@ -1,5 +1,23 @@
 #include keyRemapFunc.ahk
 
+;===================    Capslock Toggled on
+#if GetKeyState("CapsLock", "T")
+1::													 ; Capslock acts as Numlock for top row numbers
+2::
+3::
+4::
+5::
+6::
+7::
+8::
+9::
+0::
+-::
++::
+	send {Numpad%A_ThisHotkey%}
+return
+#if
+
 ;===================    CapsLock as Prefix
 #if GetKeyState("CapsLock", "P")
 
