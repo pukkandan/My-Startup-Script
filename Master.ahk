@@ -57,7 +57,7 @@ Modules.add("Transparent_TaskbarGlass", 500, 4)
 #include PIP.ahk
 Modules.add(PIP, 100, [
 	, { title: "ahk_group WG_VideoPlayer", maxHeight: 0.8    , type: "VJTD" }
-    , { title: "Picture in picture ahk_group WG_Browser"     , type: "CJT " }
+    , { title: "ahk_group WG_Browser_PIP"     				 , type: "CJT " }
     , { title: "ahk_group WG_Console", set: 2                , type: "  TD" }
     , { title: "ahk_group WG_Calc"   , set: 3, maxheight: 530, type: "N   " }    ])
 
@@ -83,7 +83,7 @@ global runTextObj:=new runText("Runtext.ini")
 ;Module.add("netNotify", -5000, False)
 
 #include autoUpdate.ahk
-Modules.add("autoUpdate", -3600000)
+Modules.add("autoUpdate", 3600000) ;Put in firstrun, but without blocking
 
 Modules.initialize()
 Modules.startTimers()

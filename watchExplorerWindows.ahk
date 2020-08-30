@@ -2,7 +2,7 @@ class watchExplorerWindows {
     __module_init(args*){
         this.__new(args*)
 		this.__module := {	runTimerAtStart: True
-						  , this._module_timerFn: ObjbindMethod(this, "run")	}
+						  , timerFn: ObjbindMethod(this, "run")	}
     }
 	__new(file:="explorerWindows", firstRun:=True){
 		this.file:=file
@@ -17,7 +17,7 @@ class watchExplorerWindows {
 			return this._firstRecover()
 		else if this.recoverRunning
 			return
-		;tooltip("run", {no:5})
+		;tooltip("run")
 		lastCount:=this.currentWinCount
 		this.update()
 		if !this.writeWinsToFile(false, false) && lastCount>1 && this._recoverAsk()
@@ -25,7 +25,7 @@ class watchExplorerWindows {
 	}
 
 	update() {
-		;tooltip("update", {no:5})
+		;tooltip("update")
 		this.currentWinCount:=0
 		this.currentWins:={}
 		for _,win in Explorer_GetAllWindowsInfo() {
@@ -39,7 +39,7 @@ class watchExplorerWindows {
 	}
 
 	_recoverAsk(qn:="Recover explorer windows?") {
-		;tooltip("_recoverAsk", {no:5})
+		;tooltip("_recoverAsk")
 		ret:=False
 		msgbox, 4, Explorer Watcher, % qn
 		IfMsgBox, Yes
@@ -105,11 +105,12 @@ class watchExplorerWindows {
 			
 			try {
 				loop % diff {
+					;RunWait, %method% "%path%",, Max
 					RunWait, "%path%",, Max
 					opened:=True
 					sleep 1000
 
-					if this.currentWins[path].length() { ; Window was already open. Now it is active. Duplicate it
+					if (this.currentWins[path] && this.currentWins[path].length()) { ; Window was already open. Now it is active. Duplicate it
 						Send, ^n
 						sleep 1000
 					}
@@ -157,7 +158,7 @@ class watchExplorerWindows {
 	writeWinsToFile(update:=True, force:=True) {
 		if !force && this.recoverRunning
 			return -1
-		;tooltip("writeWinsToFile", {no:5})
+		;tooltip("writeWinsToFile")
 		if (update) 
 			this.update()
 		out:=""
@@ -176,7 +177,7 @@ class watchExplorerWindows {
 		return True
 	}
 	getWinsFromFile() {
-		;tooltip("getWinsFromFile", {no:5})
+		;tooltip("getWinsFromFile")
 		wins:={}
 		Loop, Read, % this.file
 		{

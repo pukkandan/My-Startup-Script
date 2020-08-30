@@ -39,20 +39,16 @@ class ReloadScriptOnEdit {
 		for _,f in this.files
 			if changed:=this.check(f)
 				break
-		this.clean()
 		if this._ask(changed)
 			Reload
+		else this.clean()
 		return
 	}
 
 	check(filePatt) {
 		Loop, Files, % filePatt, % this.option
-		{
-			if inStr(A_LoopFileAttrib,"A") && !inStr(A_LoopFileAttrib,"H") && !inStr(A_LoopFileAttrib,"S") {
-				FileSetAttrib, -A, % A_LoopFileLongPath
+			if inStr(A_LoopFileAttrib,"A") && !inStr(A_LoopFileAttrib,"H") && !inStr(A_LoopFileAttrib,"S")
 				return A_LoopFileLongPath
-			}
-		}
 		return False
 	}
 

@@ -34,12 +34,12 @@ class Modules {
 		tooltip("Starting Timers", {life:500})
 		delayedTimer.start(False)
 		fs:=ObjBindMethod(this,"_onFullScreen")
-		setTimer, % fs, 100
+		setTimer, % fs, 1000 
 	}
 	firstRun() {
 		tooltip()
-		Toast.show("Script Loaded")
 		delayedTimer.firstRun()
+		Toast.show("Script Loaded")
 	}
 
 	_initFn(name){
@@ -90,7 +90,14 @@ class Modules {
 	}
 
 	_onFullScreen(){
-		fs:= isFullScreen(,1) && !isActiveWinInList(this.opts.fullScreenExceptions)
+		static lastFS:=false, lastWin
+		fs:= isFullScreen(,1) && !isActiveWinInList(this.opts.fullScreenExceptions), win:=WinExist("A")
+		if ( fs==lastFS && (!fs || win==lastWin) ) ; Reduce the number of times the loop below needs to run
+			return
+		else {
+			lastFS:=fs
+			lastWin:=win
+		}
 
 		for name, mod in this.list {
 			if !mod.func { ; Dont do anything for functions
@@ -98,7 +105,7 @@ class Modules {
 					continue
 				if fs && isActiveWinInList(mod.obj.fullScreenExceptions)
 					continue
-				mod:=this.list[name]._fs:=fs ; mark that the mod is in FS/Win mode
+				this.list[name]._fs:=fs ; mark that the mod is in FS/Win mode
 				;msgbox % name "`n" mod.class._module_onFullScreen "`n" mod._module_suspendOnFullScreen
 
 				if fs && mod.obj.onFullScreen

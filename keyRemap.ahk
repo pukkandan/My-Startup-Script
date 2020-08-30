@@ -73,7 +73,7 @@ MButton Up::
 	silentKeyRelease_Mouse("R")
 return
 
-WheelUp::                                            ; Go to Prev/Next Desktops
+  WheelUp::                                            ; Go to Prev/Next Desktops
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(True): taskView.GoToDesktopNext(False)
 	silentKeyRelease_Mouse("R")
@@ -82,7 +82,7 @@ return
 
 #if getKeyState("MButton","P")
 
-WheelUp::                                            ; Move window to desktop and go there
+  WheelUp::                                            ; Move window to desktop and go there
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
 	silentKeyRelease_Mouse("M")
@@ -109,7 +109,7 @@ RETURN
 		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
 return
 
-!#Left::                                             ; Move window to desktop and go there
+ !#Left::                                             ; Move window to desktop and go there
 !#Right::
 	if (A_ThisHotkey="!#Left")
 		taskView.MoveWindowToDesktopPrev(WinExist("A"),True)
@@ -160,8 +160,8 @@ return
 ;===================    Over Taskbar
 RETURN
 #if isOver_mouse("ahk_group WG_TaskBar")
-~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
-WheelUp::send ^+!{Tab}
+ ~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
+  WheelUp::send ^+!{Tab}
 WheelDown::send ^!{Tab}
 
 #if winActive("ahk_group WG_TaskView") AND isOver_mouse("ahk_group WG_TaskBar")
@@ -179,7 +179,7 @@ RETURN
 ;===================    Fences Pages
 RETURN
 #ifwinActive ahk_group WG_Desktop
-WheelUp::
+  WheelUp::
 WheelDown::
 	if getKeyState("LButton","P")
 		send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
@@ -258,7 +258,7 @@ return
 
 ;===================    Programs/Functions
 RETURN
- #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)			; WindowSwitch
+ #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)		; WindowSwitch
 +#CapsLock:: ShellRun("notepad.exe")                ; Notepad
 ^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
  !CapsLock:: cmdInCurrentFolder()					; CMD
@@ -279,22 +279,21 @@ RETURN
 ;#r:: runOrSend(PRG_RS_Run*)							; Run => Launcher
 
 
-#m:: winAction.bind_Window() ? winAction.trayIt()   ; TrayIt
-#t:: Menu, trayIt, show                             ; TrayIt Menu
+#m:: winAction.bind_Window() ? winAction.trayIt()	; TrayIt
+#t:: Menu, trayIt, Show								; TrayIt Menu
 
 #if Explorer_winActive()                   			; Move Files to Common FOlder
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
 #if
 
 
-
-#F10::                                              ; Global controls for Music player
+#F10::												; Global controls for Music player
 #Media_Play_Pause::
 	runOrSend(PRG_RS_MusicPlayer*)
 return
 
 #if ProcessExist(PRG_MusicPlayer)
-#F9::  Media_Prev
+ #F9::  Media_Prev
 #F11:: Media_Next
 ; MusicBee sometimes doesn't respond to Media buttons.
 ; So I set it's global hotkey to #{F9/10/11}
@@ -303,10 +302,10 @@ return
 ;Media_Next::       send #{F11}
 #if
 
-;+^Space:: YouTubePlayPause()                       ; Play/Pause Youtube
+;+^Space:: YouTubePlayPause()						; Play/Pause Youtube
 return
 
-;===================    Script Functions - Tray/Pause/Reload/Exit
+;===================	Script Functions - Tray/Pause/Reload/Exit
 RETURN
 #+t::
 	updateTray(0, A_ScreenHeight-200)

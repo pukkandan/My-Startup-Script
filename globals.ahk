@@ -77,6 +77,7 @@ GroupAdd, WG_ShiftEnter		, ahk_exe mathematica.exe
 ; Programs
 GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_exe sublime_text.exe ahk_class #32770
 GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_exe sublime_merge.exe ahk_class #32770
+GroupAdd, WG_unwantedHide 	, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
 
 GroupAdd, WG_unwantedClose	, Error ahk_class #32770 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose	, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
@@ -86,11 +87,16 @@ GroupAdd, WG_unwantedClose	, Internet Download Manager ahk_exe IDMan.exe, Intern
 
 ;-----------------------------------------------------------------------
 ; Programs
-GroupAdd, WG_VideoPlayer	, ahk_exe PotPlayerMini64.exe ahk_class PotPlayer64
-GroupAdd, WG_VideoPlayer	, ahk_exe PotPlayer.exe ahk_class PotPlayer64
+GroupAdd, WG_VideoPlayerExe	, ahk_exe PotPlayerMini64.exe
+GroupAdd, WG_VideoPlayerExe	, ahk_exe PotPlayer.exe
+
+GroupAdd, WG_VideoPlayer	, ahk_class PotPlayer64 ahk_group WG_VideoPlayerExe
 
 GroupAdd, WG_Browser		, ahk_exe chrome.exe
 GroupAdd, WG_Browser		, ahk_exe vivaldi.exe
+
+GroupAdd, WG_Browser_PIP	, Picture in picture ahk_group WG_Browser
+GroupAdd, WG_Browser_PIP	, Picture-in-picture ahk_group WG_Browser
 
 GroupAdd, WG_Console		, ahk_class ConsoleWindowClass
 
