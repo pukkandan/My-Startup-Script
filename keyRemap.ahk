@@ -282,7 +282,7 @@ RETURN
 #m:: winAction.bind_Window() ? winAction.trayIt()	; TrayIt
 #t:: Menu, trayIt, Show								; TrayIt Menu
 
-#if Explorer_winActive()                   			; Move Files to Common FOlder
+#if Explorer_getActiveWindow()						; Move Files to Common FOlder
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
 #if
 

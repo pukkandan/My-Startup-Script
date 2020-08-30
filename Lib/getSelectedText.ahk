@@ -28,7 +28,7 @@ getSelectedText(opts:="") {
 _getSelectedText_process(clip, opts){
     if !clip
         return ""
-    if (!opts.path && Explorer_winActive() ) {
+    if (!opts.path && Explorer_getActiveWindow() ) {
         clipNew:=""
         Loop, Parse, clip, `n, `r
             clipNew.=path(A_LoopField).name "`n"

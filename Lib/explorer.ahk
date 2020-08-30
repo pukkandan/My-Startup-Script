@@ -1,63 +1,68 @@
 ;#include <Taskview>
 ;TaskView.__new()
 
-Explorer_winActive(desktop:=False) {
-	w:=winActive("ahk_group WG_Explorer")
-	if desktop && !w
-		w:=winActive("ahk_group WG_Desktop")
-	return w
+Explorer_isExplorerWindow(hwnd:=0, allowDesktop:=False) {
+	if hwnd
+		return winExist("ahk_group WG_Explorer ahk_id " hwnd) || (allowDesktop && winExist("ahk_group WG_Desktop ahk_id " hwnd))
+	else
+		return winActive("ahk_group WG_Explorer") || (allowDesktop && winExist("ahk_group WG_Desktop"))
 }
 
-Explorer_GetAllWindowsInfo(opt*) {
+Explorer_getActiveWindow(opts*) {
+	return Explorer_isExplorerWindow(,opts*)
+}
+
+Explorer_getAllWindows(opts*) {
+	hw:=A_DetectHiddenWindows
+	DetectHiddenWindows, On
+
 	ret:=[]
-	for win in Explorer_GetAllWindowObjects(){
-		;msgbox % "explorer " Explorer_GetWindowObjectPath(win)
-		ret.push({ hwnd:win.hwnd, path:Explorer_GetWindowObjectPath(win, opt*)
-				 , desktop:TaskView.GetWindowDesktopNumber(win.hwnd)		})
+	winget win, list
+	loop % win {
+		hwnd:=win%A_Index%
+		if Explorer_isExplorerWindow(hwnd, opts*)
+			ret.push(hwnd)
 	}
+
+	DetectHiddenWindows, % hw
 	return ret
 }
 
-Explorer_GetPath(hwnd, opts*) {
-	if !WinExist("ahk_group WG_Explorer ahk_id " hwnd)
-		return False
-	for win in Explorer_GetAllWindowObjects() {
-		if win.hwnd!=hwnd
-			continue
-		return Explorer_GetWindowObjectPath(win, opts*)
-	}
-	return False
+Explorer_getWindowPath(hwnd, ignoreSpecial:=False) {
+	hw:=A_DetectHiddenWindows
+	DetectHiddenWindows, On
+
+	WinGetText, txt, ahk_id %hwnd%
+	RegExMatch(txt, "Sm)(?<=^Address: )(.+)$", path)
+	special:=Explorer_getSpecialFolderPath(path)
+
+	DetectHiddenWindows, % hw
+	if ignoreSpecial
+		return special? False: path
+	else
+		return special? special : path
+
 }
 
-;=========================================================
-
-Explorer_GetAllWindowObjects() {
-	return ComObjCreate("Shell.Application").Windows
+Explorer_getAllWindowsWithPath(path, opts*) { ; opts = [allowDesktop, ignoreSpecial]
+	ret:=[]
+	for _,hwnd in Explorer_getAllWindows(opts[1])
+		if (Explorer_getWindowPath(hwnd, opts[2])==path)
+			ret.push(hwnd)
+	return ret
 }
 
-Explorer_GetWindowObjectPath(winObj, ignoreSpecial:=False) {
-	static replace:=[ ["ftp://.*@", "ftp://", True], ["file:///"], ["/", "\"] ]
-	
-	path:=winObj.Document.Folder.Self.Path
-	return (SubStr(path, 0, 2)=="::") ? (ignoreSpecial? False : "shell:" path) :path
-
-	/*// OLD METHOD
-	if (!winObj.LocationURL) {
-		if ignoreSpecial
-			return False
-		hw:=A_DetectHiddenWindows 
-	    DetectHiddenWindows, On
-	    WinGetTitle, t, % "ahk_id " winObj.hwnd
-	    path:= Explorer_getSpecialFolderPath(t)
-		;msgbox % t "`n" path
-	    DetectHiddenWindows, % hw
-	} else
-		path:= URI_Decode(str_Replace(winObj.LocationURL, replace))
-	return path
-	*/
+Explorer_getWindowInfo(hwnd, opts*) {
+	return { hwnd:win.hwnd, path:Explorer_getWindowPath(hwnd, opts*)
+				 , desktop:TaskView.GetWindowDesktopNumber(hwnd)		}
 }
 
-;=========================================================
+Explorer_getAllWindowsInfo(opts*) { ; opts = [allowDesktop, ignoreSpecial]
+	ret:=[]
+	for _,hwnd in Explorer_getAllWindows(opts[1])
+		ret.push(Explorer_getWindowInfo(hwnd, opts[2]))
+	return ret
+}
 
 Explorer_getSpecialFolderPath(name){
 	static special:="" 
@@ -65,8 +70,7 @@ Explorer_getSpecialFolderPath(name){
 		special:=_Explorer_specialFolderList()
 	return special[name]	
 }
-
-_Explorer_specialFolderList(){
+_Explorer_specialFolderList() {
 	ret:={} ;In single line, it gives error "expression too long"
 	ret["3D Objects"] := "shell:::{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
 	ret["Add Network Location"] := "shell:::{D4480A50-BA28-11d1-8E75-00C04FA31A86}"
@@ -183,7 +187,7 @@ _Explorer_specialFolderList(){
 	ret["Taskbar and Navigation properties"] := "shell:::{0DF44EAA-FF21-4412-828E-260A8728E7F1}"
 	ret["Taskbar page in Settings"] := "shell:::{0DF44EAA-FF21-4412-828E-260A8728E7F1}"
 	ret["Text to Speech"] := "shell:::{D17D1D6D-CC3F-4815-8FE3-607E7D5D10B3}"
-	ret["This PC"] := "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
+	ret["Explorer_PC"] := "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
 	ret["Troubleshooting"] := "shell:::{C58C4893-3BE0-4B45-ABB5-A63E4B8C8651}"
 	ret["History"] := "shell:::{C58C4893-3BE0-4B45-ABB5-A63E4B8C8651} -Microsoft.Troubleshooting\HistoryPage"
 	ret["User Accounts"] := "shell:::{60632754-c523-4b62-b45c-4172da012619}"
@@ -198,5 +202,48 @@ _Explorer_specialFolderList(){
 	ret["Windows Features"] := "shell:::{67718415-c450-4f3c-bf8a-b487642dc39b}"
 	ret["Windows To Go"] := "shell:::{8E0C279D-0BD1-43C3-9EBD-31C3DC5B8A77}"
 	ret["Work Folders"] := "shell:::{ECDB0924-4208-451E-8EE0-373C0956DE16}"
+	return ret
+}
+
+Explorer_getAllWindowObjects() {
+	return ComObjCreate("Shell.Application").Windows
+}
+Explorer_getWindowObjectPath(winObj, ignoreSpecial:=False) {
+	path:=winObj.Document.Folder.Self.Path
+	return (SubStr(path, 1, 2)=="::")? (ignoreSpecial? False : "shell:" path) :path
+}
+Explorer_getWindowObjectURL(winObj, ignoreSpecial:=False) {
+	; Old method to get path. Also gets IE windows
+	static replace:=[ ["ftp://.*@", "ftp://", True], ["file:///"] ]
+	url:= winObj.LocationURL
+
+	if (!url) {
+		if ignoreSpecial
+			return False
+		hw:=A_DetectHiddenWindows 
+		DetectHiddenWindows, On
+		WinGetTitle, t, % "ahk_id " winObj.hwnd
+		url:= Explorer_getSpecialFolderPath(t)
+		;msgbox % t "`n" url
+		DetectHiddenWindows, % hw
+	} else {
+		url:= URI_Decode(str_Replace( ((substr(path,1,8)=="file:///")? strReplace(path, "/", "\") :path) , replace))
+	}
+	return url
+}
+Explorer_getAllWindowObjectsWithPath(path) {
+	ret:=[]
+	for winObj in Explorer_getAllWindowObjects()
+		if (Explorer_getWindowObjectPath(winObj)==path)
+			ret.push(winObj)
+	return ret
+}
+Explorer_getWindowInfoFromObject(winObj) {
+	return Explorer_getWindowInfo(win.hwnd)
+}
+Explorer_getAllWindowsInfoFromObject() {
+	ret:=[]
+	for winObj in Explorer_getAllWindowObjects()
+		ret.push(Explorer_getWindowInfoFromObject(winObj))
 	return ret
 }
