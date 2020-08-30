@@ -268,6 +268,15 @@ RETURN
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
 #F1:: Send {F1}                                     ; Convert #F1 => F1
+Volume_Up::											; fn+Arrow = Volume
+Volume_Down::
+Media_Play_Pause::
+Media_Stop::
+Suspend, Permit
+send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
+return
+
+
 #F5:: dimScreen(+10)                                ; DimScreen
 #F6:: dimScreen(-10)
  #c:: makeMicroWindow()                             ; MicroWindow
@@ -286,6 +295,10 @@ RETURN
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
 #if
 
+~RAlt & RCtrl::											; Temporarily reduce Volume
+ ~RCtrl & RAlt::
+	toggleVolume(.5, strSplit(A_ThisHotkey," ")[3])
+return
 
 #F10::												; Global controls for Music player
 #Media_Play_Pause::

@@ -5,15 +5,17 @@
 ; Functions starting with _ are not expected to be called from outside the class.
 
 class TaskView {
-    __new(){
+    __new(toast:=True){
         this.base:={__call:ObjBindMethod(this,"_call")}
 
         this.dll := DllCall("LoadLibrary", "Str", A_ScriptDir . "\Lib\VirtualDesktopAccessor.dll", "Ptr")
         this.Toast:=new toast({life:1000})
 
-        ; Windows 10 desktop changes listener
-        DllCall(this.fList["RegisterPostMessageHook"], Int, A_ScriptHwnd+(0x1000 << 32), Int, 0x1400 + 30)
-        OnMessage(0x1400 + 30, ObjBindMethod(this,"_VWMessage"))
+        ; Desktop changes listener
+       if toast {
+            DllCall(this.fList["RegisterPostMessageHook"], Int, A_ScriptHwnd+(0x1000 << 32), Int, 0x1400 + 30)
+            OnMessage(0x1400 + 30, ObjBindMethod(this,"_VWMessage"))
+       }
 
         ; Restart the virtual desktop accessor when explorer.exe restarts
         OnMessage( DllCall("user32\RegisterWindowMessage", "Str", "TaskbarCreated")
@@ -31,8 +33,8 @@ class TaskView {
                     ,"GetWindowDesktopNumber","MoveWindowToDesktopNumber"
                     ,"IsPinnedWindow","PinWindow","UnPinWindow","IsPinnedApp","PinApp","UnPinApp"
                     ,"RegisterPostMessageHook","UnregisterPostMessageHook" ]
-                for _,f in l
-                {
+                this._fList:={}
+                for _,f in l {
                     StringLower, g, f
                     this._fList[g]:= DllCall("GetProcAddress", "Ptr", this.dll, "AStr", f, "Ptr")
                     ;msgbox % "x " f "`n" this._fList[g]
@@ -160,7 +162,10 @@ class TaskView {
             current:=this.GetCurrentDesktopNumber()
             params[1]:=0 ; No animation when creating desktops
         }
+
+        msgbox % "Implicitly creating " n-MaxNo " new desktops!"
         this.createNewDesktops(n-MaxNo, params*)
+
         if (ret)
             this.GoToDesktopNumber(current,,"")
         return n
@@ -174,8 +179,6 @@ class TaskView {
         return DllCall(this.fList["GetWindowDesktopNumber"], "UInt", hwnd) + 1
     }
     IsWindowOnDesktopNumber(hwnd, n, params*){
-        if n is not number
-            return 0
         params[2]:=-1  ; ret:=-1 => Dont create desktops
         return DllCall(this.fList["IsWindowOnDesktopNumber"], "UInt", hwnd, "UInt", this._desktopNumber(n,params*)-1)
     }
@@ -231,15 +234,14 @@ class TaskView {
         ;   -2 = Animate only for single page
         ;    0 = Animate Each Page
 
-        if n is not number
-            return 0
 
-        maxNo:=this.this.GetDesktopCount()
+        maxNo:=this.GetDesktopCount()
         n:=this._desktopNumber(n,wrap,, mod(abs(anim),10)? (anim==2? 0:1) :2, animDelay)
         m:=this.getCurrentDesktopNumber()
+        ;msgbox %m%=>%n% (%maxNo%)
         if (m==n)
             return n
-
+        
         static keyMap:={1:"Right", -1:"Left"}
         if (anim<0 && abs(m-n)==1) {
             send % "#^{" keyMap[n-m] "}"
@@ -290,16 +292,12 @@ class TaskView {
     MoveWindowToDesktopNumber(n, win_hwnd, wrap:=False, params*){
         ; Any extra args are sent to params* and are ignored.
         ; This makes it possible to call both GoToDesktopNumber and this fn with the same optional arguments
-        if n is not number
-            return 0
         n:= this._desktopNumber(n, wrap, True)
         DllCall(this.fList["MoveWindowToDesktopNumber"], "UInt", win_hwnd, "UInt", n-1)
         return n
     }
     MoveWindowAndGoToDesktopNumber(n, win_hwnd, params*){
         active:=winActive(win_hwnd)
-        if n is not number
-            return 0
         params2:=params.clone()
         params2.insertAt(2,False)
 
@@ -315,9 +313,9 @@ class TaskView {
 
 
 
-    createNewDesktops(n, anim:=1, animDelay:=200) {
+    createNewDesktops(n:=1, anim:=0, animDelay:=200) {
         ; anim can be: 0=No anim, 1=1 anim, 2=Full anim
-        msgbox Creating %n% new desktops!
+        ;msgbox Creating %n% new desktops!
         loop, % n {
             if ( A_Index>1 && (anim>1 || (anim==1 && A_Index==n)) )  {
                 sleep % animDelay
@@ -328,9 +326,8 @@ class TaskView {
     }
 
 
+
     FirstWindowInDesktop(n, params*){
-        if n is not number
-            return 0
         n:=this._desktopNumber(n, params*)
         w:=0
 
@@ -350,6 +347,7 @@ class TaskView {
         DetectHiddenWindows, % hw
         return w
     }
+
 
     ;---------------------------------------------------------
     GoToDesktopPrev(params*) {
@@ -371,6 +369,7 @@ class TaskView {
         return this.MoveWindowAndGoToDesktopNumber(this.GetCurrentDesktopNumber()+1, params*)
     }
 
+
     PinWindowToggle(hwnd){
         if this.isPinnedWindow(hwnd){
             this.UnPinWindow(hwnd)
@@ -386,5 +385,101 @@ class TaskView {
             this.PinApp(hwnd)
         }
         return this.isPinnedApp(hwnd)
+    }
+
+
+    MoveDesktops(dObj, params*) {
+        deskList:={}, winLists:={}
+        for from,to in dObj {
+            n:=this._desktopNumber(from, params*)
+            deskList[n]:=this._desktopNumber(to, params*)
+            winLists[n]:=[]
+        }
+
+        hw:=A_DetectHiddenWindows 
+        DetectHiddenWindows, On
+        winget win, list
+
+        loop % win { ; Get all windows to move
+            d:=this.GetWindowDesktopNumber(win%A_Index%)
+            if deskList.hasKey(d) {
+                WinGetTitle, t, % "ahk_id " win%A_Index%
+                if t
+                    winLists[d].push(win%A_Index%)
+            }
+        }
+
+        for d, winList in winLists ; Move to the other window
+            for _,win in winList
+                this.MoveWindowToDesktopNumber(deskList[d], win)
+
+        DetectHiddenWindows, % hw
+        return true
+    }
+
+    MoveDesktopTo(d1, d2, params*) {
+        d1:=this._desktopNumber(d1, params*), d2:=this._desktopNumber(d2, params*)
+        dObj:={(d1):d2}
+        loop % d2-d1 ;Moving right
+            dObj[d1+A_Index]:= d1+A_Index-1
+        loop % d1-d2 ;Moving Left
+            dObj[d2+A_Index-1]:= d2+A_Index
+        return this.MoveDesktops(dObj, params*)
+    }
+    MoveDesktopRight(n, params*) {
+        return this.MoveDesktopTo(n, n+1, params*)
+    }
+    MoveDesktopLeft(n, params*) {
+        return this.MoveDesktopTo(n, n-1, params*)
+    }
+    MoveCurrentDesktopTo(n, params*) {
+        current:=this.GetCurrentDesktopNumber()
+        this.MoveDesktopTo(current, n, params*)
+        return this.GoToDesktopNumber(n,,"")
+    }
+    MoveCurrentDesktopBy(n, params*) {
+        current:=this.GetCurrentDesktopNumber()
+        this.MoveDesktopTo(current, n+current, params*)
+        return this.GoToDesktopNumber(n,,"")
+    }
+    MoveCurrentDesktopRight(params*) {
+        return this.MoveCurrentDesktopBy(n, 1, params*)
+    }
+    MoveCurrentDesktopLeft(params*) {
+        return this.MoveCurrentDesktopBy(n, -1, params*)
+    }
+
+    SwapDesktops(d1, d2, params*) {
+        return this.MoveDesktops({(d1):d2, (d2):d1}, params*)
+    }
+    SwapCurrentDesktopWith(n, params*) {
+        current:=this.GetCurrentDesktopNumber()
+        this.SwapDesktops(current, n, params*)
+        return this.GoToDesktopNumber(n,,"")
+    }
+
+    CreateNewDesktopsAfter(n, count:=1, params*) {
+        ; Pass n="" to create new desktop at begining
+        n:= (n=="")?0: this._desktopNumber(n, params*)
+        last:=this.GetDesktopCount()
+        dObj:={}
+        loop % last-n
+            dObj[n+A_Index]:= n+A_Index+count
+        this.createNewDesktops(count)
+        return this.MoveDesktops(dObj, params*)
+    }
+    CreateNewDesktopsBefore(n, params*) {
+        ; Pass n="" to create new desktop at end
+        return this.createNewDesktopsAfter(n==""?0: (n==1?"": n-1), params*)
+    }
+    CreateNewDesktopsAfterCurrent(params*) {
+        n:=this.getCurrentDesktopNumber()
+        this.CreateNewDesktopsAfter(n, params*)
+        return this.GoToDesktopNumber(n+1,,"") ; Go to the first new desktop
+    }
+    CreateNewDesktopsBeforeCurrent(params*) {
+        n:=this.getCurrentDesktopNumber()
+        this.CreateNewDesktopsBefore(n, params*)
+        return this.GoToDesktopNumber(n,,"") ; ; Go to the last new desktop
     }
 }
