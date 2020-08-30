@@ -1,10 +1,10 @@
 hotcorners(){
 	CoordMode, Mouse, Screen
-	static counter:=0, trigger:=False, delay:=6
+	static counter:=0, trigger:=False, delay:=10
 	counterTemp:=0
 	MouseGetPos, xpos, ypos
 	buttonsPressed:= GetKeyState("LButton") OR GetKeyState("RButton")
-	; tooltip, % "X:" xpos "+" A_ScreenWidth-xpos "=" A_ScreenWidth "`nY:"  ypos "+" A_ScreenHeight-ypos "=" A_ScreenHeight "`nTrigger=" trigger "`nCounter=" counter
+	;tooltip, % "X:" xpos "+" A_ScreenWidth-xpos "=" A_ScreenWidth "`nY:"  ypos "+" A_ScreenHeight-ypos "=" A_ScreenHeight "`nTrigger=" trigger "`nCounter=" counter
 
 	; Edges not containing trigger:=True will fire contineously. Counter can be used to controll the frequency of firing. Corners must always contain trigger:=True. Otherwise, edge to corner transitions will fire the corresponding edge.
 
@@ -12,7 +12,7 @@ hotcorners(){
 	counterTemp:=counter+1
 	if (counterTemp>DELAY){
 		DO THIS
-		counterTemp:=0
+		counterTemp:=0 ; So that it repeats
 	}
 	*/
 
@@ -66,10 +66,14 @@ hotcorners(){
 		}
 		else if (ypos+2>=A_ScreenHeight){
 			if (!trigger){
-				trigger:=True
+				;trigger:=True
 				if(!buttonsPressed){
 					; 										Bottom Right
-					send, #a
+					counterTemp:=counter+1
+					if (counterTemp==delay){ ; After delay, but dont repeat
+						Send, #a
+						trigger:=True
+					}
 					;---------------------------------------------------------
 				}
 			}
@@ -118,4 +122,5 @@ hotcorners(){
 	}
 	else trigger:=False
 	counter:=counterTemp
+	;ToolTip, %LastCorner%%LastXEdge%%LastYEdge%
 }

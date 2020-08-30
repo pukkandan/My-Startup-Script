@@ -276,4 +276,34 @@ winUpWhenCapsReleased() {
 }
 
 ;=============================================
+
+toggleVolume(vol, key, t0:=0, t1:=200, t2:=500) {
+	SoundGet, currentvol
+	if (vol<1)
+		vol*=currentVol
+	sleep % t0
+	_toggleVolume_setVol(vol, currentVol, t1, key, True)
+	
+	KeyWait, % key
+	SoundGet, vol
+	_toggleVolume_setVol(currentVol, vol, t2, key, False)
+
+	SoundSet % currentVol
+	Tooltip("",{no:5})
+}
+
+_toggleVolume_setVol(to, from, t, key, cndn){
+	if t {
+		diff:=to-from, wait:=max(50, t/abs(diff)), step:=diff*wait/t
+		loop % t/wait {
+			sleep % wait
+			if (getKeyState(key,"P")!=cndn)
+				break
+			now:=from + step*A_Index
+			SoundSet % now
+			tooltip("Volume = " floor(now), {no:5})
+		}
+	}
+	return
+
 }

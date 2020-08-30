@@ -101,7 +101,15 @@ return
 
 ;===================    Task View with Keyboard
 RETURN
-+#Left::                                             ; Move window to desktop
+ +#d::
+^+#d::
+	if (A_ThisHotkey="+#d")
+		taskView.CreateNewDesktopsAfterCurrent()
+	else
+		taskView.CreateNewDesktopsBeforeCurrent()
+return
+
+ +#Left::                                             ; Move window to desktop
 +#Right::
 	if (A_ThisHotkey="+#Left")
 		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True)
@@ -115,6 +123,14 @@ return
 		taskView.MoveWindowToDesktopPrev(WinExist("A"),True)
 	else
 		taskView.MoveWindowToDesktopNext(WinExist("A"),False)
+return
+
+ +^#Left::                                             ; Move Desktop
++^#Right::
+	if (A_ThisHotkey="+^#Left")
+		taskView.MoveCurrentDesktopLeft()
+	else
+		taskView.MoveCurrentDesktopRight()
 return
 
 #1::                                                 ; Go to Desktop by number
@@ -154,6 +170,19 @@ return
 !#9::
 !#0::
 	taskView.MoveWindowToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), sendWindowBack(), False)
+return
+
+^+#1::                                                ; Move Desktop
+^+#2::
+^+#3::
+^+#4::
+^+#5::
+^+#6::
+^+#7::
+^+#8::
+^+#9::
+^+#0::
+	taskView.MoveCurrentDesktopTo(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), False)
 return
 
 
