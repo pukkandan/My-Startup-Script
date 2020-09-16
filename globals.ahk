@@ -1,4 +1,4 @@
-; This file must be in Windows 1252 encoding, because of "ï¿½"
+; This file must be in Windows 1252 encoding, because of "»"
 
 ; Script Name
 global SCR_Name  := path(A_ScriptName).name        ;SCR_Name = Name of script file without extension
@@ -12,7 +12,7 @@ SCR_hookTimeOut := SCR_hookTimeOut?SCR_hookTimeOut:300
 
 ;-----------------------------------------------------------------------
 ; Script PID and HWND
-DetectHiddenWindows, On ; Off is called in DIrectives.ahk
+DetectHiddenWindows, On ; Off is called in Directives.ahk
 global SCR_PID  := DllCall("GetCurrentProcessId","Uint")
 
 ;========================================================================
@@ -30,7 +30,7 @@ global PRG_RS_MusicPlayer 		:=[ "MusicBee" 		, "{Media_Play_Pause}"	   , PRG_Mus
 global PRG_RS_Clipboard 		:=[ "Ditto" 		, "^``"		, PRG_Clipboard						]
 global PRG_RS_Launcher 			:=[ "Launcher"		, "!{F2}"	, PRG_Launcher , False				]
 global PRG_RS_Run				:=[ "Run" 			, "!{F2}"	, PRG_Launcher , False , "{>} "		]
-global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{Â»}{Tab}"	]
+global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{»}{Tab}"	]
 
 ;========================================================================
 ; Window Groups
@@ -75,10 +75,13 @@ GroupAdd, WG_ShiftEnter		, ahk_exe mathematica.exe
 
 ;-----------------------------------------------------------------------
 ; Programs
-GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_exe sublime_text.exe ahk_class #32770
-GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_exe sublime_merge.exe ahk_class #32770
+GroupAdd, WG_SublimeText	, ahk_exe sublime_text.exe
+GroupAdd, WG_SublimeText	, ahk_exe sublime_merge.exe
+
+GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
 GroupAdd, WG_unwantedHide 	, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
 
+GroupAdd, WG_unwantedClose 	, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
 GroupAdd, WG_unwantedClose	, Error ahk_class #32770 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose	, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose	, ahk_class AvIPMDialog ahk_exe ipmGui.exe

@@ -75,7 +75,7 @@ return
 
   WheelUp::                                            ; Go to Prev/Next Desktops
 WheelDown::
-	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(True): taskView.GoToDesktopNext(False)
+	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(): taskView.GoToDesktopNext()
 	silentKeyRelease_Mouse("R")
 	sleep 200
 return
@@ -84,7 +84,7 @@ return
 
   WheelUp::                                            ; Move window to desktop and go there
 WheelDown::
-	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
+	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A")): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 	silentKeyRelease_Mouse("M")
 	sleep 200
 return
@@ -112,22 +112,22 @@ return
  +#Left::                                             ; Move window to desktop
 +#Right::
 	if (A_ThisHotkey="+#Left")
-		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"),True)
+		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"))
 	else
-		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"),False)
+		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 return
 
  !#Left::                                             ; Move window to desktop and go there
 !#Right::
 	if (A_ThisHotkey="!#Left")
-		taskView.MoveWindowToDesktopPrev(WinExist("A"),True)
+		taskView.MoveWindowToDesktopPrev(WinExist("A"))
 	else
-		taskView.MoveWindowToDesktopNext(WinExist("A"),False)
+		taskView.MoveWindowToDesktopNext(WinExist("A"))
 return
 
- +^#Left::                                             ; Move Desktop
-+^#Right::
-	if (A_ThisHotkey="+^#Left")
+ ^+#Left::                                             ; Move Desktop
+^+#Right::
+	if (A_ThisHotkey="^+#Left")
 		taskView.MoveCurrentDesktopLeft()
 	else
 		taskView.MoveCurrentDesktopRight()

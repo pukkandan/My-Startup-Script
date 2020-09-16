@@ -1,9 +1,11 @@
 unwantedPopupBlocker(){
-    winClose ahk_group WG_unwantedClose
-    winHide  ahk_group WG_unwantedHide
+    DetectHiddenWindows On
 
-	IfWinExist, (UNREGISTERED) ahk_exe sublime_text.exe
-	{
+    winHide  ahk_group WG_unwantedHide
+    winClose ahk_group WG_unwantedClose
+
+	IfWinExist, (UNREGISTERED) ahk_group WG_SublimeText
+    {
 		WinGetTitle, t
 		WinSetTitle,% StrReplace(t, " (UNREGISTERED)")
 	}

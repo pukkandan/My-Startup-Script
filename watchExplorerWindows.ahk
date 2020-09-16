@@ -29,7 +29,7 @@ class watchExplorerWindows {
 		this.currentWinCount:=0
 		this.currentWins:={}
 		for _,win in Explorer_GetAllWindowsInfo() {
-			;msgbox % win.path
+			;msgbox % win.path "`n" win.hwnd
 			if !this.currentWins[win.path]
 				this.currentWins[win.path]:=[]
 			this.currentWins[win.path].push({hwnd:win.hwnd, desk:win.desktop})
@@ -74,8 +74,10 @@ class watchExplorerWindows {
 		while !ret
 			ret:=this._recover(True, False)
 		this.writeWinsToFile(True, True)
-		
-		TaskView.gotoDesktopNumber(currentDesktop,,"")
+		if this._openedWins {
+			TaskView.gotoDesktopNumber(currentDesktop,,"")
+			this._openedWins:=False
+		}
 		tooltip("", {no:4})
 		this.recoverRunning:=False
 	}
@@ -106,6 +108,7 @@ class watchExplorerWindows {
 			try {
 				loop % diff {
 					;RunWait, %method% "%path%",, Max
+					this._openedWins:=True
 					RunWait, "%path%",, Max
 					opened:=True
 					sleep 1000
@@ -119,6 +122,7 @@ class watchExplorerWindows {
 				wins.delete(path)
 			;msgbox % path " " wins.hasKey(path)
 		}
+
 		if (opened) {
 			sleep 1000
 			this.update()
@@ -126,7 +130,8 @@ class watchExplorerWindows {
 
 		for path,deskList in wins {
 			if ( !this.currentWins[path] || this.currentWins[path].length() < deskList.length() )
-				return !this._recoverAsk("Failed to open window at:`n" path "`n`nRetry?")
+				if this._recoverAsk("Failed to open window at:`n" path "`n`nRetry?")
+					return False
 
 			toMove:=this.currentWins[path].clone()
 			moveTo:=[]
@@ -142,7 +147,6 @@ class watchExplorerWindows {
 				if !found
 					moveTo.push(n)
 			}
-
 			for i,w in toMove {
 				if i==1 && ask && !this._recoverAsk("Place explorer windows into correct Desktops?")
 					return True
@@ -171,8 +175,14 @@ class watchExplorerWindows {
 		}
 		if !force && !hasFolders
 			return False
-		FileMove, % this.file , % this.file ".old" , 1
+
+		old:=False
+		try
+			FileRead, old, % this.file
+		if (old)
+			FileMove, % this.file , % this.file ".old" , 1
 		fileDelete, % this.file
+
 		fileAppend, % out, % this.file
 		return True
 	}

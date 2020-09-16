@@ -20,8 +20,8 @@ class PIP {
     }
     __new(p:=""){
         this.list:={}, this.sets:=0, this.topListOld:=[], this.topList:=[], mouseAllowed:=[]
-        , this.def:={ set:1, type:"J", maxwidth:0.47, maxheight:0.47 }
-        onExit(ObjbindMethod(this,"run",1))
+        , this.def:={ set:1, type:"J", maxwidth:0.45, maxheight:0.45 }
+        onExit(ObjbindMethod(this, "run", true))
         if p
             this.add(p)
     }
@@ -127,7 +127,7 @@ class PIP {
         return 0
     }
     getPIPWindows(){
-        winPref:=[], this_winPref:=0
+        winPref:=[], this_winPref:=0, topList:=[]
         for t,i in this.list {
             n:=this.getPIPWindow(t,i)
             IfWinNotExist, ahk_id %n%
@@ -142,17 +142,17 @@ class PIP {
             if ( this_winPref > (winPref.haskey(i.set)?winPref[i.set]:0) )
                 winPref[i.set]:=this_winPref
             else continue
-            this.topList[i.set]:={id: Format("{1:#x}",n), type: i.type}
+            topList[i.set]:={id: Format("{1:#x}",n), type: i.type}
             ; msgbox, % "this.topList[" i.set "]:={id:" n ",type:" i.type "}`nid=" this.topList[i.set].id ",type=" this.topList[i.set].type
         }
-        return
+        return topList
     }
     unPIP(set){
         old:=this.topListOld[set]
         this.mouseAllowed[set]:=True
         WinSet, AlwaysOnTop, Off, % "ahk_id " old.id
         taskView.UnPinWindow(old.id)
-        if inStr(old.type,"D") {
+        if inStr(old.type,"D") && old.desk {
             if WinActive("ahk_id " old.id)
                 TaskView.MoveWindowAndGoToDesktopNumber(old.desk, old.id,,2)
             else 
@@ -161,13 +161,13 @@ class PIP {
         if !isFullScreen(old.id,1) AND inStr(old.type,"T")
             WinSet, Style, +0xC00000, % "ahk_id " old.id
     }
-    unPIPOld(){
+    unPIPOld(force:=False){
         for set,old in this.topListOld {
             if (this.mouseAllowed[set]="")
                 this.mouseAllowed[set]:=True
-            if (this.topList[set].id!=old.id)
+            if (force || this.topList[set].id!=old.id)
                 this.unPIP(set)
-            else
+            else if (old.desk)
                 this.topList[set].desk:=old.desk
         }
         return
@@ -175,10 +175,13 @@ class PIP {
 
     PIP(set){
         n:=this.topList[set].id
-        if !TaskView.isPinnedWindow(n) {
-            this.topList[set].desk:= TaskView.getWindowDesktopNumber(n)
-            TaskView.pinWindow(n)
+        if inStr(this.topList[set].type,"D") && !this.topList[set].desk {
+            this.topList[set].desk:=TaskView.getWindowDesktopNumber(n)
+            if !this.topList[set].desk ; Couldn't get
+                this.topList[set].desk:=TaskView.getCurrentDesktopNumber()
         }
+        if !TaskView.isPinnedWindow(n)
+            TaskView.pinWindow(n)
         WinSet, AlwaysOnTop, On, ahk_id %n%    ;Set onTop
         ; msgbox, PIP:%set% id:%n%
 
@@ -213,12 +216,12 @@ class PIP {
         return
     }
 
-    run(exit:=0){
-        this.topListOld:=this.topList.Clone(), this.topList:=[]
-        if !exit
-            this.getPIPWindows()
-        this.unPIPOld()
-        if !exit
+    run(exiting:=false){
+        this.topListOld:=this.topList
+        if !exiting
+            this.topList:=this.getPIPWindows()
+        this.unPIPOld(exiting)
+        if !exiting
             this.setPIP()
         return
     }

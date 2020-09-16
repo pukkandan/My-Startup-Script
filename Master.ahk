@@ -3,7 +3,7 @@ reloadAsAdmin_Task()
 Suspend, On
 
 #include %A_ScriptDir%  ;Sets dir for includes
-#include globals.ahk
+#include globals.ahk ; Must be before directives
 #include Directives.ahk
 
 ; #include <byteWord>
@@ -36,7 +36,7 @@ modules.add("dimScreen", 0)
 
 #include <Taskview>
 ;#include Taskview_Temp.ahk
-Modules.add(TaskView)
+Modules.add(TaskView,, true)
 
 #include hotcorners.ahk
 Modules.add("hotCorners", 100)

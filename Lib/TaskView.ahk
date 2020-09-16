@@ -5,14 +5,15 @@
 ; Functions starting with _ are not expected to be called from outside the class.
 
 class TaskView {
-    __new(toast:=True){
+    __new(msg:=False){
         this.base:={__call:ObjBindMethod(this,"_call")}
 
         this.dll := DllCall("LoadLibrary", "Str", A_ScriptDir . "\Lib\VirtualDesktopAccessor.dll", "Ptr")
-        this.Toast:=new toast({life:1000})
 
         ; Desktop changes listener
-       if toast {
+       if msg {
+            this.Toast:=new Toast({life:1000})
+            ;this.Toast.show("Loaded")
             DllCall(this.fList["RegisterPostMessageHook"], Int, A_ScriptHwnd+(0x1000 << 32), Int, 0x1400 + 30)
             OnMessage(0x1400 + 30, ObjBindMethod(this,"_VWMessage"))
        }
@@ -114,14 +115,17 @@ class TaskView {
 
     _OnExplorerRestart(wParam, lParam, msg, hwnd_scr) {
         DllCall("RestartVirtualDesktopAccessorProc", "UInt", result)
+        if this.Toast
+            this.Toast.show("TaskView Restarted")
         return result
     }
 
     _VWMessage(wParam, lParam, msg, hwnd_scr) {
-        return this._OnDesktopSwitch(lParam + 1)
+        this._OnDesktopSwitch(lParam + 1)
     }
     _OnDesktopSwitch(x){
-        return this.toast.show("Desktop " x)
+        this.Toast.show("Desktop " x)
+        return x
     }
 
     ;------------------------------------------------------------------------
@@ -144,8 +148,8 @@ class TaskView {
     }
 
     ;------------------------------------------------------------------------
-    _desktopNumber(n, wrap:=False, ret:=False, params*){
-        ; ret can be: 0=Dont return to current window, 1=Return to current window, -1=Dont create new windows
+    _desktopNumber(n, wrap:=False, ret:=-1, params*){
+        ; ret can be: 0=Dont return to current Desktop, 1=Return to current Desktop, -1=Dont create new Desktops
         ; ret only has any effect if wrap:=False
 
         maxNo:=this.GetDesktopCount()
@@ -211,7 +215,9 @@ class TaskView {
     }
     */
 
-    GoToDesktopNumber(n, wrap:=False, anim:=-12, animDelay:=200) {
+    GoToDesktopNumber(n, wrap:=-1, anim:=-12, animDelay:=200) {
+        ; wrap can be 0=Create desktop if necessary, -1=Dont create/wrap, 1= wrap
+
         ; anim can be a combination of:
         ; * -1 = Single page by #^{Arrow}
         ; +100 = Use 'Top Window Activate' Method // This is slow and therefore deprecated
@@ -236,11 +242,12 @@ class TaskView {
 
 
         maxNo:=this.GetDesktopCount()
-        n:=this._desktopNumber(n,wrap,, mod(abs(anim),10)? (anim==2? 0:1) :2, animDelay)
+        n:=this._desktopNumber(n, wrap>0, wrap<0?-1:0, mod(abs(anim),10)? (anim==2? 0:1) :2, animDelay)
         m:=this.getCurrentDesktopNumber()
         ;msgbox %m%=>%n% (%maxNo%)
-        if (m==n)
-            return n
+        if (m==n) {
+           return this._OnDesktopSwitch(n)
+        }
         
         static keyMap:={1:"Right", -1:"Left"}
         if (anim<0 && abs(m-n)==1) {

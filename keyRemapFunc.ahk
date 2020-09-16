@@ -172,9 +172,11 @@ runSSH(){
 	return
 }
 
-cmdInCurrentFolder(wsl:=False) { ;as admin 
+cmdInCurrentFolder(wsl:=False, admin:=True) { ;as admin 
 	path:=Explorer_getWindowPath(Explorer_getActiveWindow())
-	ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, "RunAs")
+	tooltip((wsl?"wsl """:"cmd """) path """")
+	ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, admin?"RunAs":"")
+	tooltip()
 }
 
 ;=============================================
@@ -200,6 +202,7 @@ activateVideoPlayer() {
 	if (!win) {
 		DetectHiddenWindows, On
 		win:=WinExist("ahk_group WG_VideoPlayer")
+		;DetectHiddenWindows, Off
 	}
 	if win
 		WinActivate, ahk_id %win%
@@ -210,7 +213,7 @@ activateVideoPlayer() {
 ;=============================================
 
 playAllVideoPlayers(){
-	DetectHiddenWindows, off
+	;DetectHiddenWindows, off
 	active:=winExist("A")
 	WinGet, l, list, ahk_group WG_VideoPlayer
 	loop %l%

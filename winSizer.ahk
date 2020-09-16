@@ -28,13 +28,9 @@ class winSizer {
     }
     
     end(){
-        r:=this.running
-        if r {
-            this.toastObj.close()
-            act:=this.action
-            setTimer, % act, Off
-            this.running:=False
-        }
+        act:=this.action, r:=this.running, this.running:=False
+        setTimer, % act, Off
+        this.toastObj.close()
         return r
     }
     

@@ -2,10 +2,11 @@
 ;TaskView.__new()
 
 Explorer_isExplorerWindow(hwnd:=0, allowDesktop:=False) {
-	if hwnd
-		return winExist("ahk_group WG_Explorer ahk_id " hwnd) || (allowDesktop && winExist("ahk_group WG_Desktop ahk_id " hwnd))
-	else
-		return winActive("ahk_group WG_Explorer") || (allowDesktop && winExist("ahk_group WG_Desktop"))
+	hwnd:=hwnd? " ahk_id " hwnd :""
+	win:=winExist("ahk_group WG_Explorer" hwnd)
+	if (!win && allowDesktop)
+		win:=winExist("ahk_group WG_Desktop" hwnd)
+	return win
 }
 
 Explorer_getActiveWindow(opts*) {
@@ -53,7 +54,7 @@ Explorer_getAllWindowsWithPath(path, opts*) { ; opts = [allowDesktop, ignoreSpec
 }
 
 Explorer_getWindowInfo(hwnd, opts*) {
-	return { hwnd:win.hwnd, path:Explorer_getWindowPath(hwnd, opts*)
+	return { hwnd:hwnd, path:Explorer_getWindowPath(hwnd, opts*)
 				 , desktop:TaskView.GetWindowDesktopNumber(hwnd)		}
 }
 
@@ -188,6 +189,7 @@ _Explorer_specialFolderList() {
 	ret["Taskbar page in Settings"] := "shell:::{0DF44EAA-FF21-4412-828E-260A8728E7F1}"
 	ret["Text to Speech"] := "shell:::{D17D1D6D-CC3F-4815-8FE3-607E7D5D10B3}"
 	ret["Explorer_PC"] := "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
+	ret["This PC"] := "shell:::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"
 	ret["Troubleshooting"] := "shell:::{C58C4893-3BE0-4B45-ABB5-A63E4B8C8651}"
 	ret["History"] := "shell:::{C58C4893-3BE0-4B45-ABB5-A63E4B8C8651} -Microsoft.Troubleshooting\HistoryPage"
 	ret["User Accounts"] := "shell:::{60632754-c523-4b62-b45c-4172da012619}"

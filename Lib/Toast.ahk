@@ -9,7 +9,7 @@
 ; Toast.show(p) ;Show without creating a dedicated object. Will replace other instances without object, but not other object
 
 class Toast{
-    __new(byRef p:=""){
+    __new(p:=""){
         static toastCount:=0
         toastCount++
         this.id:=toastCount, this.closeObj:=ObjBindMethod(this,"close")
@@ -29,7 +29,7 @@ class Toast{
             }
 
     }
-    setParam(byRef p,def:=false){
+    setParam(p,def:=false){
         if !IsObject(p) ;If not object, assume only title is given
             p:={title:{text:p}}
         for i,x in this.def {
@@ -42,7 +42,7 @@ class Toast{
         this.x:=this.pos.x, this.y:=this.pos.y, this.pos:="", this.closekeys:=this.closekeys[1]
         return
     }
-    show(byRef param){
+    show(param){
         if A_IsPaused
             return
         if !this.def
