@@ -153,7 +153,7 @@ class watchExplorerWindows {
 				if !this.currentWins[path]
 					return !this._recoverAsk("Window not found!`nRetry?")
 				;msgbox % "Moving " path " (" w.hwnd ") to " moveTo[i]
-				TaskView.MoveWindowToDesktopNumber(moveTo[i], w.hwnd)
+				TaskView.MoveWindowToDesktopNumber(moveTo[i], w.hwnd, False)
 			}
 		}
 		return True

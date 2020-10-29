@@ -1,8 +1,8 @@
-; This file must be in Windows 1252 encoding, because of "»"
+; This file must be in Windows 1252 or UTF-BOM encoding, because of "»"
 
 ; Script Name
 global SCR_Name  := path(A_ScriptName).name        ;SCR_Name = Name of script file without extension
-global SCR_AHKDir:= path(A_Ahkpath).dir
+global SCR_AHKDir:= path(A_AHKpath).dir
 
 ;-----------------------------------------------------------------------
 ; Hook Timeout

@@ -1,4 +1,4 @@
-; This file must be in Windows 1252 encoding, not in UTF8/16
+﻿; This file must be in UTF-BOM encoding
 
 ;===================    Reset hotstring on Undo, Cut, Copy
 RETURN
@@ -12,14 +12,15 @@ return
 
 ;===================    Hot Strings
 RETURN
-::@�::@gmail.com
-::m�::magnet:?xt=urn:btih:
-:::�::=:=      ; ":�" => "=:="       :Join Param Seperator
+::@»::@gmail.com
+::m»::magnet:?xt=urn:btih:
+:::»::=:=      		; ":»" => "=:="       		:Join Param Seperator
+::#»::{#}:~:text=   ; "#»" => "#:~:text="       :Text Fragments
 return
 
 ;===================    Paste Trackers
 RETURN
-::tr�::
+::tr»::
 pasteTrackers(){
 	FileRead trackerList, trackers.txt
 	pasteText(trackerList)
@@ -59,8 +60,28 @@ return
 
 ;===================    Symbols
 RETURN
-::z�::{U+0370} 		; z� = Heta      :Succedes letters in sorting
-::0�::{U+263A} 		; 0� = Smiley    :Precedes numbers in sorting
+::z»::Ͱ 		; z» = Heta      :Succedes letters in sorting
+::0»::☺ 		; 0» = Smiley    :Precedes numbers in sorting
 
-::inf�::{U+221E}	; inf� = Infinity
+::inf»::∞ 		; inf» = Infinity
 return
+
+;===================    Send `n/`t in cases where enter/tab is used for other purposes
+#InputLevel 0
+
+:X: t»::sendKeys("`t")	; " t»" = Tab, + » = Another Tab ... 
+:Xb0:`t»::sendKeys("{Backspace}`t")
+
+:X: n»::sendKeys("`n") 	; " n»" = NewLine, + » = Another line ... 
+:Xb0:`n»::sendKeys("{Backspace}`n")
+
+:Xb0: »::sendKeys("{Backspace}   ")		; " »" = 4 Spaces, + » = Another 4 spaces ...
+
+/* Example how to create hotkey chains
+
+#InputLevel 0
+:X:a»::sendKeys("first")			; a»   = first
+:X:first»::sendKeys("second")		; a»»  = second
+::second»::third					; a»»» = third
+
+*/

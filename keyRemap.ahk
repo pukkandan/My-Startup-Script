@@ -24,8 +24,7 @@ return
 r:: ; I forget +F10                                  ; No AppsKey in my laptop
 m::                                                  ; Hard to M-Click in trackpad
 	prefixUsed("CapsLock")
-	SendLevel 1
-	sendEvent % {r: "{AppsKey}", m: "{MButton}"}[subStr(A_ThisHotkey,0)]
+	SendKeys({r: "{AppsKey}", m: "{MButton}"}[subStr(A_ThisHotkey,0)])
 return
 
 Space::                                              ; Play/Pause all visible video players 
@@ -244,17 +243,17 @@ CapsLock::
 	keyWait %A_ThisHotkey%
 	if prefixUsed("CapsLock", False)
 	    return
-	SendLevel 1
-	sendEvent » ;Used to trigger many hotstrings
+	SendKeys("»", 10) ;Used to trigger many hotstrings
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
+/* (See HotStrings for alternate implementation)
 #ifWinNotActive ahk_group WG_ShiftEnter
 +Enter::Send `n
 #ifWinNotActive ahk_group WG_ShiftSpace
 +Space::Send % "    " ;I prefer 4 spaces instead of tab in some situations instead of tab
 #if
-
+*/
 ;===================    X1 - Ditto & Launcher
 RETURN
 XButton2::
