@@ -1,5 +1,15 @@
 ; This file must be in Windows 1252 encoding, not in UTF8/16
 
+;===================    Reset hotstring on Undo, Cut, Copy
+RETURN
+~^z::
+~^x::
+~^v::
+~+Del::
+~+Ins::
+	Hotstring("Reset")
+return
+
 ;===================    Hot Strings
 RETURN
 ::@»::@gmail.com
