@@ -69,24 +69,24 @@ GroupAdd, WG_NoTransparent	, ahk_class Dropdown
 GroupAdd, WG_NoTransparent	, ahk_class SysDragImage
 
 ;-----------------------------------------------------------------------
-; keyRemap - +Enter/Space
+; keyRemap - +Enter/Space ; DEPRECATED
 GroupAdd, WG_ShiftEnter		, ahk_exe mathematica.exe
 ;GroupAdd, WG_ShiftSpace, ; Nothing right now
 
 ;-----------------------------------------------------------------------
 ; Programs
-GroupAdd, WG_SublimeText	, ahk_exe sublime_text.exe
-GroupAdd, WG_SublimeText	, ahk_exe sublime_merge.exe
+GroupAdd, WG_SublimeText		, ahk_exe sublime_text.exe
+GroupAdd, WG_SublimeText		, ahk_exe sublime_merge.exe
 
-GroupAdd, WG_unwantedHide 	, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
-GroupAdd, WG_unwantedHide 	, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
+GroupAdd, WG_unwantedHide 		, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
+GroupAdd, WG_unwantedHide 		, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
 
-GroupAdd, WG_unwantedClose 	, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
-GroupAdd, WG_unwantedClose	, Error ahk_class #32770 ahk_exe SdDisplay.exe
-GroupAdd, WG_unwantedClose	, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
-GroupAdd, WG_unwantedClose	, ahk_class AvIPMDialog ahk_exe ipmGui.exe
-GroupAdd, WG_unwantedClose	, Internet Download Manager Registration ahk_exe IDMan.exe
-GroupAdd, WG_unwantedClose	, Internet Download Manager ahk_exe IDMan.exe, Internet Download Manager has been registered with a fake Serial Number
+GroupAdd, WG_unwantedClose 		, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
+GroupAdd, WG_unwantedClose		, Error ahk_class #32770 ahk_exe SdDisplay.exe
+GroupAdd, WG_unwantedClose		, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
+GroupAdd, WG_unwantedClose		, ahk_class AvIPMDialog ahk_exe ipmGui.exe
+GroupAdd, WG_unwantedClose		, Internet Download Manager Registration ahk_exe IDMan.exe
+GroupAdd, WG_unwantedClose		, Internet Download Manager ahk_exe IDMan.exe, Internet Download Manager has been registered with a fake Serial Number
 
 ;-----------------------------------------------------------------------
 ; Programs

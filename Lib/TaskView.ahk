@@ -148,11 +148,13 @@ class TaskView {
     }
 
     ;------------------------------------------------------------------------
-    _desktopNumber(n, wrap:=False, ret:=-1, params*){
+    _desktopNumber(n, wrap:=False, ret:=-1, params*){ ; TODO: ReWork
         ; ret can be: 0=Dont return to current Desktop, 1=Return to current Desktop, -1=Dont create new Desktops
         ; ret only has any effect if wrap:=False
 
         maxNo:=this.GetDesktopCount()
+        if (maxNo<=0)
+            return n
         if (wrap){
             while n<=0
                 n+=maxNo
@@ -162,17 +164,17 @@ class TaskView {
         }
 
         ; Desktops need to be created
-        if (ret) {
+        if (ret>=0) {
             current:=this.GetCurrentDesktopNumber()
             params[1]:=0 ; No animation when creating desktops
+
+            ;msgbox % "Implicitly creating " n-MaxNo " (" n "-" MaxNo ") new desktops!"
+            ;this.createNewDesktops(n-MaxNo, params*)
+
+            if (ret)
+                this.GoToDesktopNumber(current,,"")
         }
-
-        msgbox % "Implicitly creating " n-MaxNo " new desktops!"
-        this.createNewDesktops(n-MaxNo, params*)
-
-        if (ret)
-            this.GoToDesktopNumber(current,,"")
-        return n
+        return min(max(n,1),maxNo)
     }
 
     ;------------------------------------------------------------------------

@@ -30,5 +30,13 @@ URI_URLDecode(URL) {
     return URI_Decode(URL)
 }
 
+URI_QueryEncode(URL) { ; keep ",&=+#."
+    return URI_Encode(URL, "[0-9a-zA-Z,&=+#.]")
+}
+
+URI_QueryDecode(URL) {
+    return URI_Decode(URL)
+}
+
 ;Msgbox % URI_Encode("hi hello")
 ;Msgbox % URI_Decode("hi%20hello")
