@@ -88,6 +88,8 @@ GroupAdd, WG_unwantedClose		, ahk_class AvIPMDialog ahk_exe ipmGui.exe
 GroupAdd, WG_unwantedClose		, Internet Download Manager Registration ahk_exe IDMan.exe
 GroupAdd, WG_unwantedClose		, Internet Download Manager ahk_exe IDMan.exe, Internet Download Manager has been registered with a fake Serial Number
 
+GroupAdd, WG_unwantedCloseRegex , ahk_class Afx:\w+:b:0000000000010003:0000000000900010:0000000000000000 ahk_group WG_VideoPlayerExe
+
 ;-----------------------------------------------------------------------
 ; Programs
 GroupAdd, WG_VideoPlayerExe	, ahk_exe PotPlayerMini64.exe

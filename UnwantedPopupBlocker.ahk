@@ -16,6 +16,9 @@ unwantedPopupBlocker(){
         send, {esc}
         ; ControlSend, Intermediate D3D Window1, {esc},
     }
+
+    SetTitleMatchMode, Regex
+    winClose ahk_group WG_unwantedCloseRegex
     return
 }
 
