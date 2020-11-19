@@ -48,11 +48,8 @@ class watchExplorerWindows {
 	}
 
 	_firstRecover() {
-		hw:=A_DetectHiddenWindows
 		DetectHiddenWindows, On
 		WinWait, ahk_group WG_Explorer,, 10
-		;msgbox % errorlevel
-		DetectHiddenWindows, % hw
 
 		this.recover(, False)
 		this.firstRun:=False

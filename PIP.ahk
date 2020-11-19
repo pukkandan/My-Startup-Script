@@ -35,6 +35,7 @@ class PIP {
                 t:="ahk_id " t
 
             /*      Type
+                    H = Get hidden windows as well
                     D = Return to parent desktop on unPiP
                     T = Show/Hide Titlebar
                     J = Jump on MouseOver
@@ -83,6 +84,7 @@ class PIP {
     }
 
     getPIPWindow(t,item){
+        DetectHiddenWindows % !!inStr(item.type,"H")
         IDList0:=WinActive(t)
         WinGet, IDList , List, % t
         ; msgbox, %t%`n%IDList% Windows

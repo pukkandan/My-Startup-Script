@@ -10,13 +10,15 @@ class Modules {
 		;	the function is used in setTimer if timer is non-zero
 
 		if !this.list
-			this.list:={}
-		if isObject(mod) ; Assume it is a class
+			this.list:={}, this.orderedList:=[]
+		if isObject(mod) { ; Assume it is a class
+			this.orderedList.push(mod.__class)
 			this.list[mod.__class]:={name:mod.__class, class:mod, timer:timer, args:args}
-		else ; Assume it is a function NAME
+		} else { ; Assume it is a function NAME
+			this.orderedList.push(mod)
 			this.list[mod]:={name:mod, func:Func(mod).bind(args*), timer:timer, args:args}
 			; To check b/w class and fn, check "if (this.list[name].func)"
-
+		}
 		;msgbox % (isObject(mod)? mod.__class :"""" mod """") "`n"  timer
 		return isObject(mod)? mod.__class :mod ; Return the name
 	}
@@ -24,7 +26,7 @@ class Modules {
 	initialize(opts:="") {
 		this.opts:= opts? opts :{}
 
-		for name in this.list {
+		for _,name in this.orderedList {
 			tooltip(name, {life:500})
 			this._initFn(name)
 			this._setTimer(name)
@@ -39,6 +41,8 @@ class Modules {
 	firstRun() {
 		tooltip()
 		delayedTimer.firstRun()
+		while delayedTimer.running
+			sleep 100
 		Toast.show("Script Loaded")
 	}
 
@@ -99,7 +103,7 @@ class Modules {
 			lastWin:=win
 		}
 
-		for name, mod in this.list {
+		for name, mod in this.list { ; Order doesn't matter
 			if !mod.func { ; Dont do anything for functions
 				if fs&&mod._fs || !fs&&!mod._fs ; Already triggered
 					continue
