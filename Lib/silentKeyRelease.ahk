@@ -1,8 +1,12 @@
+; DEPRECATED
+
+
 silentKeyRelease_Mouse(key,delay:=200){
     obj:=func("_silentKeyRelease").bind(key, True)
     setTimer % obj, -%delay%
     return
 }
+
 /* ; UNTESTED
 silentKeyRelease_Keyboard(key,delay:=200){
     obj:=func("_silentKeyRelease").bind(key)

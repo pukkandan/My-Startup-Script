@@ -260,13 +260,19 @@ YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
 
 ;=============================================
 
-prefixUsed(key, set:=True) {
+prefixUsed(key, set:=True) { ;-1 to keep it unchanged
 	static prefix:={}
 
 	ret:=prefix[key]
-	prefix[key]:=set
+	if (set>-1)
+		prefix[key]:=set
 	
 	return ret ; returns previous value
+}
+
+sendPrefixKey(key) {
+	if !prefixUsed(key, False)
+		send {%key%}
 }
 
 winUpWhenCapsReleased() {

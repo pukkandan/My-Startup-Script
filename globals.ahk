@@ -50,7 +50,7 @@ GroupAdd, WG_TaskView		, Task View ahk_class Windows.UI.Core.CoreWindow ahk_exe 
 ; keyRemap - RButton Prefixes
 GroupAdd, WG_RightDrag		, ahk_exe mspaint.exe
 GroupAdd, WG_RightDrag		, ahk_exe mspaint1.exe
-GroupAdd, WG_RightDrag		, ahk_group WG_Browser
+;GroupAdd, WG_RightDrag		, ahk_group WG_Browser
 
 ;-----------------------------------------------------------------------
 ; HotStrings - AutoBracket

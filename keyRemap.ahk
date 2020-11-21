@@ -62,21 +62,22 @@ RETURN
 
 LButton::                                            ; Switch to next window
 	sendWindowBack()
-	silentKeyRelease_Mouse("R")
+	prefixUsed("RButton")
 return
 
 MButton:: winSizer.start("RButton")                  ; WinSizer (keyboard alternative below)
 MButton Up::
 	if !winSizer.end()
 	    send, #{Tab}
-	silentKeyRelease_Mouse("R")
+	prefixUsed("RButton")
 return
 
   WheelUp::                                            ; Go to Prev/Next Desktops
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(): taskView.GoToDesktopNext()
-	silentKeyRelease_Mouse("R")
+	prefixUsed("RButton")
 	sleep 200
+	tooltip
 return
 
 #if getKeyState("MButton","P")
@@ -84,16 +85,21 @@ return
   WheelUp::                                            ; Move window to desktop and go there
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A")): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
-	silentKeyRelease_Mouse("M")
+	prefixUsed("MButton")
 	sleep 200
 return
 
-#ifWinNotActive ahk_group WG_RightDrag
-
-*RButton up::                                        ; Dont Block RButton
+#IfWinActive ahk_group WG_RightDrag
+~*RButton up::
 	Critical
-	if !{"MButton":0,"MButton Up":0,"WheelUp":0,"WheelDown":0,"LButton":0}.haskey(A_PriorKey)
-	    send % "{Blind}{RButton}"
+	prefixUsed(subStr(A_ThisHotkey, 3, 7), False)
+return
+
+#If
+*RButton up::
+*MButton up::
+	Critical
+	sendPrefixKey(subStr(strReplace(A_ThisHotkey,"~"), 2, 7))
 return
 
 #If
