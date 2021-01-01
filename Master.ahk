@@ -31,11 +31,11 @@ Modules.add(winProbe)
 ; winProbe.activate()
 
 #include dimScreen.ahk
-modules.add("dimScreen", 0)
+Modules.add("dimScreen", 0)
 ; dimScreen(120)
 
 #include <Taskview>
-;#include Taskview_Temp.ahk
+;#include <Taskview_Temp>
 Modules.add(TaskView,, true)
 
 #include hotcorners.ahk
@@ -46,13 +46,13 @@ Modules.add(winSizer)
 ;winSizer.__new()
 
 #include UnwantedPopupBlocker.ahk
-Modules.add("UnwantedPopupBlocker", -100)
+Modules.add("UnwantedPopupBlocker", 1000)
 
 #include Transparent.ahk
 Modules.add("Transparent_TaskbarGlass", 500, 4)
 ;Modules.add("Transparent_Windows", 500, 240)
 ;Modules.add("Transparent_MaxBG", 500, "ahk_exe ImageGlass.exe","3C3C3C")
-;Modules.add("Transparent_MaxBG", 500, "ahk_exe nomacs.exe"    ,"F0F0F0")
+;Modules.add("Transparent_MaxBG", 500, "ahk_exe nomacs.exe"    ,"1f2021")
 
 #include PIP.ahk
 Modules.add(PIP, 100, [

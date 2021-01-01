@@ -38,10 +38,7 @@ Explorer_getWindowPath(hwnd, ignoreSpecial:=False) {
 	special:=Explorer_getSpecialFolderPath(path)
 
 	DetectHiddenWindows, % hw
-	if ignoreSpecial
-		return special? False: path
-	else
-		return special? special : path
+	return !special?path: ignoreSpecial?False: special
 
 }
 

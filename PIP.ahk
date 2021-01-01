@@ -143,7 +143,8 @@ class PIP {
 
             if ( this_winPref > (winPref.haskey(i.set)?winPref[i.set]:0) )
                 winPref[i.set]:=this_winPref
-            else continue
+            else
+                continue
             topList[i.set]:={id: Format("{1:#x}",n), type: i.type}
             ; msgbox, % "this.topList[" i.set "]:={id:" n ",type:" i.type "}`nid=" this.topList[i.set].id ",type=" this.topList[i.set].type
         }
@@ -165,7 +166,7 @@ class PIP {
     }
     unPIPOld(force:=False){
         for set,old in this.topListOld {
-            if (this.mouseAllowed[set]="")
+            if (this.mouseAllowed[set]=="")
                 this.mouseAllowed[set]:=True
             if (force || this.topList[set].id!=old.id)
                 this.unPIP(set)

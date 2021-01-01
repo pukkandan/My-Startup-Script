@@ -1,25 +1,32 @@
 unwantedPopupBlocker(){
-    DetectHiddenWindows On
-
-    winHide  ahk_group WG_unwantedHide
-    winClose ahk_group WG_unwantedClose
-
-	IfWinExist, (UNREGISTERED) ahk_group WG_SublimeText
+	IfWinExist, (UNREGISTERED) ahk_group WG_Sublime
     {
 		WinGetTitle, t
-		WinSetTitle,% StrReplace(t, " (UNREGISTERED)")
+		WinSetTitle % StrReplace(t, " (UNREGISTERED)")
 	}
 
-    IfWinExist, Disable developer mode extensions ahk_exe chrome.exe
-    {
+    while winExist("ahk_group WG_unwantedEsc") {
         winactivate
         send, {esc}
-        ; ControlSend, Intermediate D3D Window1, {esc},
     }
 
+    winHide  ahk_group WG_unwantedHide
+    winHide  ahk_group WG_unwantedClose
+    winHide  ahk_group WG_unwantedCloseRegex
+
+    /*
+    win:=winExist("ahk_group WG_ImageViewer")
+    if win && !winActive("ahk_id " win) {
+        WinGetPos,, y,, h
+        if (y==0 && h==A_ScreenHeight)
+            winclose
+    }
+    */
+
+    DetectHiddenWindows On
+    winClose ahk_group WG_unwantedClose
     SetTitleMatchMode, Regex
     winClose ahk_group WG_unwantedCloseRegex
+    ;SetTitleMatchMode 2 ; Important for firstRun
     return
 }
-
-

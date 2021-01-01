@@ -89,12 +89,15 @@ updateTray(mx0:="",my0:=""){
     obj:=Togglekeys_check()
     tip.="ToggleKeys: " (obj.n?"N":"") (obj.c?"C":"") (obj.s?"S":"") (obj.i?"I":"") "`n"
 
+    /*
     obj:=netNotify(False,False)
     if (obj.status!="") {
         tip.="Internet: " (["No Connection","Connected, no Internet","Internet access (no VPN)","Internet access through VPN"][obj.status+2]) "`n"
         if obj.status>=0
             tip.="Public IP: " obj.ipInfo.ip (obj.ipInfo.loc?" (" obj.ipInfo.loc ")":"") "`nLocal IP: [ " obj.ipInfo.ipl " ]" "`n"
     }
+    */
+    
     obj:=func("showTrayTip").bind(tip,mx,my)
     setTimer, % obj, -200
     return

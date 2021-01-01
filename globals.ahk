@@ -76,17 +76,24 @@ GroupAdd, WG_ShiftEnter		, ahk_exe mathematica.exe
 ;-----------------------------------------------------------------------
 ; Programs
 GroupAdd, WG_SublimeText		, ahk_exe sublime_text.exe
-GroupAdd, WG_SublimeText		, ahk_exe sublime_merge.exe
+GroupAdd, WG_SublimeMerge		, ahk_exe sublime_merge.exe
 
-GroupAdd, WG_unwantedHide 		, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
+GroupAdd, WG_Sublime			, ahk_group WG_SublimeText
+GroupAdd, WG_Sublime			, ahk_group WG_SublimeMerge
+
+GroupAdd, WG_ImageViewer		, ahk_class Qt5QWindowIcon ahk_exe nomacs.exe
+
 GroupAdd, WG_unwantedHide 		, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
 
-GroupAdd, WG_unwantedClose 		, This is an unregistered copy ahk_class #32770 ahk_group WG_SublimeText
+GroupAdd, WG_unwantedClose 		, This is an unregistered copy ahk_class #32770 ahk_group WG_Sublime
+GroupAdd, WG_unwantedClose 		, Update Available ahk_class #32770 ahk_group WG_SublimeMerge
 GroupAdd, WG_unwantedClose		, Error ahk_class #32770 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose		, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose		, ahk_class AvIPMDialog ahk_exe ipmGui.exe
 GroupAdd, WG_unwantedClose		, Internet Download Manager Registration ahk_exe IDMan.exe
 GroupAdd, WG_unwantedClose		, Internet Download Manager ahk_exe IDMan.exe, Internet Download Manager has been registered with a fake Serial Number
+
+GroupAdd, WG_unwantedEsc		, Disable developer mode extensions ahk_group WG_Browser
 
 GroupAdd, WG_unwantedCloseRegex , ahk_class Afx:\w+:b:0000000000010003:0000000000900010:0000000000000000 ahk_group WG_VideoPlayerExe
 

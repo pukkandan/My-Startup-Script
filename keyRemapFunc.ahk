@@ -90,7 +90,8 @@ runOrSend(title, key, path, paste:=False, sendAfter:=""){
 	}
 
 	Toast.show(title)
-	send % key
+	if !winExist(win)
+		send % key
 
 	DetectHiddenWindows, Off
 	Winwait, % win ,, 2

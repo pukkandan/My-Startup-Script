@@ -49,7 +49,7 @@ class TaskView {
             }
             return this._fList[g]
 
-            /* ------------- Functions exported by DLL ; * = Usable ** = Explicitly Defined here
+            /* ------------- Functions exported by DLL ; * = Usable Directly ** = Redefined here
             > Desktop
             **  int GetCurrentDesktopNumber()
             *   int GetDesktopCount()
@@ -101,7 +101,7 @@ class TaskView {
         }
 
         set { ;Never used
-            msgbox TaskView.fList is never supposed to be set. Mistake??
+            throw Exception("Items of TaskView.fList should not be set", "TaskView.fList[" fn "]:=" value)
             StringLower, g, fn ; The keys are stored in lowercase to avoid case issues
             return this._fList[g]:=value
         }
@@ -114,6 +114,9 @@ class TaskView {
     }
 
     _OnExplorerRestart(wParam, lParam, msg, hwnd_scr) {
+        this.restart()
+    }
+    restart(){
         DllCall("RestartVirtualDesktopAccessorProc", "UInt", result)
         if this.Toast
             this.Toast.show("TaskView Restarted")
