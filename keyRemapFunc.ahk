@@ -174,7 +174,7 @@ runSSH(){
 }
 
 cmdInCurrentFolder(wsl:=False, admin:=True) { ;as admin 
-	path:=Explorer_getWindowPath(Explorer_getActiveWindow())
+	path:=Explorer_getWindowPath(Explorer_getLastWindow())
 	tooltip((wsl?"wsl """:"cmd """) path """")
 	ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, admin?"RunAs":"")
 	tooltip()
@@ -316,4 +316,34 @@ _toggleVolume_setVol(to, from, t, key, cndn){
 	}
 	return
 
+}
+
+;=============================================
+
+clipboardBuffer(get:=False) {
+	static buffer:=[], len:=0, pos:=0, tt:={no:6, life:500}
+	if get {
+		x:=getSelectedText({keep:True, path:True}), buffer:=[]
+		loop parse, x, `n, `r
+			if (A_LoopField!="")
+				buffer.push(A_LoopField)
+		len:=buffer.length(), pos:=0
+		if len
+			tooltip("Copied " len " items", tt)
+		else
+			tooltip("No item copied", tt)
+	} else {
+		/*
+		while (buffer[1]=="") {
+			buffer.removeAt(1)
+			if (++pos>len)
+				break
+		}
+		*/
+		if (!len or ++pos>len)
+			return tooltip("No item in buffer", tt)
+		tooltip("Paste " pos "/" len "`n" _getSelectedText_process(buffer[1], {clean:True, path:True}), tt)
+		pasteText(buffer[1],,,, {keep:true})
+		buffer.RemoveAt(1)
+	}
 }

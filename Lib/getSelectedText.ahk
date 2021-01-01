@@ -2,7 +2,7 @@ getSelectedText(opts:="") {
  /* Returns selected text without disrupting the clipboard. However, if the clipboard contains a large amount of data, some of it may be lost
  */
 
-    def:={path:False, clip:False, clean:False}
+    def:={path:true, clip:False, clean:False, keep:False}
 
     if !IsObject(opts) {
         opts:=def.clone()
@@ -15,14 +15,16 @@ getSelectedText(opts:="") {
     clipOld:=ClipboardAll
     Clipboard:=""
     Send, ^c
-    ClipWait, 0.1, 1
+    ClipWait, 0.5, 1
     sleep 100
     clipNew:=Clipboard
     Clipboard:=clipOld
+    if (opts.keep && clipNew!="")
+        Clipboard:=clipNew
     clipOld:=""
 
     clipNew:=_getSelectedText_process(clipNew, opts)
-    return (!opts.clip || clipNew)? clipNew: _getSelectedText_process(Clipboard, opts)
+    return (!opts.clip || clipNew!="")? clipNew: _getSelectedText_process(Clipboard, opts)
 }
 
 _getSelectedText_process(clip, opts){

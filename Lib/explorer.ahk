@@ -2,7 +2,7 @@
 ;TaskView.__new()
 
 Explorer_isExplorerWindow(hwnd:=0, allowDesktop:=False) {
-	hwnd:=hwnd? " ahk_id " hwnd :""
+	hwnd:= hwnd==0? " ahk_id " winExist("A") :!hwnd?"": " ahk_id " hwnd
 	win:=winExist("ahk_group WG_Explorer" hwnd)
 	if (!win && allowDesktop)
 		win:=winExist("ahk_group WG_Desktop" hwnd)
@@ -11,6 +11,10 @@ Explorer_isExplorerWindow(hwnd:=0, allowDesktop:=False) {
 
 Explorer_getActiveWindow(opts*) {
 	return Explorer_isExplorerWindow(,opts*)
+}
+
+Explorer_getLastWindow(opts*) {
+	return Explorer_isExplorerWindow("",opts*)
 }
 
 Explorer_getAllWindows(opts*) {
