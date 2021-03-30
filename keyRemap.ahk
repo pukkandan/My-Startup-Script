@@ -193,14 +193,16 @@ return
 
 ;===================    Over Taskbar
 RETURN
-#if isOver_mouse("ahk_group WG_TaskBar")
- ~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
-  WheelUp::send ^+!{Tab}
-WheelDown::send ^!{Tab}
-
 #if winActive("ahk_group WG_TaskView") AND isOver_mouse("ahk_group WG_TaskBar")
 LButton::send {Enter}								; When Task Switching
+WheelUp::send ^+!{Tab}
+WheelDown::send ^!{Tab}
 MButton::send {Alt Up}{Esc}
+
+#if isOver_mouse("ahk_group WG_TaskBar")
+~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
+WheelUp::Volume_Up
+WheelDown::Volume_Down
 #if
 
 /*
