@@ -295,17 +295,17 @@ winUpWhenCapsReleased() {
 ;=============================================
 
 toggleVolume(vol, key, t0:=0, t1:=200, t2:=500) {
-	SoundGet, currentvol
+	currentvol:=VA_GetMasterVolume(1)
 	if (vol<1)
 		vol*=currentVol
 	sleep % t0
 	_toggleVolume_setVol(vol, currentVol, t1, key, True)
 	
 	KeyWait, % key
-	SoundGet, vol
+	vol:=VA_GetMasterVolume(1)
 	_toggleVolume_setVol(currentVol, vol, t2, key, False)
 
-	SoundSet % currentVol
+	changeVolume(currentVol, True)
 	Tooltip("",{no:5})
 }
 
@@ -317,12 +317,34 @@ _toggleVolume_setVol(to, from, t, key, cndn){
 			if (getKeyState(key,"P")!=cndn)
 				break
 			now:=from + step*A_Index
-			SoundSet % now
+			changeVolume(now, True)
 			tooltip("Volume = " floor(now), {no:5})
 		}
 	}
 	return
 
+}
+
+changeVolume(diff, absolute:=False, tip:=True){ ; Force balance
+	static lastToast
+	bal:=changeVolumeBalance()
+	vol:= round(absolute?diff: VA_GetMasterVolume(1)+diff)
+	VA_SetMasterVolume(vol, 1)
+	VA_SetMasterVolume(vol*bal, 2)
+	if tip {
+		tip:="Volume = " round(VA_GetMasterVolume(1)) ", " round(VA_GetMasterVolume(2)) " (" round(bal, 1) ")"
+		(currentToast:=new Toast()).show(tip)
+		lastToast.close(), lastToast:=currentToast
+	}
+}
+
+changeVolumeBalance(diff:=0, absolute:=False, args*){
+	static bal:=1
+	if !diff
+		return bal
+	bal:= absolute?diff: bal+diff
+	changeVolume(0, False, args*)
+	return bal
 }
 
 ;=============================================

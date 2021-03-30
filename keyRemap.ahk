@@ -201,8 +201,15 @@ MButton::send {Alt Up}{Esc}
 
 #if isOver_mouse("ahk_group WG_TaskBar")
 ~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
-WheelUp::Volume_Up
-WheelDown::Volume_Down
+;WheelUp::Volume_Up
+;WheelDown::Volume_Down
+
+WheelUp::changeVolume(1)
+WheelDown::changeVolume(-1)
+^WheelUp::
+^WheelDown::
+	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
+return
 #if
 
 /*
@@ -309,6 +316,10 @@ Volume_Down::
 Media_Play_Pause::
 Media_Stop::
 Suspend, Permit
+if !inStr(A_ThisHotkey, "Volume") {
+	changeVolume({Media_Stop: 1, Media_Play_Pause:-1}[A_ThisHotkey])
+	return
+}
 send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
 return
 

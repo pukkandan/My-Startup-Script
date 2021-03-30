@@ -82,6 +82,9 @@ global runTextObj:=new runText("Runtext.ini")
 #include internet.ahk
 ;Module.add("netNotify", -5000, False)
 
+changeVolumeBalance(VA_GetMasterVolume(2)/VA_GetMasterVolume(1), True, False)
+Modules.add("changeVolume", 5000, 0, False, False)
+
 #include autoUpdate.ahk
 Modules.add("autoUpdate", 3600000) ;Put in firstrun, but without blocking
 
