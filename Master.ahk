@@ -95,8 +95,8 @@ RETURN
 
 ;============================== End of auto-execute
 #include keyRemap.ahk
-#include *i hotStrings-Private.ahk ;Has personal data in this file
 #include hotStrings.ahk
+#include *i hotStrings-Private.ahk ;Has personal data in this file
 
 RETURN
 Exit:
