@@ -232,7 +232,7 @@ class runText{
                     if sect.get(mod "SendRaw" A_Index)=1
                         SendRaw,% s ;ControlSendRaw is buggy
                     else if sect.get(mod "SendRaw" A_Index)=2
-                        pasteText(s,w)
+                        pasteText(s,{win:w})
                     else ControlSend,, % s, % w
                 }
             } else if (s){

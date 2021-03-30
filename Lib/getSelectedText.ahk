@@ -15,7 +15,7 @@ getSelectedText(opts:="") {
     clipOld:=ClipboardAll
     Clipboard:=""
     Send, ^c
-    ClipWait, 0.5, 1
+    ClipWait, 1
     sleep 100
     clipNew:=Clipboard
     Clipboard:=clipOld

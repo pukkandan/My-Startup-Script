@@ -13,7 +13,7 @@ return
 ;===================    Hot Strings
 RETURN
 ::@»::@gmail.com
-::m»::magnet:?xt=urn:btih:
+:?0:m»::magnet:?xt=urn:btih:
 :::»::=:=      		; ":»" => "=:="       		:Join Param Seperator
 ::#»::{#}:~:text=   ; "#»" => "#:~:text="       :Text Fragments
 return
@@ -63,7 +63,7 @@ RETURN
 ::z»::Ͱ 		; z» = Heta      :Succedes letters in sorting
 ::0»::☺ 		; 0» = Smiley    :Precedes numbers in sorting
 
-::inf»::∞ 		; inf» = Infinity
+:?0:inf»::∞ 		; inf» = Infinity
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes

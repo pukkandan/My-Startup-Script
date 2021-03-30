@@ -53,7 +53,7 @@ class Toast{
         Gui, %GUI_handle%: New, -Caption +ToolWindow +AlwaysOnTop +hwndHWND
         this.hwnd:=hwnd
         Gui, %GUI_handle%: Color, % this.bgColor
-        GUI, %GUI_handle%:+LastFoundExist
+        Gui, %GUI_handle%:+LastFoundExist
         WinSet, Trans, % this.trans
         Gui, %GUI_handle%:Margin, % this.marginX, % this.marginY
 
@@ -74,7 +74,7 @@ class Toast{
         this.exist:=True
         if this.sound
             SoundPlay, *-1
-        GUI, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
+        Gui, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
         if this.life
             setTimer, % closeObj , % "-" this.life
         for _,k in this.closekeys
@@ -88,7 +88,7 @@ class Toast{
         this.exist:=False, GUI_handle:="Toast_GUI" this.id
         for _,k in this.closekeys
             Hotkey % k, Off
-        GUI, %GUI_handle%: Destroy
+        Gui, %GUI_handle%: Destroy
         return
     }
 }

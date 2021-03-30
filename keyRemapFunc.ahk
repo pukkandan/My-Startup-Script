@@ -25,10 +25,17 @@ listOpenFolders(){
 }
 
 listOpenFolders_pastePath(path, win){
+	if getKeyState("LCtrl", "P") ; Copy to clipboard, dont paste
+		return Clipboard:=path
+
 	winGetClass, c, % win
-	pasteText(path,,,win)
-	if(c="#32770")
-		send {Return}
+	gotoPath:= 
+	opts:={waitWin: win}
+	if (c="#32770" or c="CabinetWClass") ; In explorer window or filepicker
+		opts.win:=win, opts.cntrl:="Edit1"
+	pasteText(path, opts)
+	if opts.cntrl
+		controlSend % opts.cntrl, {Return}, % opts.win
 }
 
 ;=============================================
@@ -342,8 +349,8 @@ clipboardBuffer(get:=False) {
 		*/
 		if (!len or ++pos>len)
 			return tooltip("No item in buffer", tt)
-		tooltip("Paste " pos "/" len "`n" _getSelectedText_process(buffer[1], {clean:True, path:True}), tt)
-		pasteText(buffer[1],,,, {keep:true})
+		tooltip("Paste " pos "/" len "`n" subStr(_getSelectedText_process(buffer[1], {clean:True, path:True}), 1, 500), tt)
+		pasteText(buffer[1], {keep:true})
 		buffer.RemoveAt(1)
 	}
 }
