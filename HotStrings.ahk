@@ -64,6 +64,7 @@ RETURN
 ::0»::☺ 		; 0» = Smiley    :Precedes numbers in sorting
 
 :?0:inf»::∞ 		; inf» = Infinity
+:?0:.»::• 			; .» = • (Bullet)
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes

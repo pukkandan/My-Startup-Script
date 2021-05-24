@@ -323,6 +323,13 @@ if !inStr(A_ThisHotkey, "Volume") {
 send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
 return
 
+; Volume controls
+#WheelUp::changeVolume(1)
+#WheelDown::changeVolume(-1)
+#^WheelUp::
+#^WheelDown::
+	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
+return
 
 #F5:: dimScreen(+10)                                ; DimScreen
 #F6:: dimScreen(-10)
