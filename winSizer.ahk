@@ -26,14 +26,14 @@ class winSizer {
         ; this.show(mx,my,wx,wy,w,h)
         return true
     }
-    
+
     end(){
         act:=this.action, r:=this.running, this.running:=False
         setTimer, % act, Off
         this.toastObj.close()
         return r
     }
-    
+
     run(){
         MouseGetPos, x, y
         mode:=this.mode, dx0:=x-this.mx, dy0:=y-this.my, win:= "ahk_id " this.win

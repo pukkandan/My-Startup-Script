@@ -160,13 +160,13 @@ class microWindow{
     crop(dir, expand:=False, amt:=32){
         ;msgbox crop %dir% %expand% %amt%
         amt:= expand? -amt :amt
-        if (dir="l"){ 
+        if (dir="l"){
             this.pos1[1]+= amt
-        } else if (dir="u"){ 
+        } else if (dir="u"){
             this.pos1[2]+= amt
-        } else if (dir="r"){ 
+        } else if (dir="r"){
             this.pos2[1]-= amt
-        } else if (dir="d"){ 
+        } else if (dir="d"){
             this.pos2[2]-= amt
         }
         return this.update()
@@ -187,7 +187,7 @@ class microWindow{
             hotkey, % "^" k[1] , % obj
             obj:= register? ObjBindMethod(this, "crop", l) :"Off"
             hotkey, % k[2] , % obj
-            
+
             obj:= register? ObjBindMethod(this, "crop", l, True, 4) :"Off"
             hotkey, % "+^" k[1] , % obj
             obj:= register? ObjBindMethod(this, "crop", l,, 4) :"Off"

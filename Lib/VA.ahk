@@ -66,13 +66,13 @@ VA_GetVolume(subunit_desc="1", channel="", device_desc="playback")
     if channel =
     {
         vol = 0
-        
+
         Loop, %channel_count%
         {
             VA_IPerChannelDbLevel_GetLevelRange(avl, A_Index-1, min_dB, max_dB, step_dB)
             VA_IPerChannelDbLevel_GetLevel(avl, A_Index-1, this_vol)
             this_vol := VA_dB2Scalar(this_vol, min_dB, max_dB)
-            
+
             ; "Speakers Properties" reports the highest channel as the volume.
             if (this_vol > vol)
                 vol := this_vol
@@ -93,38 +93,38 @@ VA_SetVolume(vol, subunit_desc="1", channel="", device_desc="playback")
 {
     if ! avl := VA_GetDeviceSubunit(device_desc, subunit_desc, "{7FB7B48F-531D-44A2-BCB3-5AD5A134B3DC}")
         return
-    
+
     vol := vol<0 ? 0 : vol>100 ? 100 : vol
-    
+
     VA_IPerChannelDbLevel_GetChannelCount(avl, channel_count)
-    
+
     if channel =
     {
         ; Simple method -- resets balance to "center":
         ;VA_IPerChannelDbLevel_SetLevelUniform(avl, vol)
-        
+
         vol_max = 0
-        
+
         Loop, %channel_count%
         {
             VA_IPerChannelDbLevel_GetLevelRange(avl, A_Index-1, min_dB, max_dB, step_dB)
             VA_IPerChannelDbLevel_GetLevel(avl, A_Index-1, this_vol)
             this_vol := VA_dB2Scalar(this_vol, min_dB, max_dB)
-            
+
             channel%A_Index%vol := this_vol
             channel%A_Index%min := min_dB
             channel%A_Index%max := max_dB
-            
+
             ; Scale all channels relative to the loudest channel.
             ; (This is how Vista's "Speakers Properties" dialog seems to work.)
             if (this_vol > vol_max)
                 vol_max := this_vol
         }
-        
+
         Loop, %channel_count%
         {
             this_vol := vol_max ? channel%A_Index%vol / vol_max * vol : vol
-            this_vol := VA_Scalar2dB(this_vol/100, channel%A_Index%min, channel%A_Index%max)            
+            this_vol := VA_Scalar2dB(this_vol/100, channel%A_Index%min, channel%A_Index%max)
             VA_IPerChannelDbLevel_SetLevel(avl, A_Index-1, this_vol)
         }
     }
@@ -187,7 +187,7 @@ VA_GetDevicePeriod(device_desc, ByRef default_period, ByRef minimum_period="")
     DllCall(NumGet(NumGet(audioClient+0)+9*A_PtrSize), "ptr",audioClient, "int64*",default_period, "int64*",minimum_period)
     ; Convert 100-nanosecond units to milliseconds.
     default_period /= 10000
-    minimum_period /= 10000    
+    minimum_period /= 10000
     ObjRelease(audioClient)
     return true
 }
@@ -257,13 +257,13 @@ VA_EnumSubunits(device, callback, target_name="", target_iid="", callback_param=
 VA_EnumSubunitsEx(part, data_flow, callback, target_name="", target_iid="", callback_param="")
 {
     r := 0
-    
+
     VA_IPart_GetPartType(part, type)
-    
+
     if type = 1 ; Subunit
     {
         VA_IPart_GetName(part, name)
-        
+
         ; v2.01: target_name is now a regular expression.
         if RegExMatch(name, target_name)
         {
@@ -282,16 +282,16 @@ VA_EnumSubunitsEx(part, data_flow, callback, target_name="", target_iid="", call
                 return r ; early termination
         }
     }
-    
+
     if data_flow = 0
         VA_IPart_EnumPartsIncoming(part, parts)
     else
         VA_IPart_EnumPartsOutgoing(part, parts)
-    
+
     VA_IPartsList_GetCount(parts, count)
     Loop %count%
     {
-        VA_IPartsList_GetPart(parts, A_Index-1, subpart)        
+        VA_IPartsList_GetPart(parts, A_Index-1, subpart)
         r := VA_EnumSubunitsEx(subpart, data_flow, callback, target_name, target_iid, callback_param)
         ObjRelease(subpart)
         if r
@@ -311,13 +311,13 @@ VA_GetDevice(device_desc="playback")
                 , "ptr", VA_GUID(IID_IMMDeviceEnumerator, "{A95664D2-9614-4F35-A746-DE8DB63617E6}")
                 , "ptr*", deviceEnumerator)) != 0
         return 0
-    
+
     device := 0
-    
+
     ; deviceEnumerator->GetDevice(device_id, [out] device)
     if DllCall(NumGet(NumGet(deviceEnumerator+0)+5*A_PtrSize), "ptr", deviceEnumerator, "wstr", device_desc, "ptr*", device) = 0
         goto VA_GetDevice_Return
-    
+
     if device_desc is integer
     {
         m2 := device_desc
@@ -326,7 +326,7 @@ VA_GetDevice(device_desc="playback")
     }
     else
         RegExMatch(device_desc, "(.*?)\s*(?::(\d+))?$", m)
-    
+
     if m1 in playback,p
         m1 := "", flow := 0 ; eRender
     else if m1 in capture,c
@@ -335,7 +335,7 @@ VA_GetDevice(device_desc="playback")
         m1 := "", flow := 0 ; eRender (default)
     else
         flow := 2 ; eAll
-    
+
     if (m1 . m2) = ""   ; no name or number (maybe "playback" or "capture")
     {   ; deviceEnumerator->GetDefaultAudioEndpoint(dataFlow, role, [out] device)
         DllCall(NumGet(NumGet(deviceEnumerator+0)+4*A_PtrSize), "ptr",deviceEnumerator, "uint",flow, "uint",0, "ptr*",device)
@@ -344,16 +344,16 @@ VA_GetDevice(device_desc="playback")
 
     ; deviceEnumerator->EnumAudioEndpoints(dataFlow, stateMask, [out] devices)
     DllCall(NumGet(NumGet(deviceEnumerator+0)+3*A_PtrSize), "ptr",deviceEnumerator, "uint",flow, "uint",1, "ptr*",devices)
-    
+
     ; devices->GetCount([out] count)
     DllCall(NumGet(NumGet(devices+0)+3*A_PtrSize), "ptr",devices, "uint*",count)
-    
+
     if m1 =
     {   ; devices->Item(m2-1, [out] device)
         DllCall(NumGet(NumGet(devices+0)+4*A_PtrSize), "ptr",devices, "uint",m2-1, "ptr*",device)
         goto VA_GetDevice_Return
     }
-    
+
     index := 0
     Loop % count
         ; devices->Item(A_Index-1, [out] device)
@@ -367,7 +367,7 @@ VA_GetDevice_Return:
     ObjRelease(deviceEnumerator)
     if devices
         ObjRelease(devices)
-    
+
     return device ; may be 0
 }
 

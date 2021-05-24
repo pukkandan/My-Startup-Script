@@ -14,7 +14,7 @@ class ReloadScriptOnEdit {
 			files:=["*"]
 		this.files := files
 		this.option:= option
-		
+
 		this.neverCleaned:=True
 	}
 
@@ -24,7 +24,7 @@ class ReloadScriptOnEdit {
 			title := SCR_Name " - Reload this script?"
 			text  := "A file related to the script " SCR_Name " has changed.`nScript file:`n" A_ScriptFullPath "`n`nChanged file:`n"
 		}
-	
+
 		if file {
 			MsgBox, 0x24, % title, % text file
 			IfMsgBox, Yes
@@ -58,7 +58,7 @@ class ReloadScriptOnEdit {
 			Loop, Files, % f, % this.option
 				if !inStr(A_LoopFileAttrib,"H") && !inStr(A_LoopFileAttrib,"S")
 					FileSetAttrib, -A, % A_LoopFileLongPath, % inStr(option,"D")?(inStr(option,"F")?2:1):0, % InStr(option,"R")?1:0
-		return		
+		return
 	}
 
 }

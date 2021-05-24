@@ -253,7 +253,7 @@ class TaskView {
         if (m==n) {
            return this._OnDesktopSwitch(n)
         }
-        
+
         static keyMap:={1:"Right", -1:"Left"}
         if (anim<0 && abs(m-n)==1) {
             send % "#^{" keyMap[n-m] "}"
@@ -270,12 +270,12 @@ class TaskView {
         if (anim.gui && !newWin)
             newWin:=this._dummyGUI(n)
         if (newWin) {
-            hw:=A_DetectHiddenWindows 
+            hw:=A_DetectHiddenWindows
             DetectHiddenWindows, On
             WinActivate, ahk_id %newWin%
             sleep, % animDelay
             DetectHiddenWindows, % hw
-        
+
             sleep % min(animDelay,500)
             this._dummyGUI() ; Hide the GUI. This is not actually needed
             m:=this.getCurrentDesktopNumber()
@@ -343,7 +343,7 @@ class TaskView {
         n:=this._desktopNumber(n, params*)
         w:=0
 
-        hw:=A_DetectHiddenWindows 
+        hw:=A_DetectHiddenWindows
         DetectHiddenWindows, On
         winget win, list
 
@@ -408,7 +408,7 @@ class TaskView {
             winLists[n]:=[]
         }
 
-        hw:=A_DetectHiddenWindows 
+        hw:=A_DetectHiddenWindows
         DetectHiddenWindows, On
         winget win, list
 

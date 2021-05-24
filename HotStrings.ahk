@@ -1,4 +1,4 @@
-﻿; This file must be in UTF-BOM encoding
+﻿; This file must be in Windows 1252 or UTF-BOM encoding, because of "»"
 
 ;===================    Reset hotstring on Undo, Cut, Copy
 RETURN
@@ -70,10 +70,10 @@ return
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
 #InputLevel 0
 
-:X: t»::sendKeys("`t")	; " t»" = Tab, + » = Another Tab ... 
+:X: t»::sendKeys("`t")	; " t»" = Tab, + » = Another Tab ...
 :Xb0:`t»::sendKeys("{Backspace}`t")
 
-:X: n»::sendKeys("`n") 	; " n»" = NewLine, + » = Another line ... 
+:X: n»::sendKeys("`n") 	; " n»" = NewLine, + » = Another line ...
 :Xb0:`n»::sendKeys("{Backspace}`n")
 
 :Xb0: »::sendKeys("{Backspace}   ")		; " »" = 4 Spaces, + » = Another 4 spaces ...

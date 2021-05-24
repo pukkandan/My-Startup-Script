@@ -79,10 +79,10 @@ class watchExplorerWindows {
 		this.recoverRunning:=False
 	}
 	_recover(update:=True, ask:=True) {
-		if (update) 
+		if (update)
 			this.update()
 		wins:= this.getWinsFromFile()
-		
+
 		opened:=False
 		for path,deskList in wins.clone() {
 			if !path
@@ -101,7 +101,7 @@ class watchExplorerWindows {
 			; explore can't open duplicates and some special windows
 			; explorer.exe opens new process everytime. Multiple processes messes with "shell.application"
 			; Directly giving path can open special windows but not duplicates.
-			
+
 			try {
 				loop % diff {
 					;RunWait, %method% "%path%",, Max
@@ -160,7 +160,7 @@ class watchExplorerWindows {
 		if !force && this.recoverRunning
 			return -1
 		;tooltip("writeWinsToFile")
-		if (update) 
+		if (update)
 			this.update()
 		out:=""
 		for path,winArr in this.currentWins {

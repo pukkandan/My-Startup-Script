@@ -97,7 +97,7 @@ updateTray(mx0:="",my0:=""){
             tip.="Public IP: " obj.ipInfo.ip (obj.ipInfo.loc?" (" obj.ipInfo.loc ")":"") "`nLocal IP: [ " obj.ipInfo.ipl " ]" "`n"
     }
     */
-    
+
     obj:=func("showTrayTip").bind(tip,mx,my)
     setTimer, % obj, -200
     return

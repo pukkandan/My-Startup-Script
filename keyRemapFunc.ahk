@@ -29,7 +29,7 @@ listOpenFolders_pastePath(path, win){
 		return Clipboard:=path
 
 	winGetClass, c, % win
-	gotoPath:= 
+	gotoPath:=
 	opts:={waitWin: win}
 	if (c="#32770" or c="CabinetWClass") ; In explorer window or filepicker
 		opts.win:=win, opts.cntrl:="Edit1"
@@ -50,7 +50,7 @@ moveFilesToCommonFolder(list){
 		folder:=path(list[1]).dir
 	else
 		folder:=regexReplace(str_CommonPart(list), "[^\\a-zA-Z0-9]+$")
-	
+
 	if (subStr(folder,0)=="\") {
 		path:=substr(folder,1,-1), folder:=""
 	} else {
@@ -146,7 +146,7 @@ _runLauncher_tooltipOff(force:=False){
 		return
 }
 
-keepSelectedText(new:=True, again:=True){ ; new = -1 to delete text, "" to return text without doing anything 
+keepSelectedText(new:=True, again:=True){ ; new = -1 to delete text, "" to return text without doing anything
 	static text:="", pasted:=False
 	;tooltip % text
 	if (new=="")
@@ -180,7 +180,7 @@ runSSH(){
 	return
 }
 
-cmdInCurrentFolder(wsl:=False, admin:=True) { ;as admin 
+cmdInCurrentFolder(wsl:=False, admin:=True) { ;as admin
 	path:=Explorer_getWindowPath(Explorer_getLastWindow())
 	tooltip((wsl?"wsl """:"cmd """) path """")
 	ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, admin?"RunAs":"")
@@ -274,7 +274,7 @@ prefixUsed(key, set:=True) { ;-1 to keep it unchanged
 	ret:=prefix[key]
 	if (set>-1)
 		prefix[key]:=set
-	
+
 	return ret ; returns previous value
 }
 
@@ -286,7 +286,7 @@ sendPrefixKey(key) {
 winUpWhenCapsReleased() {
 	if GetKeyState("CapsLock", "P")
 		return
-	
+
 	SetTimer,, Off
 	send {LWin Up}
 	prefixUsed("CapsLock_Num", False)
@@ -300,7 +300,7 @@ toggleVolume(vol, key, t0:=0, t1:=200, t2:=500) {
 		vol*=currentVol
 	sleep % t0
 	_toggleVolume_setVol(vol, currentVol, t1, key, True)
-	
+
 	KeyWait, % key
 	vol:=VA_GetMasterVolume(1)
 	_toggleVolume_setVol(currentVol, vol, t2, key, False)

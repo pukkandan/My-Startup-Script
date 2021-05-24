@@ -67,10 +67,10 @@ Explorer_getAllWindowsInfo(opts*) { ; opts = [allowDesktop, ignoreSpecial]
 }
 
 Explorer_getSpecialFolderPath(name){
-	static special:="" 
+	static special:=""
 	if !special
 		special:=_Explorer_specialFolderList()
-	return special[name]	
+	return special[name]
 }
 _Explorer_specialFolderList() {
 	ret:={} ;In single line, it gives error "expression too long"
@@ -223,7 +223,7 @@ Explorer_getWindowObjectURL(winObj, ignoreSpecial:=False) {
 	if (!url) {
 		if ignoreSpecial
 			return False
-		hw:=A_DetectHiddenWindows 
+		hw:=A_DetectHiddenWindows
 		DetectHiddenWindows, On
 		WinGetTitle, t, % "ahk_id " winObj.hwnd
 		url:= Explorer_getSpecialFolderPath(t)

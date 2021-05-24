@@ -36,7 +36,7 @@ class Modules {
 		tooltip("Starting Timers", {life:500})
 		delayedTimer.start(False)
 		fs:=ObjBindMethod(this,"_onFullScreen")
-		setTimer, % fs, 1000 
+		setTimer, % fs, 1000
 	}
 	firstRun() {
 		tooltip()
@@ -53,7 +53,7 @@ class Modules {
 				if !mod.timer ; If timer doesnt exist, initialize with the fn
 					mod.func.call()
 			} else {
-				if mod.class.__module_init 
+				if mod.class.__module_init
 					mod.class.__module_init(mod.args*)
 				else
 					mod.class.__new(mod.args*)

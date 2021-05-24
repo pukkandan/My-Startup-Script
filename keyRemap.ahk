@@ -1,8 +1,9 @@
+﻿; This file must be in Windows 1252 or UTF-BOM encoding, because of "»"
 #include keyRemapFunc.ahk
 
 ;===================    Capslock Toggled on
 #if GetKeyState("CapsLock", "T")
-1::													 ; Capslock acts as Numlock for top row numbers
+1::																				; Capslock acts as Numlock for top row numbers
 2::
 3::
 4::
@@ -21,23 +22,23 @@ return
 ;===================    CapsLock as Prefix
 #if GetKeyState("CapsLock", "P")
 
-r:: ; I forget +F10                                  ; No AppsKey in my laptop
-m::                                                  ; Hard to M-Click in trackpad
+r:: ; I forget +F10																; No AppsKey in my laptop
+m::																				; Hard to M-Click in trackpad
 	prefixUsed("CapsLock")
 	SendKeys({r: "{AppsKey}", m: "{MButton}"}[subStr(A_ThisHotkey,0)])
 return
 
-Space::                                              ; Play/Pause all visible video players 
+Space::																			; Play/Pause all visible video players
 	prefixUsed("CapsLock")
-	playAllVideoPlayers() 
+	playAllVideoPlayers()
 return
 
-n::                                                  ; NetNotify
+n::																				; NetNotify
 	prefixUsed("CapsLock")
 	netNotify(True,,1000)
 return
 
-1::													 ; Caps+Num => #Num since #Num is replaced below
+1::																				; Caps+Num => #Num since #Num is replaced below
 2::
 3::
 4::
@@ -60,19 +61,19 @@ return
 RETURN
 #if getKeyState("RButton","P")
 
-LButton::                                            ; Switch to next window
+LButton::																		; Switch to next window
 	sendWindowBack()
 	prefixUsed("RButton")
 return
 
-MButton:: winSizer.start("RButton")                  ; WinSizer (keyboard alternative below)
+MButton:: winSizer.start("RButton")												; WinSizer (keyboard alternative below)
 MButton Up::
 	if !winSizer.end()
 	    send, #{Tab}
 	prefixUsed("RButton")
 return
 
-  WheelUp::                                            ; Go to Prev/Next Desktops
+  WheelUp::																		; Go to Prev/Next Desktops
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.GoToDesktopPrev(): taskView.GoToDesktopNext()
 	prefixUsed("RButton")
@@ -82,7 +83,7 @@ return
 
 #if getKeyState("MButton","P")
 
-  WheelUp::                                            ; Move window to desktop and go there
+  WheelUp::																		; Move window to desktop and go there
 WheelDown::
 	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A")): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 	prefixUsed("MButton")
@@ -114,7 +115,7 @@ RETURN
 		taskView.CreateNewDesktopsBeforeCurrent()
 return
 
- +#Left::                                             ; Move window to desktop
+ +#Left::																		; Move window to desktop
 +#Right::
 	if (A_ThisHotkey="+#Left")
 		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"))
@@ -122,7 +123,7 @@ return
 		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 return
 
- !#Left::                                             ; Move window to desktop and go there
+ !#Left::																		; Move window to desktop and go there
 !#Right::
 	if (A_ThisHotkey="!#Left")
 		taskView.MoveWindowToDesktopPrev(WinExist("A"))
@@ -130,7 +131,7 @@ return
 		taskView.MoveWindowToDesktopNext(WinExist("A"))
 return
 
- ^+#Left::                                             ; Move Desktop
+ ^+#Left::																		; Move Desktop
 ^+#Right::
 	if (A_ThisHotkey="^+#Left")
 		taskView.MoveCurrentDesktopLeft()
@@ -138,7 +139,7 @@ return
 		taskView.MoveCurrentDesktopRight()
 return
 
-#1::                                                 ; Go to Desktop by number
+#1::																			; Go to Desktop by number
 #2::
 #3::
 #4::
@@ -151,7 +152,7 @@ return
 	taskView.GoToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), False)
 return
 
-+#1::                                                ; Move window to Desktop by number
++#1::																			; Move window to Desktop by number
 +#2::
 +#3::
 +#4::
@@ -164,7 +165,7 @@ return
 	taskView.MoveWindowAndGoToDesktopNumber( SubStr(A_ThisHotKey,0)=="0"? 10: SubStr(A_ThisHotKey,0), winExist("A"), False)
 return
 
-!#1::                                                ; Move window to Desktop by number and go there
+!#1::																			; Move window to Desktop by number and go there
 !#2::
 !#3::
 !#4::
@@ -177,7 +178,7 @@ return
 	taskView.MoveWindowToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), sendWindowBack(), False)
 return
 
-^+#1::                                                ; Move Desktop
+^+#1::																			; Move Desktop
 ^+#2::
 ^+#3::
 ^+#4::
@@ -194,13 +195,13 @@ return
 ;===================    Over Taskbar
 RETURN
 #if winActive("ahk_group WG_TaskView") AND isOver_mouse("ahk_group WG_TaskBar")
-LButton::send {Enter}								; When Task Switching
+LButton::send {Enter}															; When Task Switching
 WheelUp::send ^+!{Tab}
 WheelDown::send ^!{Tab}
 MButton::send {Alt Up}{Esc}
 
 #if isOver_mouse("ahk_group WG_TaskBar")
-~MButton::send ^!{Tab}^+!{Tab}                      ; Alt tab over taskbar
+~MButton::send ^!{Tab}^+!{Tab}													; Alt tab over taskbar
 ;WheelUp::Volume_Up
 ;WheelDown::Volume_Down
 
@@ -227,7 +228,7 @@ WheelDown::
 	if getKeyState("LButton","P")
 		send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
 	else
-		send {%A_ThisHotkey%}	
+		send {%A_ThisHotkey%}
 return
 #if
 
@@ -252,13 +253,13 @@ RETURN
 	Toast.show( {title:{text:str_Replace(A_ThisHotkey,[["~"],["+"]]) (GetKeyState(str_Replace(A_ThisHotkey,[["~"],["+"]]),"T")? " On":" Off")}, sound:True})
 return
 
-;===================    Trigger HotStrings (�) [Check hotStrings.ahk for details]
+;===================    Trigger HotStrings (») [Check hotStrings.ahk for details]
 RETURN
 CapsLock::
 	keyWait %A_ThisHotkey%
 	if prefixUsed("CapsLock", False)
-	    return
-	SendKeys("�", 10) ;Used to trigger many hotstrings
+		return
+	SendKeys("»", 10) ;Used to trigger many hotstrings
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
@@ -285,33 +286,33 @@ return
 
 ;===================    Launcher
 RETURN
-  LWin:: runlauncher(True)							; LWin => Launcher
-#Space:: runLauncher(False,True)					; Open Launcher with pastable text
+  LWin:: runlauncher(True)														; LWin => Launcher
+#Space:: runLauncher(False,True)												; Open Launcher with pastable text
 
 #ifWinActive ahk_group WG_Launcher
-  ~Tab:: 											; Paste previously selected text
-~Space:: 
+  ~Tab:: 																		; Paste previously selected text
+~Space::
     if keepSelectedText(False, A_ThisHotkey=="~Tab")
         tooltip("Press TAB to paste :`n" subStr(keepSelectedText(""), 1, 150), {no:3, y:-50, x:0, mode:"Window"}  )
 return
 #if
 
-~LWin & RWin:: return                               ; Allows LWin to be still used as prefix
-;+^LWin:: send {Ctrl Up}{Shift Up}{LWin Up}{RWin}   ; +^LWin => Win (^Esc already does this)
+~LWin & RWin:: return															; Allows LWin to be still used as prefix
+;+^LWin:: send {Ctrl Up}{Shift Up}{LWin Up}{RWin}								; +^LWin => Win (^Esc already does this)
 
 ;===================    Programs/Functions
 RETURN
- #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)		; WindowSwitch
-+#CapsLock:: ShellRun("notepad.exe")                ; Notepad
-^#CapsLock:: ShellRun("calc1.exe")                  ; Calc
- !CapsLock:: cmdInCurrentFolder()					; CMD
-+!CapsLock:: cmdInCurrentFolder(True)				; WSL
-^!CapsLock:: runSSH()                               ; SSH
- ^CapsLock:: caseMenu.show()                        ; caseMenu
+ #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)									; WindowSwitch
++#CapsLock:: ShellRun("notepad.exe")											; Notepad
+^#CapsLock:: ShellRun("calc1.exe")												; Calc
+ !CapsLock:: cmdInCurrentFolder()												; CMD
++!CapsLock:: cmdInCurrentFolder(True)											; WSL
+^!CapsLock:: runSSH()															; SSH
+ ^CapsLock:: caseMenu.show()													; caseMenu
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
-#F1:: Send {F1}                                     ; Convert #F1 => F1
-Volume_Up::											; fn+Arrow = Volume
+#F1:: Send {F1}																	; Convert #F1 => F1
+Volume_Up::																		; fn+Arrow = Volume
 Volume_Down::
 Media_Play_Pause::
 Media_Stop::
@@ -323,41 +324,40 @@ if !inStr(A_ThisHotkey, "Volume") {
 send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
 return
 
-; Volume controls
-#WheelUp::changeVolume(1)
+#WheelUp::changeVolume(1)														; Volume controls
 #WheelDown::changeVolume(-1)
 #^WheelUp::
 #^WheelDown::
 	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
 return
 
-#F5:: dimScreen(+10)                                ; DimScreen
+#F5:: dimScreen(+10)															; DimScreen
 #F6:: dimScreen(-10)
- #c:: makeMicroWindow()                             ; MicroWindow
- #f:: listOpenFolders()                             ; List all open folders
- #w:: winAction.show()								; winAction
- #`:: runTextObj.showGUI()							; runText
-#^e:: watchExplorerWindows.recover()				; Recover Explorer Window
- #v:: activateVideoPlayer() 						; Open VideoPlayer
-;#r:: runOrSend(PRG_RS_Run*)							; Run => Launcher
+ #c:: makeMicroWindow()															; MicroWindow
+ #f:: listOpenFolders()															; List all open folders
+ #w:: winAction.show()															; winAction
+ #`:: runTextObj.showGUI()														; runText
+#^e:: watchExplorerWindows.recover()											; Recover Explorer Window
+ #v:: activateVideoPlayer() 													; Open VideoPlayer
+;#r:: runOrSend(PRG_RS_Run*)													; Run => Launcher
 
 
-#m:: winAction.bind_Window() ? winAction.trayIt()	; TrayIt
-#t:: Menu, trayIt, Show								; TrayIt Menu
+#m:: winAction.bind_Window() ? winAction.trayIt()								; TrayIt
+#t:: Menu, trayIt, Show															; TrayIt Menu
 
 #^c::clipboardBuffer(True)
 #^v::clipboardBuffer()
 
-#if Explorer_getActiveWindow()						; Move Files to Common FOlder
+#if Explorer_getActiveWindow()													; Move Files to Common FOlder
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
 #if
 
-~RAlt & RCtrl::											; Temporarily reduce Volume
+~RAlt & RCtrl::																	; Temporarily reduce Volume
  ~RCtrl & RAlt::
 	toggleVolume(.5, strSplit(A_ThisHotkey," ")[3])
 return
 
-#F10::												; Global controls for Music player
+#F10::																			; Global controls for Music player
 #Media_Play_Pause::
 	runOrSend(PRG_RS_MusicPlayer*)
 return
@@ -372,10 +372,10 @@ return
 ;Media_Next::       send #{F11}
 #if
 
-;+^Space:: YouTubePlayPause()						; Play/Pause Youtube
+;+^Space:: YouTubePlayPause()													; Play/Pause Youtube
 return
 
-;===================	Script Functions - Tray/Pause/Reload/Exit
+;=================== Script Functions - Tray/Pause/Reload/Exit
 RETURN
 #+t::
 	updateTray(0, A_ScreenHeight-200)

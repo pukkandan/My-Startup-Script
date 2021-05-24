@@ -11,7 +11,7 @@ getSelectedText(opts:="") {
             if !opts.haskey(i)
                 opts[i]:=j
     }
-    
+
     clipOld:=ClipboardAll
     Clipboard:=""
     Send, ^c

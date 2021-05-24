@@ -158,7 +158,7 @@ class PIP {
         if inStr(old.type,"D") && old.desk {
             if WinActive("ahk_id " old.id)
                 TaskView.MoveWindowAndGoToDesktopNumber(old.desk, old.id,,2)
-            else 
+            else
                 TaskView.MoveWindowToDesktopNumber(old.desk, old.id)
         }
         if !isFullScreen(old.id,1) AND inStr(old.type,"T")

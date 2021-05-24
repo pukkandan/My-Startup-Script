@@ -34,7 +34,7 @@ pasteText(text:="", opts:="") {
         }
         Send, +{Insert} ;^v
     }
-    
+
     sleep 100
     if (text!="") {
         Clipboard:=clipOld

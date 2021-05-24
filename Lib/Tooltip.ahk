@@ -1,7 +1,7 @@
 Tooltip(tip:="", p:=""){
     ; static def:={ color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:8, opt:"",name:"Segoe UI"} }
     static def:={ font:{size:8, opt:"",name:"Segoe UI"} }
-    if !tip 
+    if !tip
         return _TT_RemoveNow(p.no)
     if A_IsPaused
         return
