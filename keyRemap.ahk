@@ -115,7 +115,7 @@ RETURN
 		taskView.CreateNewDesktopsBeforeCurrent()
 return
 
- +#Left::																		; Move window to desktop
+ +#Left::																		; Move window to desktop and go there
 +#Right::
 	if (A_ThisHotkey="+#Left")
 		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"))
@@ -123,7 +123,7 @@ return
 		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 return
 
- !#Left::																		; Move window to desktop and go there
+ !#Left::																		; Move window to desktop
 !#Right::
 	if (A_ThisHotkey="!#Left")
 		taskView.MoveWindowToDesktopPrev(WinExist("A"))
@@ -152,7 +152,7 @@ return
 	taskView.GoToDesktopNumber(SubStr(A_ThisHotKey,0)=="0" ?10: SubStr(A_ThisHotKey,0), False)
 return
 
-+#1::																			; Move window to Desktop by number
++#1::																			; Move window to Desktop by number and go there
 +#2::
 +#3::
 +#4::
@@ -165,7 +165,7 @@ return
 	taskView.MoveWindowAndGoToDesktopNumber( SubStr(A_ThisHotKey,0)=="0"? 10: SubStr(A_ThisHotKey,0), winExist("A"), False)
 return
 
-!#1::																			; Move window to Desktop by number and go there
+!#1::																			; Move window to Desktop by number
 !#2::
 !#3::
 !#4::
@@ -205,7 +205,7 @@ MButton::send {Alt Up}{Esc}
 ;WheelUp::Volume_Up
 ;WheelDown::Volume_Down
 
-WheelUp::changeVolume(1)
+WheelUp::changeVolume(1)														; Change volume scrolling over taskbar
 WheelDown::changeVolume(-1)
 ^WheelUp::
 ^WheelDown::
@@ -322,6 +322,10 @@ if !inStr(A_ThisHotkey, "Volume") {
 	return
 }
 send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
+return
+^Media_Play_Pause::
+^Media_Stop::
+	changeVolumeBalance({ Media_Play_Pause:-.1, Media_Stop:.1 }[subStr(A_ThisHotkey, 2)])
 return
 
 #WheelUp::changeVolume(1)														; Volume controls
