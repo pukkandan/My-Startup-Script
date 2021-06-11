@@ -110,7 +110,8 @@ GroupAdd, WG_Browser		, ahk_exe vivaldi.exe
 GroupAdd, WG_Browser_PIP	, Picture in picture ahk_group WG_Browser
 GroupAdd, WG_Browser_PIP	, Picture-in-picture ahk_group WG_Browser
 
-GroupAdd, WG_Console		, ahk_class ConsoleWindowClass
+GroupAdd, WG_Console        , ahk_class ConsoleWindowClass
+GroupAdd, WG_Console        , ahk_class CASCADIA_HOSTING_WINDOW_CLASS
 
 GroupAdd, WG_Calc			, ahk_exe calc.exe
 GroupAdd, WG_Calc			, ahk_exe calc1.exe

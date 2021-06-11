@@ -180,10 +180,10 @@ runSSH(){
 	return
 }
 
-cmdInCurrentFolder(wsl:=False, admin:=True) { ;as admin
+cmdInCurrentFolder(exe:="wt", args:="", admin:=False) {
 	path:=Explorer_getWindowPath(Explorer_getLastWindow())
-	tooltip((wsl?"wsl """:"cmd """) path """")
-	ShellRun(A_COMSPEC, (path? "/k cd /d " path :"") (wsl&&path? " && " :"") (wsl? "wsl.exe" :""),, admin?"RunAs":"")
+	tooltip(exe (admin?"* ":" ") args " : " path)
+	ShellRun(exe, args, path, admin?"RunAs":"")
 	tooltip()
 }
 

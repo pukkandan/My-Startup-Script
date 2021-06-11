@@ -305,8 +305,9 @@ RETURN
  #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)									; WindowSwitch
 +#CapsLock:: ShellRun("notepad.exe")											; Notepad
 ^#CapsLock:: ShellRun("calc1.exe")												; Calc
- !CapsLock:: cmdInCurrentFolder()												; CMD
-+!CapsLock:: cmdInCurrentFolder(True)											; WSL
+ !CapsLock:: cmdInCurrentFolder()												; CMD - WT
++!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL - WT
+#!CapsLock:: cmdInCurrentFolder(, "-p powershell")								; Powershell - WT
 ^!CapsLock:: runSSH()															; SSH
  ^CapsLock:: caseMenu.show()													; caseMenu
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
