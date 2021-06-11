@@ -175,8 +175,9 @@ processExist(p){ ;This function is available natively in v2
 ;=============================================
 
 runSSH(){
-	InputBox, param, SHH, parameters?,,, 128,,,,,-CX 14173002@10.2.60.11
-	ShellRun("ssh.exe",param,,,"RunAs")
+	InputBox, param, SHH, parameters?,,, 128,,,,,-CX%A_Space%
+	if !ErrorLevel
+		ShellRun("ssh.exe", param,,, "RunAs")
 	return
 }
 

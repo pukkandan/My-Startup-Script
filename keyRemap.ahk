@@ -302,14 +302,14 @@ return
 
 ;===================    Programs/Functions
 RETURN
+ ^CapsLock:: caseMenu.show()													; caseMenu
  #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)									; WindowSwitch
-+#CapsLock:: ShellRun("notepad.exe")											; Notepad
++#CapsLock:: ShellRun(PRG_TextEditor, "-n")										; Text editor
 ^#CapsLock:: ShellRun("calc1.exe")												; Calc
  !CapsLock:: cmdInCurrentFolder()												; CMD - WT
 +!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL - WT
 #!CapsLock:: cmdInCurrentFolder(, "-p powershell")								; Powershell - WT
 ^!CapsLock:: runSSH()															; SSH
- ^CapsLock:: caseMenu.show()													; caseMenu
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
 #F1:: Send {F1}																	; Convert #F1 => F1

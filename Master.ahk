@@ -4,6 +4,7 @@ Suspend, On
 
 #include %A_ScriptDir%  ;Sets dir for includes
 #include globals.ahk ; Must be before directives
+#include *i globals-Private.ahk ;Has personal data in this file
 #include Directives.ahk
 
 ; #include <byteWord>

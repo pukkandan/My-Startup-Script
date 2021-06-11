@@ -1,5 +1,5 @@
 *.sublime-project
-hotStrings-Private.ahk
+*-Private.ahk
 *.sublime-workspace
 backup\*
 temp\*

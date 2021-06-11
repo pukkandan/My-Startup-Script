@@ -1,4 +1,4 @@
-; This file must be in Windows 1252 or UTF-BOM encoding, because of "»"
+ï»¿; This file must be in Windows 1252 or UTF-BOM encoding, because of "Â»"
 
 ; Script Name
 global SCR_Name  := path(A_ScriptName).name        ;SCR_Name = Name of script file without extension
@@ -17,20 +17,21 @@ global SCR_PID  := DllCall("GetCurrentProcessId","Uint")
 
 ;========================================================================
 ; Programs
-global PRG_CHM       			:= "C:\Windows\hh.exe"
-global PRG_Clipboard 			:= "D:\Program Files\Ditto\Ditto.exe"
-global PRG_Launcher  			:= "D:\AKJ\Progs\Keypirinha\bin\x64\keypirinha-x64.exe"
-global PRG_MusicPlayer			:= "D:\Program Files\MusicBee\MusicBee.exe"
-global PRG_VideoPlayer			:= "D:\Program Files\Potplayer\PotplayerMini64.exe"
+global PRG_CHM					:= "hh.exe"
+global PRG_Clipboard			:= "Ditto.exe"
+global PRG_Launcher				:= "keypirinha-x64.exe"
+global PRG_MusicPlayer			:= "MusicBee.exe"
+global PRG_VideoPlayer			:= "PotplayerMini64.exe"
+global PRG_TextEditor			:= "subl.exe"
 
 ;-----------------------------------------------------------------------
 ; keyRemapFunc - RunOrSend
-global PRG_RS_VideoPlayer 		:=[ "PotPlayer" 	, "+{F12}"	, PRG_VideoPlayer	] ;For playAllVideoPlayers()
+global PRG_RS_VideoPlayer 		:=[ "PotPlayer" 	, "+{F12}"	, PRG_VideoPlayer	                ] ;For playAllVideoPlayers()
 global PRG_RS_MusicPlayer 		:=[ "MusicBee" 		, "{Media_Play_Pause}"	   , PRG_MusicPlayer	]
 global PRG_RS_Clipboard 		:=[ "Ditto" 		, "^``"		, PRG_Clipboard						]
 global PRG_RS_Launcher 			:=[ "Launcher"		, "!{F2}"	, PRG_Launcher , False				]
 global PRG_RS_Run				:=[ "Run" 			, "!{F2}"	, PRG_Launcher , False , "{>} "		]
-global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{»}{Tab}"	]
+global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{Â»}{Tab}"	]
 
 ;========================================================================
 ; Window Groups
