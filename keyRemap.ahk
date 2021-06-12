@@ -353,8 +353,9 @@ return
 #^c::clipboardBuffer(True)
 #^v::clipboardBuffer()
 
-#if Explorer_getActiveWindow()													; Move Files to Common FOlder
+#if Explorer_getActiveWindow()													; Move Files to Common Folder
 #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
+#+x:: unZipAndDeleteFromExplorer(Explorer_getActiveWindow())					; Unzip open Zip file and delete it
 #if
 
 ~RAlt & RCtrl::																	; Temporarily reduce Volume

@@ -10,11 +10,11 @@ Explorer_isExplorerWindow(hwnd:=0, allowDesktop:=False) {
 }
 
 Explorer_getActiveWindow(opts*) {
-	return Explorer_isExplorerWindow(,opts*)
+	return Explorer_isExplorerWindow(, opts*)
 }
 
 Explorer_getLastWindow(opts*) {
-	return Explorer_isExplorerWindow("",opts*)
+	return Explorer_isExplorerWindow("", opts*)
 }
 
 Explorer_getAllWindows(opts*) {

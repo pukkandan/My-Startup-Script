@@ -29,7 +29,6 @@ listOpenFolders_pastePath(path, win){
 		return Clipboard:=path
 
 	winGetClass, c, % win
-	gotoPath:=
 	opts:={waitWin: win}
 	if (c="#32770" or c="CabinetWClass") ; In explorer window or filepicker
 		opts.win:=win, opts.cntrl:="Edit1"
@@ -376,4 +375,26 @@ clipboardBuffer(get:=False) {
 		pasteText(buffer[1], {keep:true})
 		buffer.RemoveAt(1)
 	}
+}
+
+;=============================================
+
+unZipAndDeleteFromExplorer(win){
+	static tt:={no:7, life:500}
+	if !win
+		return tooltip("Not in explorer", tt)
+
+	zip:=Explorer_getWindowPath(win), pathObj:=path(zip)
+	if (pathObj.ext != "zip")
+		return tooltip("Not a ZIP file`n" zip, tt)
+	dir:=pathObj.dir "\" pathObj.name
+	if fileExist(dir)
+		return tooltip("Folder exists`n" dir)
+
+	Toast.show({title:{text:"Extracting"}, life:0})
+	zip_unzip(zip, dir)
+	Toast.close()
+	listOpenFolders_pastePath(dir, "ahk_id " win)
+	sleep 300
+	FileRecycle % zip
 }
