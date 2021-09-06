@@ -325,8 +325,17 @@ _toggleVolume_setVol(to, from, t, key, cndn){
 
 }
 
-changeVolume(diff, absolute:=False, tip:=True){ ; Force balance
+changeVolume(diff, absolute:=False, tip:=True, fast:=True){ ; Force balance
 	static lastToast
+	static self:={}
+	if (fast && diff && !absolute) {
+		send % "{Volume_" (diff>0? "Up":"Down") " " abs(diff) "}"
+		if !self[tip]
+			self[tip]:= func("changeVolume").bind(0, False, tip)
+		obj:=self[tip]
+		setTimer % obj, -1000
+		return
+	}
 	bal:=changeVolumeBalance()
 	vol:= round(absolute?diff: VA_GetMasterVolume(1)+diff)
 	VA_SetMasterVolume(vol, 1)
