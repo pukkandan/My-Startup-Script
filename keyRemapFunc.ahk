@@ -399,11 +399,11 @@ unZipAndDeleteFromExplorer(win){
 	dir:=pathObj.dir "\" pathObj.name
 	if fileExist(dir)
 		return tooltip("Folder exists`n" dir)
+	FileCreateDir % dir
+	listOpenFolders_pastePath(dir, "ahk_id " win)
 
 	Toast.show({title:{text:"Extracting"}, life:0})
 	zip_unzip(zip, dir)
 	Toast.close()
-	listOpenFolders_pastePath(dir, "ahk_id " win)
-	sleep 300
 	FileRecycle % zip
 }

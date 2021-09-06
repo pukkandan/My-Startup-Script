@@ -307,22 +307,26 @@ RETURN
 +#CapsLock:: ShellRun(PRG_TextEditor, "-n")										; Text editor
 ^#CapsLock:: ShellRun("calc1.exe")												; Calc
  !CapsLock:: cmdInCurrentFolder()												; CMD - WT
+^!CapsLock:: cmdInCurrentFolder(,, True)										; CMD - WT
 +!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL - WT
 #!CapsLock:: cmdInCurrentFolder(, "-p powershell")								; Powershell - WT
-^!CapsLock:: runSSH()															; SSH
+;^!CapsLock:: runSSH()															; SSH
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
 #F1:: Send {F1}																	; Convert #F1 => F1
 Volume_Up::																		; fn+Arrow = Volume
 Volume_Down::
+Volume_Up Up::
+Volume_Down Up::
 Media_Play_Pause::
 Media_Stop::
 Suspend, Permit
-if !inStr(A_ThisHotkey, "Volume") {
+if inStr(A_ThisHotkey, "Volume") {
+	if inStr(A_ThisHotkey, " Up")
+		send {Media_Play_Pause}
+} else {
 	changeVolume({Media_Stop: 1, Media_Play_Pause:-1}[A_ThisHotkey])
-	return
 }
-send % { Volume_Up:"{Media_Play_Pause}", Volume_Down:"{Media_Play_Pause}", Media_Play_Pause:"{Volume_Down}", Media_Stop:"{Volume_Up}" }[A_ThisHotkey]
 return
 ^Media_Play_Pause::
 ^Media_Stop::
@@ -354,8 +358,8 @@ return
 #^v::clipboardBuffer()
 
 #if Explorer_getActiveWindow()													; Move Files to Common Folder
-#n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
-#+x:: unZipAndDeleteFromExplorer(Explorer_getActiveWindow())					; Unzip open Zip file and delete it
+ #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
+#^x:: unZipAndDeleteFromExplorer(Explorer_getActiveWindow())					; Unzip open Zip file and delete it
 #if
 
 ~RAlt & RCtrl::																	; Temporarily reduce Volume

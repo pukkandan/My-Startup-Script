@@ -1,5 +1,6 @@
 *.sublime-project
 *-Private.ahk
+trackers.txt
 *.sublime-workspace
 backup\*
 temp\*

@@ -24,6 +24,8 @@ global PRG_MusicPlayer			:= "MusicBee.exe"
 global PRG_VideoPlayer			:= "PotplayerMini64.exe"
 global PRG_TextEditor			:= "subl.exe"
 
+#include *i globals-Private.ahk ; Has personal data in this file
+
 ;-----------------------------------------------------------------------
 ; keyRemapFunc - RunOrSend
 global PRG_RS_VideoPlayer 		:=[ "PotPlayer" 	, "+{F12}"	, PRG_VideoPlayer	                ] ;For playAllVideoPlayers()

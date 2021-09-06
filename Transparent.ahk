@@ -62,7 +62,7 @@ Transparent_MaxBG(title:="A",color:="F0F0F0"){
 }
 
 ;------------------------------------------------------------------------------------------------
-Transparent_TaskbarGlass(state:=-3, color:=0x40000000) { ;ABGR color
+Transparent_TaskbarGlass(state:=-4, color:=0x40000000) { ;ABGR color
 ; Note: Resets when Start menu is active. So set as timer. Even then, it won't work while startmenu/taskview is active
 
 /*  state

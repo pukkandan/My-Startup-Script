@@ -5,7 +5,7 @@ autoUpdate(path:="", download:=True, install:=False, openCLog:=True){
     else if (v<=A_AhkVersion){
         if FileExist("ahk.exe") {  ;Last run was an update
             path:=FileExist(path)?path: A_ScriptDir "\..\.." ;If path doesnt exist, go back 2 directories of the scriptdir (/AHK/Scripts/This_Script -> /AHK)
-            FileMove, ahk.exe, %path%\AutoHotkey_%v%_setup, 0 ;Dont replace
+            ;FileMove, ahk.exe, %path%\AutoHotkey_%v%_setup.exe, 0 ;Dont replace
             FileDelete, ahk.exe ;If exe still exists
             Toast.show({title:{text:"AHK Updated"}, life:openHelp?500:0})
             if openCLog
@@ -18,7 +18,7 @@ autoUpdate(path:="", download:=True, install:=False, openCLog:=True){
     Toast.show({title:{text:"AHK v" v " Available"}, life:download?500:0})
     if (download) {
         while !fileExist("ahk.exe")
-            Download_toFile("https://autohotkey.com/download/ahk-install.exe","ahk.exe")
+            Download_toFile("https://autohotkey.com/download/ahk-install.exe", "ahk.exe")
         Toast.show({title:{text:"AHK v" v " Downloaded"}, life:install?500:0})
         if (install) {
             run *RunAs ahk.exe /s /r /IsHostApp
