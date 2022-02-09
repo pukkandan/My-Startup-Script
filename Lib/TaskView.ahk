@@ -1,6 +1,6 @@
-; Uses https://github.com/Ciantic/VirtualDesktopAccessor
+; Uses https://github.com/skottmckay/VirtualDesktopAccessor
 
-; This script may work in slightly unexpected ways when used with sets.
+; This script may work in slightly unexpected ways when used with sets. (Microsoft abandoned sets?)
 
 ; Functions starting with _ are not expected to be called from outside the class.
 

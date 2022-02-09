@@ -3,9 +3,10 @@
 
 sendWindowBack(activate:=True){
     activeID:=winExist("A")
+    is_desktop:= winExist("ahk_group WG_Desktop ahk_id " activeID)
     winget ids, list
     loop % ids {
-        if (activeID!=ids%A_Index%)
+        if (!is_desktop && activeID!=ids%A_Index%)
             continue
         i:=A_Index+1
         win:="ahk_id " ids%i%

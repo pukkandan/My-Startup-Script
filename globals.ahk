@@ -47,7 +47,8 @@ GroupAdd, WG_Desktop 		, ahk_class WorkerW ahk_exe explorer.exe
 GroupAdd, WG_TaskBar 		, ahk_class Shell_TrayWnd ahk_exe explorer.exe
 
 GroupAdd, WG_TaskView		, Task Switching ahk_class MultitaskingViewFrame ahk_exe explorer.exe
-GroupAdd, WG_TaskView		, Task View ahk_class Windows.UI.Core.CoreWindow ahk_exe explorer.exe
+GroupAdd, WG_TaskView		, Task View ahk_class Windows.UI.Core.CoreWindow ahk_exe explorer.exe ; Win 10
+GroupAdd, WG_TaskView		, Task Switching ahk_class XamlExplorerHostIslandWindow ahk_exe explorer.exe
 
 ;-----------------------------------------------------------------------
 ; keyRemap - RButton Prefixes
