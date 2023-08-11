@@ -53,12 +53,19 @@ _Transparent_Taskbar_EXIT(){
 */
 
 ;------------------------------------------------------------------------------------------------
-Transparent_MaxBG(title:="A",color:="F0F0F0"){
-    WinGet, max , MinMax, % title
-    if max
-        WinSet, Transcolor, % color, % title
-    else
-        WinSet, Transcolor, Off, % title
+Transparent_MaxBG(title:="A", color:="F0F0F0", frameless:=False){
+    win := "ahk_id " WinExist(title)
+    WinGet, max , MinMax, % win
+    if (max && winActive(win)) {
+        frame:=GetKeyState("LShift", "P")? "+": "-"
+        WinSet, Transcolor, % color, % win
+    }
+    else {
+        frame:="+"
+        WinSet, Transcolor, Off, % win
+    }
+    if frameless and frame
+        WinSet, Style, %frame%0x800000, % win
 }
 
 ;------------------------------------------------------------------------------------------------

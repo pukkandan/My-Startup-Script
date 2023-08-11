@@ -51,7 +51,7 @@ Modules.add("windowRespond", 1000)
 #include Transparent.ahk
 Modules.add("Transparent_TaskbarGlass", 500, 4)
 ;Modules.add("Transparent_Windows", 500, 240)
-;Modules.add("Transparent_MaxBG", 500, "ahk_exe ImageGlass.exe","3C3C3C")
+;Modules.add("Transparent_MaxBG", 500, "  - ImageGlass ahk_exe ImageGlass.exe","222A30")
 ;Modules.add("Transparent_MaxBG", 500, "ahk_exe nomacs.exe"    ,"1f2021")
 
 #include PIP.ahk
