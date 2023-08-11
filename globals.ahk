@@ -53,6 +53,9 @@ GroupAdd, WG_TaskView		, Task Switching ahk_class MultitaskingViewFrame ahk_exe 
 GroupAdd, WG_TaskView		, Task View ahk_class Windows.UI.Core.CoreWindow ahk_exe explorer.exe ; Win 10
 GroupAdd, WG_TaskView		, Task Switching ahk_class XamlExplorerHostIslandWindow ahk_exe explorer.exe
 
+GroupAdd, WG_TrayMenu   , Control Center ahk_class Windows.UI.Core.CoreWindow ahk_exe ShellExperienceHost.exe
+GroupAdd, WG_TrayMenu   , Notification Center ahk_class Windows.UI.Core.CoreWindow ahk_exe ShellExperienceHost.exe
+
 ;-----------------------------------------------------------------------
 ; keyRemap - RButton Prefixes
 GroupAdd, WG_RightDrag		, ahk_exe mspaint.exe

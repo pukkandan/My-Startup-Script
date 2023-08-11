@@ -1,4 +1,6 @@
 windowRespond(){
+    if winActive("ahk_group WG_TrayMenu") ; WinExist/WinMove does not work for these windows without ID
+        WinMove % winactive("Control Center")? -10: 54
 
 	IfWinExist, (UNREGISTERED) ahk_group WG_Sublime
     {
