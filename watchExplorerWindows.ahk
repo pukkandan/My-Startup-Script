@@ -58,7 +58,7 @@ class watchExplorerWindows {
 
 	_bindExit(){
 		return
-		OnExit(objBindMethod(this, "writeWinsToFile", True, False))
+		OnExit(objBindMethod(this, "writeWinsToFile", True))
 	}
 
 	recover(args*) {
@@ -176,6 +176,9 @@ class watchExplorerWindows {
 		old:=False
 		try
 			FileRead, old, % this.file
+		if (out==old)
+			return True
+
 		if (old)
 			FileMove, % this.file , % this.file ".old" , 1
 		fileDelete, % this.file

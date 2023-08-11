@@ -60,7 +60,7 @@ class PIP {
             for _,dim in ["width", "height"] { ; If Width/height < 1 , it is relative
                 key:="max" dim
                 val:=p[key]? p[key] :this.def[key]
-                if val<1
+                if val<=1
                     p[key]:= A_Screen%dim% *val
                 ;msgbox % val "`n" p[key]
             }

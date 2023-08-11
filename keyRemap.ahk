@@ -3,19 +3,21 @@
 
 ;===================    Capslock Toggled on
 #if GetKeyState("CapsLock", "T")
-1::																				; Capslock acts as Numlock for top row numbers
-2::
-3::
-4::
-5::
-6::
-7::
-8::
-9::
-0::
--::
-+::
-	send {Numpad%A_ThisHotkey%}
+*1::																				; Capslock acts as Numlock for top row numbers
+*2::
+*3::
+*4::
+*5::
+*6::
+*7::
+*8::
+*9::
+*0::
+send % "{Blind}{Numpad" subStr(A_ThisHotkey,2) "}"
+return
+*-::
+*=::
+	send % "{Blind}{Numpad" ({"*-": "Sub", "*=": "Add"}[A_ThisHotkey]) "}"
 return
 #if
 
@@ -81,7 +83,7 @@ WheelDown::
 	tooltip
 return
 
-#if getKeyState("MButton","P")
+#if getKeyState("MButton","P") AND !isOver_mouse("ahk_group WG_TaskBar")
 
   WheelUp::																		; Move window to desktop and go there
 WheelDown::
@@ -201,10 +203,10 @@ RETURN
 LButton::send {Enter}															; When Task Switching
 WheelUp::send ^+!{Tab}
 WheelDown::send ^!{Tab}
-MButton::send {Alt Up}{Esc}
+MButton Up::send {Alt Up}{Esc}
 
 #if isOver_mouse("ahk_group WG_TaskBar")
-~MButton::send ^!{Tab}^+!{Tab}													; Alt tab over taskbar
+~MButton Up::send ^!{Tab}														; Alt tab over taskbar
 
 ;WheelUp::Volume_Up
 ;WheelDown::Volume_Down
@@ -299,7 +301,7 @@ RETURN
 return
 #if
 
-~LWin & RWin:: return															; Allows LWin to be still used as prefix
+LWin & RWin:: return															; Allows LWin to be still used as prefix
 ;+^LWin:: send {Ctrl Up}{Shift Up}{LWin Up}{RWin}								; +^LWin => Win (^Esc already does this)
 
 ;===================    Programs/Functions
@@ -339,6 +341,7 @@ return
 #WheelDown::changeVolume(-1)
 #^WheelUp::
 #^WheelDown::
+	prefixUsed("Win")
 	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
 return
 
