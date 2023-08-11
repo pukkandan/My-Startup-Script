@@ -23,6 +23,8 @@ global PRG_Launcher				:= "keypirinha-x64.exe"
 global PRG_MusicPlayer			:= "MusicBee.exe"
 global PRG_VideoPlayer			:= "PotplayerMini64.exe"
 global PRG_TextEditor			:= "subl.exe"
+global PRG_Screenshot           := "ShareX.exe"
+global PRG_GPG_Agent            := "gpg-agent.exe"
 
 #include *i globals-Private.ahk ; Has personal data in this file
 
@@ -34,6 +36,7 @@ global PRG_RS_Clipboard 		:=[ "Ditto" 		, "^``"		, PRG_Clipboard						]
 global PRG_RS_Launcher 			:=[ "Launcher"		, "!{F2}"	, PRG_Launcher , False				]
 global PRG_RS_Run				:=[ "Run" 			, "!{F2}"	, PRG_Launcher , False , "{>} "		]
 global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{»}{Tab}"	]
+global PRG_RS_Screenshot		:=[ "ShareX" 		, "{PrintScreen}"		   , PRG_Screenshot 	]
 
 ;========================================================================
 ; Window Groups

@@ -82,16 +82,16 @@ return
 
 ;===================    youtube-dl
 #InputLevel 2
-:?0:yt-dlp»::[yt-dlp](https://github.com/yt-dlp/yt-dlp)
-:?0:animelover1984/youtube-dl»::[animelover1984/youtube-dl](https://github.com/animelover1984/youtube-dl)
-:?0:youtube-dl»::[youtube-dl](https://github.com/ytdl-org/youtube-dl)
-:?0:youtube-dlc»::[youtube-dlc](https://github.com/blackjack4494/yt-dlc)
+:?0:yt-dlp»::https://github.com/yt-dlp/yt-dlp
+:?0:animelover1984/youtube-dl»::https://github.com/animelover1984/youtube-dl
+:?0:youtube-dl»::https://github.com/ytdl-org/youtube-dl
+:?0:youtube-dlc»::https://github.com/blackjack4494/yt-dlc
+:?0:ytdl-patched»::https://github.com/ytdl-patched/ytdl-patched
 
 :X?0:y»::sendKeys("yt-dlp")
-:X?0:ydlp»::sendKeys("yt-dlp")
 :X?0:ydal»::sendKeys("animelover1984/youtube-dl")
 :X?0:ydlc»::sendKeys("youtube-dlc")
-:X?0:dlc»::sendKeys("youtube-dlc")
+:X?0:ydlp»::sendKeys("ytdl-patched")
 :X?0:ydl»::sendKeys("youtube-dl")
 
 
@@ -107,3 +107,7 @@ return
 ::second»::third					; a»»» = third
 
 */
+
+;===================
+
+:c0:p»::pukkandan

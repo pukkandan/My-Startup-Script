@@ -351,9 +351,11 @@ return
  #f:: listOpenFolders()															; List all open folders
  #w:: winAction.show()															; winAction
  #`:: runTextObj.showGUI()														; runText
+ ^`::runOrSend(PRG_RS_Clipboard*)												; Ditto
 #^e:: watchExplorerWindows.recover()											; Recover Explorer Window
  #v:: activateVideoPlayer() 													; Open VideoPlayer
 ;#r:: runOrSend(PRG_RS_Run*)													; Run => Launcher
+PrintScreen::runOrSend(PRG_RS_Screenshot*)
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()								; TrayIt
@@ -361,6 +363,7 @@ return
 
 #^c::clipboardBuffer(True)
 #^v::clipboardBuffer()
+!^v::sendraw % Clipboard
 
 #if Explorer_getActiveWindow()													; Move Files to Common Folder
  #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))

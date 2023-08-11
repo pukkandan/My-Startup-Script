@@ -59,7 +59,8 @@ Modules.add(PIP, 100, [
 	, { title: "ahk_group WG_VideoPlayer", maxHeight: 0.8    , type: "VJTHD" }
     , { title: "ahk_group WG_Browser_PIP"     				 , type: "CJTH " }
     , { title: "ahk_group WG_Console", set: 2                , type: "  THD" }
-    , { title: "ahk_group WG_Calc"   , set: 3, maxheight: 530, type: "N    " }    ])
+    , { title: "ahk_group WG_Calc"   , set: 3, maxheight: 530, type: "N    " }
+    , { title: "ahk_exe notepad.exe" , set: 4, maxheight: 1  , type: "    D" }    ])
 
 #include Togglekeys.ahk
 Modules.add("CapsLockOffTimer", 1000, 60000)
