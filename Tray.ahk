@@ -43,7 +43,7 @@ SCR_OpenFolder(){
     ShellRun(A_ScriptDir)
 }
 SCR_Edit(){
-    ShellRun(A_ScriptDir "\" SCR_Name ".sublime-project")
+    ShellRun(A_ScriptDir "\" SCR_Name ".code-workspace")
 }
 SCR_Reload(){
     Reload

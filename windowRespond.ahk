@@ -1,4 +1,5 @@
-unwantedPopupBlocker(){
+windowRespond(){
+
 	IfWinExist, (UNREGISTERED) ahk_group WG_Sublime
     {
 		WinGetTitle, t
@@ -10,9 +11,9 @@ unwantedPopupBlocker(){
         send, {esc}
     }
 
-    winHide  ahk_group WG_unwantedHide
-    winHide  ahk_group WG_unwantedClose
-    winHide  ahk_group WG_unwantedCloseRegex
+    winHide ahk_group WG_unwantedHide
+    winHide ahk_group WG_unwantedClose
+    winHide ahk_group WG_unwantedCloseRegex
 
     /*
     win:=winExist("ahk_group WG_ImageViewer")
@@ -27,6 +28,6 @@ unwantedPopupBlocker(){
     winClose ahk_group WG_unwantedClose
     SetTitleMatchMode, Regex
     winClose ahk_group WG_unwantedCloseRegex
-    ;SetTitleMatchMode 2 ; Important for firstRun
+
     return
 }

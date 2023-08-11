@@ -45,8 +45,8 @@ Modules.add("hotCorners", 100)
 Modules.add(winSizer)
 ;winSizer.__new()
 
-#include UnwantedPopupBlocker.ahk
-Modules.add("UnwantedPopupBlocker", 1000)
+#include windowRespond.ahk
+Modules.add("windowRespond", 1000)
 
 #include Transparent.ahk
 Modules.add("Transparent_TaskbarGlass", 500, 4)

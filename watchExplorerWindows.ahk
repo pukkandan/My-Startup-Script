@@ -20,7 +20,7 @@ class watchExplorerWindows {
 		;tooltip("run")
 		lastCount:=this.currentWinCount
 		this.update()
-		if !this.writeWinsToFile(false, false) && lastCount>1 && this._recoverAsk()
+		if !this.writeWinsToFile() && lastCount>1 && this._recoverAsk()
 			this.recover(false, false)
 	}
 
@@ -156,14 +156,14 @@ class watchExplorerWindows {
 		return True
 	}
 
-	writeWinsToFile(update:=True, force:=True) {
+	writeWinsToFile(update:=False, force:=False) {
 		if !force && this.recoverRunning
 			return -1
 		;tooltip("writeWinsToFile")
 		if (update)
 			this.update()
 		out:=""
-		for path,winArr in this.currentWins {
+		for path, winArr in this.currentWins {
 			if !path
 				continue
 			if subStr(path,1,7)!="shell::"

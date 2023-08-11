@@ -50,7 +50,7 @@ return
 0::
 	prefixUsed("CapsLock")
 	if !prefixUsed("CapsLock_Num", False)
-	    send % "{LWin down}"
+	    send {LWin down}
 	prefixUsed("CapsLock_Num")
 
 	send % A_ThisHotkey
@@ -85,7 +85,10 @@ return
 
   WheelUp::																		; Move window to desktop and go there
 WheelDown::
-	(A_ThisHotkey="WheelUp")? taskView.MoveWindowAndGoToDesktopPrev(WinExist("A")): taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
+	if (A_ThisHotkey="WheelUp")
+		taskView.MoveWindowAndGoToDesktopPrev(WinExist("A"))
+	else
+		taskView.MoveWindowAndGoToDesktopNext(WinExist("A"))
 	prefixUsed("MButton")
 	sleep 200
 return
@@ -202,9 +205,9 @@ MButton::send {Alt Up}{Esc}
 
 #if isOver_mouse("ahk_group WG_TaskBar")
 ~MButton::send ^!{Tab}^+!{Tab}													; Alt tab over taskbar
+
 ;WheelUp::Volume_Up
 ;WheelDown::Volume_Down
-
 WheelUp::changeVolume(1)														; Change volume scrolling over taskbar
 WheelDown::changeVolume(-1)
 ^WheelUp::
@@ -257,9 +260,8 @@ return
 RETURN
 CapsLock::
 	keyWait %A_ThisHotkey%
-	if prefixUsed("CapsLock", False)
-		return
-	SendKeys("»", 10) ;Used to trigger many hotstrings
+	if !prefixUsed("CapsLock", False)
+		SendKeys("»", 10) ;Used to trigger many hotstrings
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes

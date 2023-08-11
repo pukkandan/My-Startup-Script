@@ -95,7 +95,7 @@ runOrSend(title, key, path, paste:=False, sendAfter:=""){
 		;    return
 	}
 
-	Toast.show(title)
+	;Toast.show(title)
 	if !winExist(win)
 		send % key
 
@@ -341,7 +341,7 @@ changeVolume(diff, absolute:=False, tip:=True, fast:=True){ ; Force balance
 	VA_SetMasterVolume(vol, 1)
 	VA_SetMasterVolume(vol*bal, 2)
 	if tip {
-		tip:="Volume = " round(VA_GetMasterVolume(1)) ", " round(VA_GetMasterVolume(2)) " (" round(bal, 1) ")"
+		tip:="Volume = " round(VA_GetMasterVolume(1)) (bal==1?"": ", " round(VA_GetMasterVolume(2)) " (" round(bal, 1) ")")
 		(currentToast:=new Toast()).show(tip)
 		lastToast.close(), lastToast:=currentToast
 	}

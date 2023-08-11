@@ -1,9 +1,10 @@
+.vscode/*
 *.sublime-project
 *-Private.ahk
 trackers.txt
 *.sublime-workspace
-backup\*
-temp\*
+backup/*
+temp/*
 *.bak
 *.exe
 *.old
