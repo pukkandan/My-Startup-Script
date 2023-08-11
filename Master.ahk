@@ -86,6 +86,9 @@ global runTextObj:=new runText("Runtext.ini")
 changeVolumeBalance(VA_GetMasterVolume(2)/VA_GetMasterVolume(1), True, False)
 Modules.add("changeVolume", 5000, 0, False, False)
 
+#include watchdog.ahk
+Modules.add("process_watchdog", 5000, PRG_GPG_Agent, "--daemon",,, 0)
+
 #include autoUpdate.ahk
 Modules.add("autoUpdate", 3600000) ;Put in firstrun, but without blocking
 
