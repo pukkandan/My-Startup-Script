@@ -280,7 +280,7 @@ return
 RETURN
 XButton2::
 	Keywait, %A_ThisHotkey%, T0.5
-	!ErrorLevel? runOrSend(PRG_RS_Clipboard*) : runLauncher(False,True)
+	!ErrorLevel? activateProgram(PRG_RS_Clipboard) : runLauncher(False,True)
 return
 
 ;===================    X2 - winAction & RunText
@@ -309,8 +309,8 @@ LWin & RWin:: return															; Allows LWin to be still used as prefix
 ;===================    Programs/Functions
 RETURN
  ^CapsLock:: caseMenu.show()													; caseMenu
- #CapsLock:: runOrSend(PRG_RS_WindowSwitcher*)									; WindowSwitch
-+#CapsLock:: ShellRun(PRG_TextEditor, "-n")										; Text editor
+ #CapsLock:: activateProgram(PRG_RS_WindowSwitcher)								; WindowSwitch
++#CapsLock:: activateProgram(PRG_RS_TextEditor)									; Text editor
 ^#CapsLock:: ShellRun("calc1.exe")												; Calc
  !CapsLock:: cmdInCurrentFolder()												; CMD - WT
 ^!CapsLock:: cmdInCurrentFolder(,, True)										; CMD - WT
@@ -359,11 +359,11 @@ return
  #f:: listOpenFolders()															; List all open folders
  #w:: winAction.show()															; winAction
  #`:: runTextObj.showGUI()														; runText
- ^`::runOrSend(PRG_RS_Clipboard*)												; Ditto
+ ^`::activateProgram(PRG_RS_Clipboard)											; Ditto
 #^e:: watchExplorerWindows.recover()											; Recover Explorer Window
- #v:: activateVideoPlayer() 													; Open VideoPlayer
-;#r:: runOrSend(PRG_RS_Run*)													; Run => Launcher
-PrintScreen::runOrSend(PRG_RS_Screenshot*)
+ #v:: activateProgram(PRG_RS_VideoPlayer)										; Open VideoPlayer
+;#r:: activateProgram(PRG_RS_Run)												; Run => Launcher
+PrintScreen::activateProgram(PRG_RS_Screenshot)
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()								; TrayIt
@@ -385,11 +385,11 @@ return
 
 #F10::																			; Global controls for Music player
 #Media_Play_Pause::
-	runOrSend(PRG_RS_MusicPlayer*)
+	activateProgram(PRG_RS_MusicPlayer)
 return
 
 /*
-#if ProcessExist(PRG_MusicPlayer)
+#if ProcessExist(PRG_RS_MusicPlayer.process)
  #F9::  Media_Prev
 #F11:: Media_Next
 ; MusicBee sometimes doesn't respond to Media buttons.

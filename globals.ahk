@@ -17,26 +17,78 @@ global SCR_PID  := DllCall("GetCurrentProcessId","Uint")
 
 ;========================================================================
 ; Programs
-global PRG_CHM					:= "hh.exe"
-global PRG_Clipboard			:= "Ditto.exe"
-global PRG_Launcher				:= "keypirinha-x64.exe"
-global PRG_MusicPlayer			:= "MusicBee.exe"
-global PRG_VideoPlayer			:= "PotplayerMini64.exe"
-global PRG_TextEditor			:= "subl.exe"
-global PRG_Screenshot           := "ShareX.exe"
-global PRG_GPG_Agent            := "gpg-agent.exe"
+global PRG_RS_VideoPlayer := {
+    (Join
+    process: "PotplayerMini64.exe",
+    run: "potplayer.exe",
+    play: "+{F12}",
+    win: "ahk_class PotPlayer64",
+    name: "PotPlayer"
+)}
+global PRG_RS_MusicPlayer := {
+    (Join
+    process: "MusicBee.exe",
+    trigger: "{Media_Play_Pause}",
+    name: "MusicBee"
+)}
+global PRG_RS_Clipboard := {
+    (Join
+    process: "Ditto.exe",
+    trigger: "^``",
+    name: "Ditto"
+)}
+global PRG_RS_Launcher := {
+    (Join
+    process: "keypirinha-x64.exe",
+    win: "ahk_class keypirinha_wndcls_run",
+    trigger: "!{F2}",
+    name: "Launcher"
+)}
+global PRG_RS_Run := {
+    (Join
+    process: "keypirinha-x64.exe",
+    trigger: "!{F2}",
+    win: "ahk_class keypirinha_wndcls_run",
+    send: "{>} ",
+    name: "Run"
+)}
+global PRG_RS_WindowSwitcher := {
+    (Join
+    process: "keypirinha-x64.exe",
+    trigger: "!{F2}",
+    win: "ahk_class keypirinha_wndcls_run",
+    send: "{»}{Tab}",
+    name: "WindowSwitch"
+)}
+global PRG_RS_Screenshot := {
+    (Join
+    process: "ShareX.exe",
+    args: "-s",
+    trigger: "{PrintScreen}",
+    win: "ShareX - Region capture",
+    name: "ShareX"
+)}
+global PRG_RS_TextEditor := {
+    (Join
+    process: "Code.exe",
+    alwaysRun: True,
+    name: "VSCode"
+)}
+global PRG_RS_CHM := {
+    (Join
+    process: "hh.exe",
+    name: "CHM"
+)}
+global PRG_RS_GPG_Agent := {
+    (Join
+    process: "gpg-agent.exe",
+    args: "--daemon",
+    visible: 0,
+    name: "GPG Agent"
+)}
+
 
 #include *i globals-Private.ahk ; Has personal data in this file
-
-;-----------------------------------------------------------------------
-; keyRemapFunc - RunOrSend
-global PRG_RS_VideoPlayer 		:=[ "PotPlayer" 	, "+{F12}"	, PRG_VideoPlayer	                ] ;For playAllVideoPlayers()
-global PRG_RS_MusicPlayer 		:=[ "MusicBee" 		, "{Media_Play_Pause}"	   , PRG_MusicPlayer	]
-global PRG_RS_Clipboard 		:=[ "Ditto" 		, "^``"		, PRG_Clipboard						]
-global PRG_RS_Launcher 			:=[ "Launcher"		, "!{F2}"	, PRG_Launcher , False				]
-global PRG_RS_Run				:=[ "Run" 			, "!{F2}"	, PRG_Launcher , False , "{>} "		]
-global PRG_RS_WindowSwitcher	:=[ "WindowSwitch" 	, "!{F2}"	, PRG_Launcher , False , "{»}{Tab}"	]
-global PRG_RS_Screenshot		:=[ "ShareX" 		, "{PrintScreen}"		   , PRG_Screenshot 	]
 
 ;========================================================================
 ; Window Groups

@@ -1,4 +1,4 @@
-process_watchdog(proc, prms*) {
-	if !processExist(proc)
-		ShellRun(proc, prms*)
+process_watchdog(spec) {
+	if !processExist(spec.process)
+		activateProgram(spec)
 }

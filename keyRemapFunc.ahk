@@ -77,43 +77,6 @@ moveFilesToCommonFolder(list){
 
 ;=============================================
 
-runOrSend(title, key, path, paste:=False, sendAfter:=""){
-	;msgbox %title%`n%key%`n%path%`n%paste%`n%sendAfter%
-	exe:=path(path).file
-	win:="ahk_exe " exe
-
-	if (paste) {
-		text:=subStr(getSelectedText({clean:True}), 1, 300)
-	}
-
-	if !processExist(exe) {
-		Toast.show("Starting " title " . . .")
-		ShellRun(path)
-		DetectHiddenWindows, On
-		Winwait, % win ,, 5
-		;if ErrorLevel
-		;    return
-	}
-
-	;Toast.show(title)
-	if !winExist(win)
-		send % key
-
-	DetectHiddenWindows, Off
-	Winwait, % win ,, 2
-	if ErrorLevel
-		return
-	sleep, 100
-	WinActivate, % win
-	if (paste) {
-		send, ^a
-		pasteText(text)
-	}
-	if (sendAfter)
-		send, % sendAfter
-	return
-}
-
 runLauncher(toggle:=True, getText:=False){
 	static tooltipOff:=Func("_runLauncher_tooltipOff")
 	if getText
@@ -124,8 +87,8 @@ runLauncher(toggle:=True, getText:=False){
 		if toggle
 			return
 	}
-	PRG_RS_Launcher[5]:=getText? "{BackSpace}" :""
-	runOrSend(PRG_RS_Launcher*)
+	PRG_RS_Launcher.send:=getText? "{BackSpace}" :""
+	activateProgram(PRG_RS_Launcher)
 
 	if !getText
 		return
@@ -202,22 +165,6 @@ makeMicroWindow(){
 	return
 }
 
-
-;=============================================
-
-activateVideoPlayer() {
-	win:=WinExist("ahk_group WG_VideoPlayer")
-	if (!win) {
-		DetectHiddenWindows, On
-		win:=WinExist("ahk_group WG_VideoPlayer")
-		;DetectHiddenWindows, Off
-	}
-	if win
-		WinActivate, ahk_id %win%
-	else
-		ShellRun(PRG_VideoPlayer) ;, Clipboard)
-}
-
 ;=============================================
 
 playAllVideoPlayers(){
@@ -231,7 +178,7 @@ playAllVideoPlayers(){
 		;msgbox %w%`n%m%
 		if (m!=-1) {
 			winActivate % w
-			Send, % PRG_RS_VideoPlayer[2] ; Set it to play/pause in potplayer. Media_Play_Pause doesnt work if it is set as global
+			Send, % PRG_RS_VideoPlayer.play ; Set it to play/pause in potplayer. Media_Play_Pause doesnt work if it is set as global
 			sleep 10 ; Sleep makes the different players drift out of sync slowly, but the send becomes much more reliable
 		}
 	}

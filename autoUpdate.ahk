@@ -9,7 +9,7 @@ autoUpdate(path:="", download:=True, install:=False, openCLog:=True){
             FileDelete, ahk.exe ;If exe still exists
             Toast.show({title:{text:"AHK Updated"}, life:openHelp?500:0})
             if openCLog
-                ShellRun(PRG_CHM, "mk:@MSITStore:" SCR_AHKDir "\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm")
+                ShellRun(PRG_RS_CHM.process, "mk:@MSITStore:" SCR_AHKDir "\AutoHotkey.chm::/docs/AHKL_ChangeLog.htm")
             return 2
         }
         else return 0
