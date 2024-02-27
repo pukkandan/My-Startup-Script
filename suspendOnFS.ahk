@@ -1,7 +1,7 @@
 suspendOnFS(exceptions:=""){
     if isFullScreen(,1) {
         setTimer, hotcorners, Off
-        setTimer, netNotify, Off
+        ;setTimer, netNotify, Off
         setTimer,, Off
         setTimer, resumeOnWin, 100
 

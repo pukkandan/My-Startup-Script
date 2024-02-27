@@ -19,7 +19,15 @@
   2 command line parameters
   3 working directory for the new process
   4 "Verb" (For example, pass "RunAs" to run as administrator)
-  5 Suggestion to the application about how to show its window - see the msdn link for possible values
+  5 Suggestion to the application about how to show its window:
+         0 Open the application with a hidden window.
+         1 Open the application with a normal window / restore window
+         2 Open the application with a minimized window.
+         3 Open the application with a maximized window.
+         4 Open the application with its window at its most recent size and position. The active window remains active.
+         5 Open the application with its window at its current size and position.
+         7 Open the application with a minimized window. The active window remains active.
+        10 Open the application with its window in the default state specified by the application.
   */
 
 ShellRun(prms*)

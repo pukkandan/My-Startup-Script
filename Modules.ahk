@@ -89,9 +89,6 @@ class Modules {
 			this.list[name].timerRunning:=False
 		}
 	}
-	toggleTimer(name){
-		return this.list[name].timerRunning ? this._stopTimer(name) : this._resumeTimer(name)
-	}
 
 	_onFullScreen(){
 		static lastFS:=false, lastWin

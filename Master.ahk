@@ -6,11 +6,9 @@ Suspend, On
 #include globals.ahk ; Must be before directives
 #include Directives.ahk
 
-; #include <byteWord>
 #include <ini>
 #include <Toast>
 #include <DelayedTimer>
-#include <ReloadScriptOnEdit>
 #include Modules.ahk
 
 #include <ReloadScriptOnEdit>
@@ -80,7 +78,7 @@ Modules.add(watchExplorerWindows, 300000, "explorerWindows")
 Modules.add(runText, 0)
 global runTextObj:=new runText("Runtext.ini")
 
-#include internet.ahk
+;#include internet.ahk
 ;Module.add("netNotify", -5000, False)
 
 changeVolumeBalance(VA_GetMasterVolume(2)/VA_GetMasterVolume(1), True, False)

@@ -42,7 +42,6 @@ class ReloadScriptOnEdit {
 		if this._ask(changed)
 			Reload
 		else this.clean()
-		return
 	}
 
 	check(filePatt) {
@@ -58,57 +57,6 @@ class ReloadScriptOnEdit {
 			Loop, Files, % f, % this.option
 				if !inStr(A_LoopFileAttrib,"H") && !inStr(A_LoopFileAttrib,"S")
 					FileSetAttrib, -A, % A_LoopFileLongPath, % inStr(option,"D")?(inStr(option,"F")?2:1):0, % InStr(option,"R")?1:0
-		return
 	}
 
 }
-
-;====================== OLD
-/*
-_ScriptEdited(files, option, clean:=False){
-	if (files="")
-		files:=A_ScriptFullPath
-
-	Loop, Files, % files, % option
-	{
-		if A_LoopFileAttrib contains H,S
-			continue
-		else if clean
-			FileSetAttrib, -A, % A_LoopFileLongPath, % inStr(option,"D")?(inStr(option,"F")?2:1):0, % InStr(option,"R")?1:0
-		else if A_LoopFileAttrib contains A
-		{
-			FileSetAttrib, -A, % A_LoopFileLongPath
-			return A_LoopFileLongPath
-		}
-	}
-	return False
-}
-
-ReloadScriptOnEdit(files, opt:="RF", clean:=0){	; clean=2 reloads also
-	static fName
-	if !fName {
-		clean:=1 ;Clean on first run
-		if SCR_Name
-			fName:=SCR_Name
-		else
-			SplitPath, A_ScriptFullPath,,,, fName, ;fName = Name of file without extension
-	}
-	if clean {
-		for _,f in files
-			_ScriptEdited(f,opt,True)
-		if (clean=2)
-			Reload
-		return False
-	}
-
-	for _,f in files
-		if changed:=_ScriptEdited(f, opt) {
-			MsgBox, 0x24, %fName% - Reload this script?, A file related to the script %fName% has changed.`nScript file:`n%A_ScriptFullPath%`n`nChanged file:`n%changed%
-			IfMsgBox, Yes
-				ReloadScriptOnEdit(files,opt,2)
-			else
-				ReloadScriptOnEdit(files,opt,1)
-		}
-	return True
-}
-*/

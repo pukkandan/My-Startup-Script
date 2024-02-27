@@ -15,8 +15,8 @@ trayMenu(){
     Menu, Tray, Default, AHK &Help
 
     Menu, Tray, Add
-    act:=func("netNotify").bind(False,,0)
-    Menu, Tray, Add, &Net Status, % act
+    ;act:=func("netNotify").bind(False,,0)
+    ;Menu, Tray, Add, &Net Status, % act
     Menu, Tray, Add, &Dim Screen, dimScreen
     Menu, TrayIt, Add
     Menu, Tray, Add, &TrayIt, :TrayIt

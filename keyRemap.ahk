@@ -35,10 +35,12 @@ Space::																			; Play/Pause all visible video players
 	playAllVideoPlayers()
 return
 
+/*
 n::																				; NetNotify
 	prefixUsed("CapsLock")
 	netNotify(True,,1000)
 return
+*/
 
 1::																				; Caps+Num => #Num since #Num is replaced below
 2::
@@ -318,6 +320,11 @@ RETURN
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 
 #F1:: Send {F1}																	; Convert #F1 => F1
+Volume_Up::																		; Popup for volume
+Volume_Down::
+	changeVolume({Volume_Up: 1, Volume_Down:-1}[A_ThisHotkey])
+return
+/*
 Volume_Up::																		; fn+Arrow = Volume
 Volume_Down::
 Volume_Up Up::
@@ -334,8 +341,9 @@ if inStr(A_ThisHotkey, "Volume") {
 return
 ^Media_Play_Pause::
 ^Media_Stop::
-	changeVolumeBalance({ Media_Play_Pause:-.1, Media_Stop:.1 }[subStr(A_ThisHotkey, 2)])
+changeVolumeBalance({ Media_Play_Pause:-.1, Media_Stop:.1 }[subStr(A_ThisHotkey, 2)])
 return
+*/
 
 #WheelUp::changeVolume(1)														; Volume controls
 #WheelDown::changeVolume(-1)
@@ -380,15 +388,17 @@ return
 	runOrSend(PRG_RS_MusicPlayer*)
 return
 
+/*
 #if ProcessExist(PRG_MusicPlayer)
  #F9::  Media_Prev
 #F11:: Media_Next
 ; MusicBee sometimes doesn't respond to Media buttons.
 ; So I set it's global hotkey to #{F9/10/11}
-;Media_Prev::       send #{F9}
-;Media_Play_Pause:: send #{F10}
-;Media_Next::       send #{F11}
+Media_Prev::       send #{F9}
+Media_Play_Pause:: send #{F10}
+Media_Next::       send #{F11}
 #if
+*/
 
 ;+^Space:: YouTubePlayPause()													; Play/Pause Youtube
 return
