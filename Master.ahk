@@ -86,6 +86,7 @@ Modules.add("changeVolume", 5000, 0, False, False)
 
 #include watchdog.ahk
 Modules.add("process_watchdog", 5000, PRG_RS_GPG_Agent)
+Modules.add("process_watchdog", 5000, {process: "eartrumpet.exe", name: "EarTrumpet"})
 
 #include autoUpdate.ahk
 Modules.add("autoUpdate", 3600000) ;Put in firstrun, but without blocking
