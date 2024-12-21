@@ -361,3 +361,19 @@ unZipAndDeleteFromExplorer(win){
 	Toast.close()
 	FileRecycle % zip
 }
+
+;=============================================
+
+fastScroll(key, timeout:=100, max:=5) {
+	static counter:=1
+	if (A_TimeSincePriorHotkey>timeout || A_ThisHotkey!=A_PriorHotkey) {
+		counter:=1
+		return
+	}
+
+	speed := Min(++counter, max) - 1
+
+	Tooltip("Scroll: " speed+1, {life: 300})
+	if (speed)
+		Send {%key% %speed%}
+}

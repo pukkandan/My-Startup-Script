@@ -1,6 +1,18 @@
 ﻿; This file must be in Windows 1252 or UTF-BOM encoding, because of "»"
 #include keyRemapFunc.ahk
 
+/*
+;===================    Fast Scrolling
+
+#if
+~WheelUp::
+~WheelDown::
+Critical
+fastScroll(subStr(A_ThisHotkey, 2))
+return
+*/
+
+
 ;===================    Capslock Toggled on
 #if GetKeyState("CapsLock", "T")
 *1::																				; Capslock acts as Numlock for top row numbers
