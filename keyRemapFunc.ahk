@@ -95,10 +95,17 @@ runLauncher(toggle:=True, getText:=False){
 	WinWaitActive, ahk_group WG_Launcher,, 2
 	sleep 100
 	tooltip(!text? "Nothing Selected": "Press SPACE/TAB to paste :`n" subStr(text, 1, 150)
-		, {no:3, y:(text?-50:-25), x:0, mode:"Window"}  )
+			, {no:3, y:(text?-50:-25), x:0, mode:"Window"}  )
 	setTimer, % tooltipOff, 1000
 	setTimer, % tooltipOff, On
-	return
+	if text {
+		pasteText(text)
+		send ^a
+	}
+}
+pasteInLauncher(again:=True){
+	if keepSelectedText(False, again)
+		tooltip("Press TAB to paste :`n" subStr(keepSelectedText(""), 1, 150), {no:3, y:-50, x:0, mode:"Window"})
 }
 _runLauncher_tooltipOff(force:=False){
 		if !force && WinActive("ahk_group WG_Launcher")

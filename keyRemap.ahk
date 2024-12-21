@@ -42,7 +42,7 @@ n::																				; NetNotify
 return
 */
 
-1::																				; Caps+Num => #Num since #Num is replaced below
+1::																				; Caps+Num => #Num, since #Num is replaced below
 2::
 3::
 4::
@@ -97,16 +97,19 @@ WheelDown::
 	sleep 200
 return
 
-#IfWinActive ahk_group WG_RightDrag
+;/*
+#ifWinActive ahk_group WG_RightDrag
 ~*RButton up::
-	Critical
-	prefixUsed(subStr(A_ThisHotkey, 3, 7), False)
+	Critical -1
+	prefixUsed(subStr(strReplace(A_ThisHotkey,"~"), 2, 7), False)
 return
+;*/
 
 #If
 *RButton up::
 *MButton up::
-	Critical
+	Critical -1
+	Thread Priority, 100
 	sendPrefixKey(subStr(strReplace(A_ThisHotkey,"~"), 2, 7))
 return
 
@@ -202,18 +205,18 @@ return
 ;===================    Over Taskbar
 RETURN
 #if winActive("ahk_group WG_TaskView") AND isOver_mouse("ahk_group WG_TaskBar")
-LButton::send {Enter}															; When Task Switching
-WheelUp::send ^+!{Tab}
-WheelDown::send ^!{Tab}
-MButton Up::send {Alt Up}{Esc}
+LButton:: send {Enter}															; When Task Switching
+WheelUp:: send ^+!{Tab}
+WheelDown:: send ^!{Tab}
+MButton Up:: send {Alt Up}{Esc}
 
 #if isOver_mouse("ahk_group WG_TaskBar")
-~MButton Up::send ^!{Tab}														; Alt tab over taskbar
+~MButton Up:: send ^!{Tab}														; Alt tab over taskbar
 
-;WheelUp::Volume_Up
-;WheelDown::Volume_Down
-WheelUp::changeVolume(1)														; Change volume scrolling over taskbar
-WheelDown::changeVolume(-1)
+;WheelUp:: Volume_Up
+;WheelDown:: Volume_Down
+WheelUp:: changeVolume(1)														; Change volume scrolling over taskbar
+WheelDown:: changeVolume(-1)
 ^WheelUp::
 ^WheelDown::
 	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
@@ -223,21 +226,23 @@ return
 /*
 ;===================    Groupy
 RETURN
-!CapsLock::Send #``
-!+CapsLock::Send #^``
+!CapsLock:: Send #``
+!+CapsLock:: Send #^``
 */
 
+/*
 ;===================    Fences Pages
 RETURN
-#ifwinActive ahk_group WG_Desktop
-  WheelUp::
+#ifWinActive ahk_group WG_Desktop
+WheelUp::
 WheelDown::
-	if getKeyState("LButton","P")
+if getKeyState("LButton","P")
 		send % "{LButton Up}!{" (A_ThisHotkey=="WheelUp"?"WheelDown":"WheelUp") "}"
 	else
 		send {%A_ThisHotkey%}
-return
-#if
+	return
+	#if
+*/
 
 ;===================    WinSizer
 RETURN
@@ -257,7 +262,8 @@ RETURN
 ~NumLock::
 ~ScrollLock::
 ~Insert::
-	Toast.show( {title:{text:str_Replace(A_ThisHotkey,[["~"],["+"]]) (GetKeyState(str_Replace(A_ThisHotkey,[["~"],["+"]]),"T")? " On":" Off")}, sound:True})
+	_toggle_key:=str_Replace(A_ThisHotkey,[["~"],["+"]])
+	Toast.show({title:{text: (_toggle_key="Insert"?"Overtype":_toggle_key) (GetKeyState(_toggle_key, "T")? " On":" Off")}, sound:True})
 return
 
 ;===================    Trigger HotStrings (») [Check hotStrings.ahk for details]
@@ -271,23 +277,29 @@ return
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
 /* (See HotStrings for alternate implementation)
 #ifWinNotActive ahk_group WG_ShiftEnter
-+Enter::Send `n
++Enter:: Send `n
 #ifWinNotActive ahk_group WG_ShiftSpace
-+Space::Send % "    " ;I prefer 4 spaces instead of tab in some situations instead of tab
++Space:: Send % "    " ;I prefer 4 spaces instead of tab in some situations instead of tab
 #if
 */
 ;===================    X1 - Ditto & Launcher
 RETURN
 XButton2::
 	Keywait, %A_ThisHotkey%, T0.5
-	!ErrorLevel? activateProgram(PRG_RS_Clipboard) : runLauncher(False,True)
+	if ErrorLevel
+		runLauncher(False,True)
+	else
+		activateProgram(PRG_RS_Clipboard)
 return
 
 ;===================    X2 - winAction & RunText
 RETURN
 XButton1::
 	Keywait, %A_ThisHotkey%, T0.25
-	!ErrorLevel? winAction.show() : runTextObj.showGUI()
+	if ErrorLevel
+		runTextObj.showGUI()
+	else
+		winAction.show()
 return
 
 ;===================    Launcher
@@ -298,8 +310,7 @@ RETURN
 #ifWinActive ahk_group WG_Launcher
   ~Tab:: 																		; Paste previously selected text
 ~Space::
-    if keepSelectedText(False, A_ThisHotkey=="~Tab")
-        tooltip("Press TAB to paste :`n" subStr(keepSelectedText(""), 1, 150), {no:3, y:-50, x:0, mode:"Window"}  )
+	pasteInLauncher(A_ThisHotkey=="~Tab")
 return
 #if
 
@@ -345,13 +356,26 @@ changeVolumeBalance({ Media_Play_Pause:-.1, Media_Stop:.1 }[subStr(A_ThisHotkey,
 return
 */
 
-#WheelUp::changeVolume(1)														; Volume controls
-#WheelDown::changeVolume(-1)
+
+#WheelUp:: changeVolume(1)														; Volume controls
+#WheelDown:: changeVolume(-1)
 #^WheelUp::
 #^WheelDown::
-	prefixUsed("Win")
-	changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
+prefixUsed("Win")
+changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
 return
+
+#ifWinActive ahk_exe vivaldi.exe
+NumpadIns::
+	send {F13}
+	;sleep 1000
+	;send ^1
+return
+#if
+
+#ifWinActive ahk_exe Code.exe
+AppsKey & Tab::F13
+#if
 
 #F5:: dimScreen(+10)															; DimScreen
 #F6:: dimScreen(-10)
@@ -359,19 +383,19 @@ return
  #f:: listOpenFolders()															; List all open folders
  #w:: winAction.show()															; winAction
  #`:: runTextObj.showGUI()														; runText
- ^`::activateProgram(PRG_RS_Clipboard)											; Ditto
+ ^`:: activateProgram(PRG_RS_Clipboard)											; Ditto
 #^e:: watchExplorerWindows.recover()											; Recover Explorer Window
  #v:: activateProgram(PRG_RS_VideoPlayer)										; Open VideoPlayer
 ;#r:: activateProgram(PRG_RS_Run)												; Run => Launcher
-PrintScreen::activateProgram(PRG_RS_Screenshot)
+PrintScreen:: activateProgram(PRG_RS_Screenshot)
 
 
 #m:: winAction.bind_Window() ? winAction.trayIt()								; TrayIt
 #t:: Menu, trayIt, Show															; TrayIt Menu
 
-#^c::clipboardBuffer(True)
-#^v::clipboardBuffer()
-!^v::sendraw % Clipboard
+#^c:: clipboardBuffer(True)
+#^v:: clipboardBuffer()
+!^v:: sendraw % Clipboard
 
 #if Explorer_getActiveWindow()													; Move Files to Common Folder
  #n:: moveFilesToCommonFolder(strSplit(getSelectedText({path:True}),"`n","`r"))
@@ -383,12 +407,20 @@ PrintScreen::activateProgram(PRG_RS_Screenshot)
 	toggleVolume(.5, strSplit(A_ThisHotkey," ")[3])
 return
 
-#F10::																			; Global controls for Music player
-#Media_Play_Pause::
+
+#F7:: Media_Play_Pause 															; Media buttons
+#F6:: Media_Prev
+#F5:: Media_Next
+
+#if !getKeyState("NumLock","T")
+NumpadEnter:: Media_Play_Pause
+#if
+
+/*
+#Media_Play_Pause::																; Global controls for Music player
 	activateProgram(PRG_RS_MusicPlayer)
 return
 
-/*
 #if ProcessExist(PRG_RS_MusicPlayer.process)
  #F9::  Media_Prev
 #F11:: Media_Next

@@ -60,11 +60,13 @@ return
 
 ;===================    Symbols
 RETURN
-::z»::Ͱ 		; z» = Heta      :Succedes letters in sorting
-::0»::☺ 		; 0» = Smiley    :Precedes numbers in sorting
+::z»::Ͱ 		; z» = Heta      :Succedes letters in file explorer sorting
+::0»::☺ 		; 0» = Smiley    :Precedes numbers in file explorer sorting
 
 :?0:inf»::∞ 		; inf» = Infinity
-:?0:.»::• 			; .» = • (Bullet)
+:?0:.»::• 			; .» = Center dot
+:?0: »::​ 			 ; space» = Zero width space
+:?0:o»::° 			; o» = Degree
 return
 
 ;===================    Send `n/`t in cases where enter/tab is used for other purposes
@@ -76,7 +78,7 @@ return
 :X: n»::sendKeys("`n") 	; " n»" = NewLine, + » = Another line ...
 :Xb0:`n»::sendKeys("{Backspace}`n")
 
-:Xb0: »::sendKeys("{Backspace}   ")		; " »" = 4 Spaces, + » = Another 4 spaces ...
+;:Xb0: »::sendKeys("{Backspace}   ")		; " »" = 4 Spaces, + » = Another 4 spaces ...
 
 
 

@@ -23,7 +23,7 @@ class winSizer {
         ; | -1+1 dw dh dx    |  0+1    dh       | +1+1 dw dh       |
         act:=this.action
         setTimer, % act, On
-        ; this.show(mx,my,wx,wy,w,h)
+        this.show(mx,my,wx,wy,w,h, this.mode)
         return true
     }
 
@@ -50,22 +50,23 @@ class winSizer {
             WinSet, Redraw,, % win
 
             WinGetPos, wx, wy, w, h, % win
-            e:= (mode.x OR mode.y)? "Resize " (!mode.x?"|":!mode.y?"--":mode.x*mode.y>0?"\":"/") : "Move"
-            this.show(x,y,wx,wy,w,h,e)
+            this.show(x,y,wx,wy,w,h,mode)
         }
         if (this.endOnKeyRelease AND !GetKeyState(this.endOnKeyRelease,"P"))
             return this.end()
         return
     }
 
-    show(mx,my,wx,wy,ww,wh,extra:=""){
+    show(mx,my,wx,wy,ww,wh,mode){
         static pad:="    ", mxOld:=-100, myOld:=-100
 
         if (abs(mxOld-mx)<4) AND (abs(myOld-my)<4) ;Minimize flickering
             return
         mxOld:=mx, myOld:=my
 
-        return this.toastObj.show({title:{text:extra}, pos:{x:mx,y:my}
+        e:= (mode.x OR mode.y)? "Resize " (!mode.x?"|":!mode.y?"--":mode.x*mode.y>0?"\":"/") : "Move"
+
+        return this.toastObj.show({title:{text:e}, pos:{x:mx,y:my}
             ,message:{text:["Mouse : (" substr(pad mx,-4) "," substr(pad my,-4) ")"
                 ,"Window:(" substr(pad wx,-4) "," substr(pad wy,-4) ") " substr(pad ww,-4) " x" substr(pad wh,-4) ]} })
     }

@@ -22,14 +22,15 @@ SendLevel 5
 #InstallKeybdHook				;Installs Keyboard hook
 #InstallMouseHook				;Installs Mouse hook
 #KeyHistory 100					;maximum number of keyboard and mouse events displayed by the KeyHistory window.
-#IfTimeout % SCR_hookTimeOut//5 ;A timeout is implemented to prevent long-running expressions from stalling keyboard input processing. If the timeout value is exceeded, the expression continues to evaluate, but the keyboard hook continues as if the expression had already returned false.
+#IfTimeout % SCR_hookTimeOut//10 ;A timeout is implemented to prevent long-running expressions from stalling keyboard input processing. If the timeout value is exceeded, the expression continues to evaluate, but the keyboard hook continues as if the expression had already returned false.
 ;;#LTrim Off					;Donot left-trim Continuation sections
 #MaxHotkeysPerInterval 200		;Rate of hotkey activations beyond which a warning dialog will be displayed
 #MaxMem 256						;Allows variables with heavy memory usage. DO NOT FORGET TO EMPTY SUCH VARIABLES AFTER USE
 #MaxThreads 255					;Allows for huge number of pseudo-threads to run simultaneously. Disable this if the script uses too much resources
 ;;#MaxThreadsBuffer Off			;Do not buffer hotkeys beyond its thread capacity
 #MaxThreadsPerHotkey 1			;Hotkey can not be launched when it is already running
-Thread, interrupt, 100	        ;Minimum time for interupt
+;Thread, interrupt, 100	        ;Minimum time for interupt
+;;Thread, NoTimers, False		;Allows timers to intterupt threads
 ;;#MenuMaskKey {Ctrl}			;Mask for #!^ keys. Use another key if this causes problems
 #NoEnv  						;Donot use default environmental variables. Recommended for performance and compatibility
 ;~#NoTrayIcon					;Hides tray icon

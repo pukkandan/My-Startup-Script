@@ -168,6 +168,8 @@ GroupAdd, WG_VideoPlayer	, ahk_class PotPlayer64 ahk_group WG_VideoPlayerExe
 
 GroupAdd, WG_Browser		, ahk_exe chrome.exe
 GroupAdd, WG_Browser		, ahk_exe vivaldi.exe
+GroupAdd, WG_Browser		, ahk_exe zen.exe
+GroupAdd, WG_Browser		, ahk_exe firefox.exe
 
 GroupAdd, WG_Browser_PIP	, Picture in picture ahk_group WG_Browser
 GroupAdd, WG_Browser_PIP	, Picture-in-picture ahk_group WG_Browser

@@ -87,7 +87,7 @@ class Toast{
 
         this.exist:=False, GUI_handle:="Toast_GUI" this.id
         for _,k in this.closekeys
-            Hotkey % k, Off
+            try Hotkey % k, Off
         Gui, %GUI_handle%: Destroy
         return
     }

@@ -13,9 +13,9 @@ activateProgram(spec){
 		Winwait, % win ,, 5
 	}
 
-	DetectHiddenWindows % !spec.alwaysRun && !spec.trigger
+	DetectHiddenWindows, % !spec.alwaysRun && !spec.trigger
 	if (spec.trigger && !winExist(win))
-		send % spec.trigger
+		send, % spec.trigger
 
 	Winwait, % win ,, 2s
 	if ErrorLevel
