@@ -1,14 +1,62 @@
 ; Uses https://github.com/skottmckay/VirtualDesktopAccessor
 
-; This script may work in slightly unexpected ways when used with sets. (Microsoft abandoned sets?)
-
 ; Functions starting with _ are not expected to be called from outside the class.
+
+/* ------------- Functions exported by DLL ; * = Usable Directly ** = Hooked
+    > Desktop
+    *   int GetCurrentDesktopNumber()
+    *   int GetDesktopCount()
+    *   void GoToDesktopNumber(int number)
+
+    > Window
+    *   int IsWindowOnDesktopNumber(HWND window, int number)
+    *   int IsWindowOnCurrentVirtualDesktop(HWND window)
+    *   int GetWindowDesktopNumber(HWND window)
+    *   BOOL MoveWindowToDesktopNumber(HWND window, int number)
+
+    > Pinning
+    *   int IsPinnedWindow(HWND hwnd) // Returns 1 if pinned, 0 if not pinned, -1 if not valid
+    *   void PinWindow(HWND hwnd)
+    *   void UnPinWindow(HWND hwnd)
+    *   int IsPinnedApp(HWND hwnd) // Returns 1 if pinned, 0 if not pinned, -1 if not valid
+    *   void PinApp(HWND hwnd)
+    *   void UnPinApp(HWND hwnd)
+
+    > Register/Unregister
+    **  void RegisterPostMessageHook(HWND listener, int messageOffset)
+    **  void UnregisterPostMessageHook(HWND hwnd)
+    **  void RestartVirtualDesktopAccessor() // Shouldn't use pointer. So pointer is not defined in "fList"
+
+    > GUID
+        int GetDesktopNumber(IVirtualDesktop *pDesktop)
+        GUID GetDesktopIdByNumber(int number) // Returns zeroed GUID with invalid number found
+        int GetDesktopNumberById(GUID desktopId)
+        GUID GetWindowDesktopId(HWND window)
+
+    > Window Properties
+        int ViewIsShownInSwitchers(HWND hwnd) // Is the window shown in Alt+Tab list?
+        int ViewIsVisible(HWND hwnd) // Is the window visible?
+        uint ViewGetLastActivationTimestamp(HWND) // Get last activation timestamp
+
+    > AltTab
+        void ViewSetFocus(HWND hwnd) // Set focus like Alt+Tab switcher
+        void ViewSwitchTo(HWND hwnd) // Switch to window like Alt+Tab switcher
+
+    > Thumbnail
+        HWND ViewGetThumbnailHwnd(HWND hwnd) // Get thumbnail handle for a window, possibly peek preview of Alt+Tab
+        HWND ViewGetFocused() // Get focused window thumbnail handle
+
+    > View Order
+        uint ViewGetByZOrder(HWND *windows, UINT count, BOOL onlySwitcherWindows, BOOL onlyCurrentDesktop) // Get windows in Z-order (NOT alt-tab order)
+        uint ViewGetByLastActivationOrder(HWND *windows, UINT count, BOOL onlySwitcherWindows, BOOL onlyCurrentDesktop) // Get windows in alt tab order
+*/
 
 class TaskView {
     __new(msg:=False){
         this.base:={__call:ObjBindMethod(this,"_call")}
 
         this.dll := DllCall("LoadLibrary", "Str", A_ScriptDir . "\Lib\VirtualDesktopAccessor.dll", "Ptr")
+        this._fList := {}
 
         ; Desktop changes listener
        if msg {
@@ -26,91 +74,15 @@ class TaskView {
 
     fList[fn]{
         get {
-
-            ; GetProcAddress is case-sensitive. So known functions are predefined to avoid errors when function call is made with wrong case
-            if !isObject(this._fList) {
-                l:=[ "GetCurrentDesktopNumber","GetDesktopCount","GoToDesktopNumber"
-                    ,"IsWindowOnDesktopNumber","IsWindowOnCurrentVirtualDesktop"
-                    ,"GetWindowDesktopNumber","MoveWindowToDesktopNumber"
-                    ,"IsPinnedWindow","PinWindow","UnPinWindow","IsPinnedApp","PinApp","UnPinApp"
-                    ,"RegisterPostMessageHook","UnregisterPostMessageHook" ]
-                this._fList:={}
-                for _,f in l {
-                    StringLower, g, f
-                    this._fList[g]:= DllCall("GetProcAddress", "Ptr", this.dll, "AStr", f, "Ptr")
-                    ;msgbox % "x " f "`n" this._fList[g]
-                }
+            if !this._fList[fn] {
+                this._fList[fn]:= DllCall("GetProcAddress", "Ptr", this.dll, "AStr", fn, "Ptr")
             }
-
-            StringLower, g, fn ; The keys are stored in lowercase to avoid case issues
-            if !this._fList[g] { ; Try to create function if it doesnt exist
-                this._fList[g]:= DllCall("GetProcAddress", "Ptr", this.dll, "AStr", fn, "Ptr")
-                msgbox % "New function '" fn "'was created in TaskView.fList`nfList[" g "] = " this._fList[g]
-            }
-            return this._fList[g]
-
-            /* ------------- Functions exported by DLL ; * = Usable Directly ** = Redefined here
-            > Desktop
-            **  int GetCurrentDesktopNumber()
-            *   int GetDesktopCount()
-            **  void GoToDesktopNumber(int number)
-
-            > Window
-            **  int IsWindowOnDesktopNumber(HWND window, int number)
-            *   int IsWindowOnCurrentVirtualDesktop(HWND window)
-            **  int GetWindowDesktopNumber(HWND window)
-            **  BOOL MoveWindowToDesktopNumber(HWND window, int number)
-
-            > Pinning
-            *   int IsPinnedWindow(HWND hwnd) // Returns 1 if pinned, 0 if not pinned, -1 if not valid
-            *   void PinWindow(HWND hwnd)
-            *   void UnPinWindow(HWND hwnd)
-            *   int IsPinnedApp(HWND hwnd) // Returns 1 if pinned, 0 if not pinned, -1 if not valid
-            *   void PinApp(HWND hwnd)
-            *   void UnPinApp(HWND hwnd)
-
-            > Register/Unregister
-            *   void RegisterPostMessageHook(HWND listener, int messageOffset)
-            *   void UnregisterPostMessageHook(HWND hwnd)
-            *   void RestartVirtualDesktopAccessor() // Shouldn't use pointer. So pointer is not defined in "fList"
-
-            > GUID
-                int GetDesktopNumber(IVirtualDesktop *pDesktop)
-                GUID GetDesktopIdByNumber(int number) // Returns zeroed GUID with invalid number found
-                int GetDesktopNumberById(GUID desktopId)
-                GUID GetWindowDesktopId(HWND window)
-
-            > Window Properties
-                int ViewIsShownInSwitchers(HWND hwnd) // Is the window shown in Alt+Tab list?
-                int ViewIsVisible(HWND hwnd) // Is the window visible?
-                uint ViewGetLastActivationTimestamp(HWND) // Get last activation timestamp
-
-            > AltTab
-                void ViewSetFocus(HWND hwnd) // Set focus like Alt+Tab switcher
-                void ViewSwitchTo(HWND hwnd) // Switch to window like Alt+Tab switcher
-
-            > Thumbnail
-                HWND ViewGetThumbnailHwnd(HWND hwnd) // Get thumbnail handle for a window, possibly peek preview of Alt+Tab
-                HWND ViewGetFocused() // Get focused window thumbnail handle
-
-            > View Order
-                uint ViewGetByZOrder(HWND *windows, UINT count, BOOL onlySwitcherWindows, BOOL onlyCurrentDesktop) // Get windows in Z-order (NOT alt-tab order)
-                uint ViewGetByLastActivationOrder(HWND *windows, UINT count, BOOL onlySwitcherWindows, BOOL onlyCurrentDesktop) // Get windows in alt tab order
-
-             */
+            return this._fList[fn]
         }
 
-        set { ;Never used
-            throw Exception("Items of TaskView.fList should not be set", "TaskView.fList[" fn "]:=" value)
-            StringLower, g, fn ; The keys are stored in lowercase to avoid case issues
-            return this._fList[g]:=value
+        set {
+            throw Exception("Items of TaskView.fList should not be set")
         }
-    }
-
-    ; Functions of the form "fn()" or "fn(hwnd)" doesnt have to be seperately defined
-    _call(obj,fn,hwnd:=""){ ; obj will always be "this"
-        ;msgbox % fn "(" hwnd ")=" ( hwnd=""? DllCall(this.fList[fn]) . " noHwnd": DllCall(this.fList[fn], "UInt", hwnd) )
-        return hwnd=""? DllCall(this.fList[fn]): DllCall(this.fList[fn], "UInt", hwnd)
     }
 
     _OnExplorerRestart(wParam, lParam, msg, hwnd_scr) {
@@ -192,8 +164,6 @@ class TaskView {
         return DllCall(this.fList["IsWindowOnDesktopNumber"], "UInt", hwnd, "UInt", this._desktopNumber(n,params*)-1)
     }
 
-    ; Defined by __call
-    /*
     GetDesktopCount(){
         return DllCall(this.fList["GetDesktopCount"])
     }
@@ -218,7 +188,6 @@ class TaskView {
     UnPinApp(hwnd){
         return DllCall(this.fList["UnPinApp"], "UInt", hwnd)
     }
-    */
 
     GoToDesktopNumber(n, wrap:=-1, anim:=-12, animDelay:=200) {
         ; wrap can be 0=Create desktop if necessary, -1=Dont create/wrap, 1= wrap
