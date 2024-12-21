@@ -154,7 +154,12 @@ class TaskView {
 
     ;------------------------------------------------------------------------
     GetCurrentDesktopNumber(){
-        return DllCall(this.fList["GetCurrentDesktopNumber"]) + 1
+        ret:= DllCall(this.fList["GetCurrentDesktopNumber"]) + 1
+        if (!ret) {
+            this.restart()
+            return DllCall(this.fList["GetCurrentDesktopNumber"]) + 1
+        }
+        return ret
     }
     GetWindowDesktopNumber(hwnd){
         return DllCall(this.fList["GetWindowDesktopNumber"], "UInt", hwnd) + 1
