@@ -90,6 +90,7 @@ class TaskView {
     }
     restart(){
         DllCall("RestartVirtualDesktopAccessorProc", "UInt", result)
+        this.__new()
         if this.Toast
             this.Toast.show("TaskView Restarted")
         return result
