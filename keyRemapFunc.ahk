@@ -377,3 +377,27 @@ fastScroll(key, timeout:=100, max:=5) {
 	if (speed)
 		Send {%key% %speed%}
 }
+
+;=============================================
+
+highlightMouse() {
+	static SIZE:=50, TIME:=300, DELAY:=30
+	static FRAMES:=TIME//DELAY
+
+	MouseGetPos x, y
+	Gui Circle:+ToolWindow -Caption +AlwaysOnTop +Hwndhwnd
+	Gui Circle:Show, % "NA x" x " y" y " w1 h1" ; Hide flicker
+	Gui Circle:Color, FFFF00
+
+	Loop % FRAMES {
+		Critical
+		r := SIZE * (1 - (A_Index - 1)/FRAMES)
+		WinSet Region, % "E 0-0 W" 2*r " H" 2*r, ahk_id %hwnd%
+		Gui Circle:Show, % "NA x" x-r " y" y-r " w" 2*r " h" 2*r
+
+		Sleep % DELAY
+		MouseGetPos x, y
+	}
+	Critical Off
+	Gui Circle:Destroy
+}

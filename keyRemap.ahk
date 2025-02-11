@@ -414,11 +414,6 @@ PrintScreen:: activateProgram(PRG_RS_Screenshot)
 #^x:: unZipAndDeleteFromExplorer(Explorer_getActiveWindow())					; Unzip open Zip file and delete it
 #if
 
-~RAlt & RCtrl::																	; Temporarily reduce Volume
- ~RCtrl & RAlt::
-	toggleVolume(.5, strSplit(A_ThisHotkey," ")[3])
-return
-
 
 #F7:: Media_Play_Pause 															; Media buttons
 #F6:: Media_Prev
@@ -426,7 +421,14 @@ return
 
 #if !getKeyState("NumLock","T")
 NumpadEnter:: Media_Play_Pause
+NumpadAdd:: toggleVolume(.3, A_ThisHotkey)										; Temporarily reduce Volume
 #if
+
+~RAlt & RCtrl::
+~RCtrl & RAlt::
+	;toggleVolume(.5, strSplit(A_ThisHotkey," ")[3])
+	highlightMouse()															; Highlight Mouse
+return
 
 /*
 #Media_Play_Pause::																; Global controls for Music player
