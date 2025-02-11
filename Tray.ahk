@@ -34,7 +34,8 @@ trayMenu(){
     ;setTimer, trayListen, 1000  ;for better Stability
 }
 DebugVars(){
-    ShellRun(path(A_ScriptDir).dir "\DebugVars\DebugVars.ahk")
+    dir := path(A_ScriptDir).dir "\DebugVars"
+    ShellRun(dir "\DebugVars.ahk", "", dir, "RunAs")
 }
 AHK_Help(){
     ShellRun(SCR_AHKDir "\AutoHotkey.chm")
