@@ -224,6 +224,8 @@ YouTubePlayPause(){ ;Using https://www.streamkeys.com/ is way better
 
 prefixUsed(key, set:=True) { ;-1 to keep it unchanged
 	static prefix:={}
+	if !inStr("|Win|CapsLock|RButton|MButton|", "|" key "|")  ; Sanity check
+		msgbox prefixUsed: Invalid key %key%
 
 	ret:=prefix[key]
 	if (set>-1)

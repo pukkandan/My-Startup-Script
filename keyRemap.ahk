@@ -109,15 +109,13 @@ WheelDown::
 	sleep 200
 return
 
-;/*
 #ifWinActive ahk_group WG_RightDrag
-~*RButton up::
+~*RButton::
 	Critical -1
 	prefixUsed(subStr(strReplace(A_ThisHotkey,"~"), 2, 7), False)
 return
-;*/
 
-#If
+#ifWinNotActive ahk_group WG_RightDrag
 *RButton up::
 *MButton up::
 	Critical -1
