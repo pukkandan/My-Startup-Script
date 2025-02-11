@@ -13,10 +13,16 @@ sendWindowBack(activate:=True){
         WinGetTitle, title, % win
         if !title
             continue
+
         ; Send active window one step back without activating the window behind
         ; This is somethimes needed in addition to winactivate
         winset AlwaysOntop, On, % win
-        winset AlwaysOntop, Off, % win
+        loop 10 {
+            winset AlwaysOntop, Off, % win
+            WinGet s, ExStyle, % win
+            if !(s & 0x8)
+                break
+        }
         if activate
             winActivate % win
         break
