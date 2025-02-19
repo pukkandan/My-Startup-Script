@@ -28,28 +28,20 @@ hotcorners(){
 	if (xpos<2) {
 		if (ypos<2){
 			if (!trigger){
-				; trigger:=True
+				trigger:=True
 				if(!buttonsPressed){
 					; 										Top Left
-					counterTemp:=counter+1
-					if (counterTemp==smallDelay){ ; After delay, but dont repeat
-						send, #{tab}
-						trigger:=True
-					}
+					send, #{tab}
 					;---------------------------------------------------------
 				}
 			}
 		}
 		else if (ypos+2>=A_ScreenHeight){
 			if (!trigger){
-				; trigger:=True
+				trigger:=True
 				if(!buttonsPressed){
 					; 										Bottom Left
-					counterTemp:=counter+1
-					if (counterTemp==delay){ ; After delay, but dont repeat
-						Send, #n
-						trigger:=True
-					}
+					Send, #n
 					;---------------------------------------------------------
 				}
 			}
