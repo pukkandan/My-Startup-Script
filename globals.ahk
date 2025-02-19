@@ -143,6 +143,9 @@ GroupAdd, WG_SublimeMerge		, ahk_exe sublime_merge.exe
 GroupAdd, WG_Sublime			, ahk_group WG_SublimeText
 GroupAdd, WG_Sublime			, ahk_group WG_SublimeMerge
 
+GroupAdd, WG_Code               , ahk_exe code.exe
+GroupAdd, WG_Code               , ahk_exe code - Insiders.exe
+
 GroupAdd, WG_ImageViewer		, ahk_class Qt5QWindowIcon ahk_exe nomacs.exe
 
 GroupAdd, WG_unwantedHide 		, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe

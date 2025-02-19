@@ -383,7 +383,7 @@ NumpadIns::
 return
 #if
 
-#ifWinActive ahk_exe Code.exe
+#ifWinActive ahk_group WG_Code
 AppsKey & Tab::F13
 #if
 
