@@ -152,8 +152,11 @@ runSSH(){
 
 cmdInCurrentFolder(exe:="wt", args:="", admin:=False) {
 	path:=Explorer_getWindowPath(Explorer_getLastWindow())
+	if (!path)
+		path := "D:\Trash"
 	tooltip(exe (admin?"* ":" ") args " : " path)
 	ShellRun(exe, args, path, admin?"RunAs":"")
+	sleep 1000
 	tooltip()
 }
 
@@ -402,4 +405,5 @@ highlightMouse() {
 	}
 	Critical Off
 	Gui Circle:Destroy
+	keyWait RAlt
 }

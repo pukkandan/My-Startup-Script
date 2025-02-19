@@ -143,11 +143,15 @@ GroupAdd, WG_SublimeMerge		, ahk_exe sublime_merge.exe
 GroupAdd, WG_Sublime			, ahk_group WG_SublimeText
 GroupAdd, WG_Sublime			, ahk_group WG_SublimeMerge
 
+GroupAdd, WG_Code               , ahk_exe code.exe
+GroupAdd, WG_Code               , ahk_exe code - Insiders.exe
+
 GroupAdd, WG_ImageViewer		, ahk_class Qt5QWindowIcon ahk_exe nomacs.exe
 
 GroupAdd, WG_unwantedHide 		, ahk_class ConsoleWindowClass ahk_group WG_VideoPlayerExe
 
 GroupAdd, WG_unwantedClose 		, This is an unregistered copy ahk_class #32770 ahk_group WG_Sublime
+GroupAdd, WG_unwantedClose      , Sublime Merge ahk_class #32770 ahk_group WG_SublimeMerge, The selected commit has been undone.`nRe-commit the changes and press continue when you are done.
 GroupAdd, WG_unwantedClose 		, Update Available ahk_class #32770 ahk_group WG_SublimeMerge
 GroupAdd, WG_unwantedClose		, Error ahk_class #32770 ahk_exe SdDisplay.exe
 GroupAdd, WG_unwantedClose		, Fences ahk_class WindowsForms10.Window.8.app.0.34f5582_r9_ad1 ahk_exe SdDisplay.exe

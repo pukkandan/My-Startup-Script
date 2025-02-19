@@ -375,7 +375,7 @@ prefixUsed("Win")
 changeVolumeBalance(inStr(A_ThisHotkey, "Up")? .1:-.1)
 return
 
-#ifWinActive ahk_exe vivaldi.exe
+;#ifWinActive ahk_exe vivaldi.exe
 NumpadIns::
 	send {F13}
 	;sleep 1000
@@ -383,7 +383,7 @@ NumpadIns::
 return
 #if
 
-#ifWinActive ahk_exe Code.exe
+#ifWinActive ahk_group WG_Code
 AppsKey & Tab::F13
 #if
 
