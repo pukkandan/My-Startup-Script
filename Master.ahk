@@ -11,7 +11,7 @@ Suspend, On
 #include Modules.ahk
 
 #include <ReloadScriptOnEdit>
-Modules.add(ReloadScriptOnEdit, 2000, ["*.ahk", "*.ini"])
+Modules.add(ReloadScriptOnEdit, 2000, ["*.ahk", "*.ini", "Lib\*.ahk"], "F")
 
 tooltip("Tray",{life:500})
 #include Tray.ahk
