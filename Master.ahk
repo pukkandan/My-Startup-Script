@@ -8,6 +8,7 @@ Suspend, On
 #include <ini>
 #include <Toast>
 #include <DelayedTimer>
+#include <UIA>
 #include Modules.ahk
 
 #include <ReloadScriptOnEdit>

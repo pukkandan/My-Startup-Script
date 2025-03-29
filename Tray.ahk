@@ -21,10 +21,13 @@ trayMenu(){
     Menu, TrayIt, Add
     Menu, Tray, Add, &TrayIt, :TrayIt
     Menu, Tray, Add
+
     act:=ObjBindMethod(winProbe,"toggle")
     Menu, Tray, Add, &Window Probe, % act
-    act:=ObjBindMethod(winProbe,"toggle")
-    Menu, Tray, Add, Deb&ug, DebugVars
+    act:=Func("launchScript").bind("UIAutomation\UIAViewer.ahk")
+    Menu, Tray, Add, &UIA Tree, % act
+    act:=Func("launchScript").bind("DebugVars\DebugVars.ahk")
+    Menu, Tray, Add, Deb&ug, % act
     Menu, Tray, MainWindow
     Menu, AHK, Standard
     Menu, Tray, Add, AH&K, :AHK
@@ -33,9 +36,9 @@ trayMenu(){
     trayListen()
     ;setTimer, trayListen, 1000  ;for better Stability
 }
-DebugVars(){
-    dir := path(A_ScriptDir).dir "\DebugVars"
-    ShellRun(dir "\DebugVars.ahk", "", dir, "RunAs")
+launchScript(script) {
+    script := path(A_ScriptDir).dir "\" script
+    ShellRun(script, "", path(script).dir, "RunAs")
 }
 AHK_Help(){
     ShellRun(SCR_AHKDir "\AutoHotkey.chm")
