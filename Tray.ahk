@@ -1,7 +1,7 @@
 trayMenu(){
     ifexist %SCR_Name%.ico                         ;Main Icon
         Menu, Tray, Icon, %SCR_Name%.ico,,0
-    Menu, Tray, Tip, % " "  ;Tray tip is shown using tooltip 20
+    ;Menu, Tray, Tip, % " "  ;Tray tip is shown using tooltip 20
 
     Menu, Tray, NoStandard                          ;No standard menu
     Menu, Tray, Add, &Reload Script, SCR_Reload
@@ -33,7 +33,7 @@ trayMenu(){
     Menu, Tray, Add, AH&K, :AHK
     Menu, Tray, Add, E&xit, Exit
 
-    trayListen()
+    ;trayListen()
     ;setTimer, trayListen, 1000  ;for better Stability
 }
 launchScript(script) {
