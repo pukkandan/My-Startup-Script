@@ -3,19 +3,24 @@
 
 sendWindowBack(activate:=True){
     activeID:=winExist("A")
-    is_desktop:= winExist("ahk_group WG_Desktop ahk_id " activeID)
+    reached := winExist("ahk_group WG_Desktop ahk_id " activeID)  ; desktop
+
     winget ids, list
     loop % ids {
-        if (!is_desktop && activeID!=ids%A_Index%)
+        if (!reached) {
+            if (activeID==ids%A_Index%)
+                reached:=True
             continue
-        i:=A_Index+1
-        win:="ahk_id " ids%i%
+        }
+
+        win:="ahk_id " ids%A_Index%
         WinGetTitle, title, % win
         if !title
             continue
 
         ; Send active window one step back without activating the window behind
         ; This is somethimes needed in addition to winactivate
+        Critical
         winset AlwaysOntop, On, % win
         loop 10 {
             winset AlwaysOntop, Off, % win
@@ -23,6 +28,8 @@ sendWindowBack(activate:=True){
             if !(s & 0x8)
                 break
         }
+        Critical Off
+
         if activate
             winActivate % win
         break
