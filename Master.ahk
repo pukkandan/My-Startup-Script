@@ -61,18 +61,18 @@ Modules.add(PIP, 100, [
     , { title: "ahk_exe notepad.exe" , set: 4, maxheight: 1  , type: "    D" }    ])
 
 #include Togglekeys.ahk
-Modules.add("CapsLockOffTimer", 1000, 60000)
+Modules.add("CapsLockOffTimer", 1000)
 Modules.add(caseMenu)
 
 #include microWindows.ahk
 Modules.add(microWindow, 0)
 
 #include winAction.ahk
-Modules.add(winAction,, "winAction.ini")
+Modules.add(winAction)
 ; Multiple winaction can be created by using obj1:=new winaction("iniName.ini"), ...
 
 #include watchExplorerWindows.ahk
-Modules.add(watchExplorerWindows, 300000, "explorerWindows")
+Modules.add(watchExplorerWindows, 300000)
 
 #include runText.ahk  ;Needs serious Refactoring!!
 Modules.add(runText, 0)

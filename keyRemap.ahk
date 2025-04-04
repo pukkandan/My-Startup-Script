@@ -332,7 +332,7 @@ RETURN
  ^CapsLock:: caseMenu.show()													; caseMenu
  #CapsLock:: activateProgram(PRG_RS_WindowSwitcher)								; WindowSwitch
 +#CapsLock:: activateProgram(PRG_RS_TextEditor)									; Text editor
-^#CapsLock:: ShellRun("calc1.exe")												; Calc
+^#CapsLock:: activateProgram(PRG_RS_Calc)										; Calc
  !CapsLock:: cmdInCurrentFolder()												; CMD - WT
 ^!CapsLock:: cmdInCurrentFolder(,, True)										; CMD - WT
 +!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL - WT

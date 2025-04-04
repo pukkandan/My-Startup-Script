@@ -17,7 +17,7 @@ activateProgram(spec){
 	if (spec.trigger && !winExist(win))
 		send, % spec.trigger
 
-	Winwait, % win ,, 2s
+	Winwait, % win,, 2
 	if ErrorLevel
 		return
 	sleep, 100

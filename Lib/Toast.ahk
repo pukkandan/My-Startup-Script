@@ -55,11 +55,11 @@ class Toast{
         Gui, %GUI_handle%: Color, % this.bgColor
         Gui, %GUI_handle%:+LastFoundExist
         WinSet, Trans, % this.trans
-        Gui, %GUI_handle%:Margin, % this.marginX, % this.marginY
+        Gui, %GUI_handle%:Margin, % this.margin.X, % this.margin.Y
 
         t:=this.title.text, s:=this.title.size, c:=this.title.color, o:=this.title.opt, f:=this.title.Font
         Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
-        Gui, %GUI_handle%: Add, Text,, %t%
+        Gui, %GUI_handle%: Add, Text, Center hwndTitleHwnd, %t%
 
         for i,t in this.message.text {
              s:= this.message.size  [i] = "" ? this.message.def_size    : this.message.size  [i]
@@ -70,11 +70,17 @@ class Toast{
             Gui, %GUI_handle%: Font, norm s%s% c%c% %o%, %f%
             Gui, %GUI_handle%: Add, Text, xp y+%m%, %t%
         }
+
         OnMessage(0x202, closeObj:=this.closeObj)
         this.exist:=True
+        Gui, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
+
+        ; Center title
+        WinGetPos,,, w,, ahk_id %hwnd%
+        GuiControl, %GUI_handle%: MoveDraw, % titleHWnd, % "w" w - 2*this.margin.X
+
         if this.sound
             SoundPlay, *-1
-        Gui, %GUI_handle%: Show, % (this.activate?"":"NoActivate ") "autosize x" this.x " y" this.y, % "Toast" this.id
         if this.life
             setTimer, % closeObj , % "-" this.life
         for _,k in this.closekeys

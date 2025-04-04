@@ -70,8 +70,9 @@ global PRG_RS_Screenshot := {
 )}
 global PRG_RS_TextEditor := {
     (Join
-    process: "Code.exe",
+    process: "code.exe",
     alwaysRun: True,
+    visible: false,
     name: "VSCode"
 )}
 global PRG_RS_CHM := {
@@ -83,8 +84,13 @@ global PRG_RS_GPG_Agent := {
     (Join
     process: "gpg-agent.exe",
     args: "--daemon",
-    visible: 0,
+    visible: False,
     name: "GPG Agent"
+)}
+global PRG_RS_Calc := {
+    (Join
+    process: "calc.exe",
+    name: "Calculator"
 )}
 
 
