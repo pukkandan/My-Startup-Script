@@ -1,7 +1,7 @@
 trayMenu(){
     ifexist %SCR_Name%.ico                         ;Main Icon
         Menu, Tray, Icon, %SCR_Name%.ico,,0
-    ;Menu, Tray, Tip, % " "  ;Tray tip is shown using tooltip 20
+    ;Menu, Tray, Tip, % " "  ;Tray tip is shown using tooltip 10
 
     Menu, Tray, NoStandard                          ;No standard menu
     Menu, Tray, Add, &Reload Script, SCR_Reload
@@ -55,7 +55,7 @@ SCR_Reload(){
 SCR_Pause(){
     Suspend
     Menu, Tray, ToggleCheck, &Active
-    Tooltip(,{no:20})
+    Tooltip(,{no:10})
     Tooltip()
     Pause, Toggle, 1
     return
@@ -107,5 +107,5 @@ updateTray(mx0:="",my0:=""){
     return
 }
 showTrayTip(tip,mx,my){
-    ToolTip(tip, { x:mx,y:my-50,no:20,life:200, color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:10} })
+    ToolTip(tip, { x:mx,y:my-50,no:10,life:200, color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:10} })
 }

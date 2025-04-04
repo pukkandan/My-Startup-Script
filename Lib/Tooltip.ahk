@@ -1,3 +1,22 @@
+class ToolTip_Group {
+    static _counter = 10
+
+    __new(p:="") {
+        this._counter++
+        if (this._counter > 20)
+            throw "Cannot create more tooltips"
+
+        this.p := p
+        this.p.no := this._counter
+    }
+    show(text) {
+        return tooltip(text, this.p)
+    }
+    hide() {
+        return tooltip(, this.p)
+    }
+}
+
 Tooltip(tip:="", p:=""){
     ; static def:={ color:{bg:"0x222222",text:"0xFFFFFF"}, font:{size:8, opt:"",name:"Segoe UI"} }
     static def:={ font:{size:8, opt:"",name:"Segoe UI"} }
