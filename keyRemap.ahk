@@ -333,10 +333,10 @@ RETURN
  #CapsLock:: activateProgram(PRG_RS_WindowSwitcher)								; WindowSwitch
 +#CapsLock:: activateProgram(PRG_RS_TextEditor)									; Text editor
 ^#CapsLock:: activateProgram(PRG_RS_Calc)										; Calc
- !CapsLock:: cmdInCurrentFolder()												; CMD - WT
-^!CapsLock:: cmdInCurrentFolder(,, True)										; CMD - WT
-+!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL - WT
-#!CapsLock:: cmdInCurrentFolder(, "-p powershell")								; Powershell - WT
+ !CapsLock:: activateProgram(PRG_RS_Terminal)									; Cmd
+^!CapsLock:: activateProgram(PRG_RS_Terminal, {admin: True})					; Cmd - Admin
+;+!CapsLock:: cmdInCurrentFolder(, "-p bash")									; WSL
+;#!CapsLock:: cmdInCurrentFolder(, "-p powershell")								; Powershell
 ;^!CapsLock:: runSSH()															; SSH
 ; CapsLock, +CapsLock, +^CapsLock are used elsewhere
 

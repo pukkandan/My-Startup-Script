@@ -87,8 +87,7 @@ runLauncher(toggle:=True, getText:=False){
 		if toggle
 			return
 	}
-	PRG_RS_Launcher.send:=getText? "{BackSpace}" :""
-	activateProgram(PRG_RS_Launcher)
+	activateProgram(PRG_RS_Launcher, {send: getText? "{BackSpace}" :""})
 
 	if !getText
 		return
@@ -150,6 +149,7 @@ runSSH(){
 	return
 }
 
+; [Deprecated]
 cmdInCurrentFolder(exe:="wt", args:="", admin:=False) {
 	path:=Explorer_getWindowPath(Explorer_getLastWindow())
 	if (!path)

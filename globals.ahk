@@ -73,7 +73,17 @@ global PRG_RS_TextEditor := {
     process: "code.exe",
     alwaysRun: True,
     visible: false,
+    at_path: True,
+    pass_path: True,
     name: "VSCode"
+)}
+global PRG_RS_Terminal := {
+    (Join
+    run: "wt.exe",
+    process: "WindowsTerminal.exe",
+    alwaysRun: True,
+    at_path: True,
+    name: "Terminal"
 )}
 global PRG_RS_CHM := {
     (Join
